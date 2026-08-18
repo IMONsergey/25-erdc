@@ -1,4 +1,4 @@
-export const asset = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
+export const asset = (name) => new URL(`${import.meta.env.BASE_URL}assets/${name}`, document.baseURI).href;
 
 export const cities = [
   {
