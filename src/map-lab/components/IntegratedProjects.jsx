@@ -1,44 +1,55 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "ol/ol.css";
-import { asset, categories } from "../../data.js";
+import { asset } from "../../data.js";
 import { createMapDataProvider } from "../mapData.js";
 import { isupSnapshot } from "../isupSnapshot.js";
 
 const vladivostokPlan = isupSnapshot.plans.find((item) => /Владивосток/i.test(item.label));
 
-const categoryIndustryRules = {
-  housing: [/жилье/i],
-  social: [/социаль/i, /здрав/i, /образ/i, /культур/i, /спорт/i],
-  transport: [/транспорт/i],
-  engineering: [/инфраструктур/i, /связь/i, /экономика/i, /производ/i, /безопас/i],
-  ecology: [/эколог/i],
-  tourism: [/туризм/i],
-};
+const industryIconRules = [
+  [/жиль/i, "icon-category-housing.svg"],
+  [/транспорт/i, "icon-category-transport.svg"],
+  [/инфраструктур|связь|эконом|производ|безопас/i, "icon-category-engineering.svg"],
+  [/туризм/i, "icon-category-tourism.svg"],
+  [/эколог/i, "icon-category-ecology.svg"],
+  [/здрав|образ|культур|спорт|социаль/i, "icon-category-social.svg"],
+];
 
-const categoryCopy = {
-  housing: "Жильё, КРТ, городская среда и общественные пространства.",
-  social: "Образование, здоровье, культура, спорт и социальные объекты.",
-  transport: "Уличная сеть, общественный транспорт, портовая и логистическая инфраструктура.",
-  engineering: "Инженерные сети, связь, безопасность и производственная инфраструктура.",
-  ecology: "Экология, рекреационные территории и зелёные связи.",
-  tourism: "Туристические точки, маршруты и сервисная инфраструктура.",
-};
+const industryCopyRules = [
+  [/жиль/i, "Жилье, городская среда и общественные пространства."],
+  [/образ/i, "Школы, детские сады, кампусы и объекты образования."],
+  [/здрав/i, "Медицинские учреждения и инфраструктура здоровья."],
+  [/культур|спорт/i, "Культурные, спортивные и общественные объекты."],
+  [/транспорт/i, "Уличная сеть, общественный транспорт, портовая и логистическая инфраструктура."],
+  [/инфраструктур|связь|эконом|производ|безопас/i, "Инженерные сети, связь, безопасность и производственная инфраструктура."],
+  [/туризм/i, "Туристические точки, маршруты и сервисная инфраструктура."],
+  [/эколог/i, "Экология, рекреационные территории и зеленые связи."],
+];
 
-const categoryStageName = {
-  housing: "Городская среда",
-  social: "Социальные объекты",
-  transport: "Транспортные объекты",
-  engineering: "Инфраструктурные объекты",
-  ecology: "Рекреация и экология",
-  tourism: "Туризм",
-};
+const industryOrderRules = [
+  [/жиль/i, 10],
+  [/образ/i, 20],
+  [/здрав/i, 30],
+  [/культур|спорт/i, 40],
+  [/транспорт/i, 50],
+  [/инфраструктур/i, 60],
+  [/туризм/i, 70],
+];
 
-function categoryForObject(object) {
-  const industry = object.industryName ?? "";
-  if (/транспорт/i.test(industry)) return "transport";
-  if (/эколог/i.test(industry)) return "ecology";
-  if (/туризм/i.test(industry)) return "tourism";
-  return categories.find((category) => categoryIndustryRules[category.id]?.some((rule) => rule.test(industry)))?.id ?? "engineering";
+function firstMatchingRule(rules, industryName, fallback) {
+  return rules.find(([rule]) => rule.test(industryName))?.[1] ?? fallback;
+}
+
+function iconForIndustry(industryName) {
+  return firstMatchingRule(industryIconRules, industryName, "icon-category-engineering.svg");
+}
+
+function copyForIndustry(industryName) {
+  return firstMatchingRule(industryCopyRules, industryName, "Объект стратегического развития Владивостока.");
+}
+
+function orderForIndustry(industryName) {
+  return firstMatchingRule(industryOrderRules, industryName, 900);
 }
 
 function normalizeTitle(title) {
@@ -46,12 +57,13 @@ function normalizeTitle(title) {
 }
 
 function prepareObject(object) {
-  const categoryId = categoryForObject(object);
+  const industryName = object.industryName ?? "Без отрасли";
   return {
     ...object,
-    categoryId,
+    categoryId: object.industryId ?? industryName,
+    categoryLabel: industryName,
     title: normalizeTitle(object.title),
-    short: object.description || object.address || categoryCopy[categoryId],
+    short: object.description || object.address || copyForIndustry(industryName),
   };
 }
 
@@ -59,12 +71,18 @@ const preparedObjects = isupSnapshot.objects
   .filter((item) => item.planId === vladivostokPlan?.id)
   .map(prepareObject);
 
-const categoryMeta = categories.map((category) => ({
-  ...category,
-  count: preparedObjects.filter((item) => item.categoryId === category.id).length,
-}));
+const categoryMeta = isupSnapshot.industries
+  .map((industry) => ({
+    id: industry.id,
+    label: industry.label,
+    icon: iconForIndustry(industry.label),
+    order: orderForIndustry(industry.label),
+    count: preparedObjects.filter((item) => item.categoryId === industry.id).length,
+  }))
+  .filter((category) => category.count > 0)
+  .sort((a, b) => a.order - b.order || a.label.localeCompare(b.label, "ru"));
 
-const defaultCategoryId = categoryMeta.find((item) => item.id === "housing" && item.count > 0)?.id ?? categoryMeta.find((item) => item.count > 0)?.id ?? "housing";
+const defaultCategoryId = categoryMeta.find((item) => /жиль/i.test(item.label))?.id ?? categoryMeta[0]?.id;
 
 function CategoryIcon({ name }) {
   return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
@@ -104,7 +122,7 @@ async function loadOpenLayers() {
 }
 
 function markerStyle(ol, object, selected) {
-  const color = selected ? "#031c39" : colorForCategory(object.categoryId);
+  const color = selected ? "#031c39" : colorForIndustry(object.categoryLabel);
   return new ol.Style({
     image: new ol.CircleStyle({
       radius: selected ? 20 : 14,
@@ -136,12 +154,13 @@ function clusterStyle(ol, feature) {
   });
 }
 
-function colorForCategory(categoryId) {
-  if (categoryId === "housing") return "#1c97d9";
-  if (categoryId === "social") return "#38b88a";
-  if (categoryId === "transport") return "#e68a3e";
-  if (categoryId === "engineering") return "#349ca4";
-  if (categoryId === "ecology") return "#17a179";
+function colorForIndustry(industryName) {
+  if (/жиль/i.test(industryName)) return "#1c97d9";
+  if (/образ|здрав/i.test(industryName)) return "#38b88a";
+  if (/культур|спорт/i.test(industryName)) return "#8f80d8";
+  if (/транспорт/i.test(industryName)) return "#e68a3e";
+  if (/инфраструктур/i.test(industryName)) return "#349ca4";
+  if (/эколог/i.test(industryName)) return "#17a179";
   return "#4c83ea";
 }
 
@@ -354,7 +373,7 @@ export default function IntegratedProjects() {
         <aside className="project-list integrated-list" aria-label="Объекты выбранного направления">
           <div className="project-list-head">
             <h3>{activeCategory.label}</h3>
-            <div><span>{categoryStageName[activeCategory.id] ?? "Объекты"}</span><b>{filteredObjects.length}</b></div>
+            <div><span>Объекты ИСУП</span><b>{filteredObjects.length}</b></div>
           </div>
           {loading ? (
             <div className="project-list-progress"><span aria-hidden="true">•••</span><p>Загружаем объекты ИСУП</p></div>
