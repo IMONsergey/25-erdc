@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "ol/ol.css";
 import { asset } from "../../data.js";
+import { FadeText, MaskedWords } from "../../components/AnimatedText.jsx";
 import { createMapDataProvider } from "../mapData.js";
 import { isupSnapshot } from "../isupSnapshot.js";
 
@@ -13,7 +14,8 @@ const industryIconRules = [
   [/туризм/i, "icon-category-tourism.svg"],
   [/эколог/i, "icon-category-ecology.svg"],
   [/здрав/i, "icon-category-health.svg"],
-  [/образ|культур|спорт|социаль/i, "icon-category-social.svg"],
+  [/культур|спорт/i, "icon-category-sport.svg"],
+  [/образ|социаль/i, "icon-category-social.svg"],
 ];
 
 const industryCopyRules = [
@@ -109,21 +111,6 @@ const defaultCategoryId = categoryMeta.find((item) => /жиль/i.test(item.labe
 
 function CategoryIcon({ name }) {
   return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
-}
-
-function MaskedWords({ text }) {
-  return String(text)
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((word, index) => (
-      <span className="mask-word" style={{ "--word-index": index }} key={`${word}-${index}`}>
-        <span>{word}</span>
-      </span>
-    ));
-}
-
-function FadeText({ children, as: Tag = "span", className = "" }) {
-  return <Tag className={`fade-line${className ? ` ${className}` : ""}`}>{children}</Tag>;
 }
 
 async function loadOpenLayers() {

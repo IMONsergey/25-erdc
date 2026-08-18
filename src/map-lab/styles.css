@@ -319,29 +319,7 @@
   display: none;
 }
 
-.mask-word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: baseline;
-}
-
-.mask-word + .mask-word {
-  margin-left: .24em;
-}
-
-.mask-word > span {
-  display: inline-block;
-  transform: translateY(112%);
-  animation: mask-word-up .62s cubic-bezier(.2,.82,.2,1) forwards;
-  animation-delay: calc(var(--word-index, 0) * 48ms);
-}
-
-.fade-line {
-  animation: fade-line-in .48s ease both;
-  animation-delay: 120ms;
-}
-
-.project-description.fade-line {
+.project-description.fade-lines {
   display: block;
 }
 
@@ -467,30 +445,11 @@
   }
 }
 
-@keyframes mask-word-up {
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-line-in {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .integrated-workspace,
   .integrated-object,
   .integrated-detail-card,
-  .integrated-preloader > span,
-  .mask-word > span,
-  .fade-line {
+  .integrated-preloader > span {
     animation: none;
     transform: none;
   }

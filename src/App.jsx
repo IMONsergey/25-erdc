@@ -4,6 +4,7 @@ import Hero from "./components/Hero.jsx";
 import Regions from "./components/Regions.jsx";
 import Mission from "./components/Mission.jsx";
 import Projects from "./components/Projects.jsx";
+import PagePreloader from "./components/PagePreloader.jsx";
 
 export default function App() {
   const [selectedCity, setSelectedCity] = useState("vladivostok");
@@ -11,6 +12,7 @@ export default function App() {
 
   return (
     <>
+      <PagePreloader />
       <a className="skip-link" href="#content">Перейти к содержанию</a>
       <Header />
       <main id="content">

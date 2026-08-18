@@ -1,4 +1,5 @@
 import { asset } from "../data.js";
+import { FadeText, MaskedWords } from "./AnimatedText.jsx";
 
 const missionCards = [
   {
@@ -29,20 +30,20 @@ export default function Mission() {
   return (
     <section className="shell mission-section" aria-labelledby="mission-title">
       <div className="section-intro">
-        <p className="section-label">Миссия города</p>
-        <h2 id="mission-title">Владивосток — морские ворота России в Азиатско-Тихоокеанский регион</h2>
+        <FadeText as="p" className="section-label">Миссия города</FadeText>
+        <h2 id="mission-title"><MaskedWords text="Владивосток — морские ворота России в Азиатско-Тихоокеанский регион" /></h2>
       </div>
       <div className="mission-grid">
         {missionCards.map((card) => (
           <article className="mission-card" key={card.number}>
-            <div><span className="card-number">{card.number}</span><p>{card.text}</p></div>
+            <div><span className="card-number">{card.number}</span><FadeText as="p">{card.text}</FadeText></div>
             <img src={asset(card.icon)} alt="" />
           </article>
         ))}
         <img className="mission-visual" src={asset("mission-map.webp")} alt="Схема транспортных связей Владивостока" />
         <img className="mission-visual" src={asset("mission-city.webp")} alt="Городская панорама Владивостока" />
         <article className="strategic-card">
-          <h3>Стратегическое положение</h3>
+          <h3><MaskedWords text="Стратегическое положение" /></h3>
           <ul>
             {strategicItems.map(([label, icon]) => (
               <li key={label}><span>{label}</span><img src={asset(icon)} alt="" /></li>

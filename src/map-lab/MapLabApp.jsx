@@ -4,6 +4,7 @@ import Hero from "../components/Hero.jsx";
 import Regions from "../components/Regions.jsx";
 import Mission from "../components/Mission.jsx";
 import IntegratedProjects from "./components/IntegratedProjects.jsx";
+import PagePreloader from "../components/PagePreloader.jsx";
 
 export default function MapLabApp() {
   const [selectedCity, setSelectedCity] = useState("vladivostok");
@@ -11,6 +12,7 @@ export default function MapLabApp() {
 
   return (
     <>
+      <PagePreloader />
       <a className="skip-link" href="#content">Перейти к содержанию</a>
       <Header />
       <main id="content">

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { asset, categories, projects } from "../data.js";
+import { FadeText, MaskedWords } from "./AnimatedText.jsx";
 
 function CategoryIcon({ name }) {
   return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
@@ -11,7 +12,7 @@ function ProjectList({ category, activeProjectId, onSelect }) {
   return (
     <aside className="project-list" aria-label="Список проектов">
       <div className="project-list-head">
-        <h3>{category.label}</h3>
+        <h3><MaskedWords text={category.label} /></h3>
         <div><span>{housing ? "Реновация и КРТ" : "Проекты"}</span><b>{housing ? "10" : "—"}</b></div>
       </div>
       {housing ? (
@@ -25,7 +26,7 @@ function ProjectList({ category, activeProjectId, onSelect }) {
               onClick={() => onSelect(project.id)}
             >
               <img src={asset(project.image)} alt="" />
-              <span><strong>{project.title}</strong><small>{project.short}</small></span>
+              <span><strong><MaskedWords text={project.title} /></strong><FadeText as="small">{project.short}</FadeText></span>
             </button>
           ))}
         </div>
@@ -43,7 +44,7 @@ function ProjectDetail({ project, onClose }) {
   return (
     <article className="project-detail-card" aria-live="polite">
       <div className="project-detail-title">
-        <h3>{project.title}</h3>
+        <h3><MaskedWords text={project.title} /></h3>
         <button className="project-close" type="button" onClick={onClose} aria-label="Закрыть карточку проекта">
           <img src={asset("icon-plus.svg")} alt="" />
         </button>
@@ -58,11 +59,11 @@ function ProjectDetail({ project, onClose }) {
               <span className="stage-progress-label">Стадия строительства</span>
             </div>
           </div>
-          <p className="project-description">Комфортная жилая застройка по стандарту ДОМ.РФ, парк, пешеходный мост, культурный и спортивный центр, социальная инфраструктура.</p>
+          <FadeText as="p" className="project-description">Комфортная жилая застройка по стандарту ДОМ.РФ, парк, пешеходный мост, культурный и спортивный центр, социальная инфраструктура.</FadeText>
           <div className="project-metrics">
-            <div><strong>94.22 га</strong><span>площадь участка проектирования</span></div>
-            <div><strong>130.5 млрд ₽</strong><span>инвестиций</span></div>
-            <div><strong>924,4 тыс. м²</strong><span>общая площадь застройки</span></div>
+            <div><strong>94.22 га</strong><FadeText>площадь участка проектирования</FadeText></div>
+            <div><strong>130.5 млрд ₽</strong><FadeText>инвестиций</FadeText></div>
+            <div><strong>924,4 тыс. м²</strong><FadeText>общая площадь застройки</FadeText></div>
           </div>
           <h4>Что появится</h4>
           <ul className="project-results">
@@ -74,7 +75,7 @@ function ProjectDetail({ project, onClose }) {
         </>
       ) : (
         <div className="detail-progress-copy">
-          <p>{project.short}</p>
+          <FadeText as="p">{project.short}</FadeText>
           <strong>Подробный контент в работе</strong>
         </div>
       )}
@@ -156,8 +157,8 @@ export default function Projects() {
   return (
     <section className="shell projects-section" id="projects" aria-labelledby="projects-title">
       <div className="section-intro">
-        <p className="section-label">Масштаб преобразований</p>
-        <h2 id="projects-title">Ключевые проекты развития Владивостока</h2>
+        <FadeText as="p" className="section-label">Масштаб преобразований</FadeText>
+        <h2 id="projects-title"><MaskedWords text="Ключевые проекты развития Владивостока" /></h2>
       </div>
       <div className="project-categories" aria-label="Категории проектов">
         {categories.map((item) => (
