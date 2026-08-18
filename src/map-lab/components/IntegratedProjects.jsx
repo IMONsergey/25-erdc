@@ -45,6 +45,10 @@ function iconForIndustry(industryName) {
   return firstMatchingRule(industryIconRules, industryName, "icon-category-engineering.svg");
 }
 
+function labelForIndustry(industryName) {
+  return /здрав/i.test(industryName) ? "Здоровье" : industryName;
+}
+
 function copyForIndustry(industryName) {
   return firstMatchingRule(industryCopyRules, industryName, "Объект стратегического развития Владивостока.");
 }
@@ -77,6 +81,7 @@ function prepareObject(object) {
     ...object,
     categoryId: object.industryId ?? industryName,
     categoryLabel: industryName,
+    categoryDisplayLabel: labelForIndustry(industryName),
     title: normalizeTitle(object.title),
     displayTitle: compactTitle(object.title, 72),
     detailTitle: compactTitle(object.title, 94),
@@ -91,7 +96,8 @@ const preparedObjects = isupSnapshot.objects
 const categoryMeta = isupSnapshot.industries
   .map((industry) => ({
     id: industry.id,
-    label: industry.label,
+    label: labelForIndustry(industry.label),
+    sourceLabel: industry.label,
     icon: iconForIndustry(industry.label),
     order: orderForIndustry(industry.label),
     count: preparedObjects.filter((item) => item.categoryId === industry.id).length,
@@ -103,6 +109,21 @@ const defaultCategoryId = categoryMeta.find((item) => /жиль/i.test(item.labe
 
 function CategoryIcon({ name }) {
   return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
+}
+
+function MaskedWords({ text }) {
+  return String(text)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word, index) => (
+      <span className="mask-word" style={{ "--word-index": index }} key={`${word}-${index}`}>
+        <span>{word}</span>
+      </span>
+    ));
+}
+
+function FadeText({ children, as: Tag = "span", className = "" }) {
+  return <Tag className={`fade-line${className ? ` ${className}` : ""}`}>{children}</Tag>;
 }
 
 async function loadOpenLayers() {
@@ -188,6 +209,7 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
   const mapRef = useRef(null);
   const olRef = useRef(null);
   const sourceRef = useRef(null);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     let disposed = false;
@@ -228,6 +250,7 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
       });
       mapRef.current = map;
       sourceRef.current = source;
+      setMapReady(true);
       window.setTimeout(() => map.updateSize(), 80);
     });
 
@@ -235,6 +258,7 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
       disposed = true;
       mapRef.current?.setTarget(undefined);
       mapRef.current = null;
+      setMapReady(false);
     };
   }, [onSelect]);
 
@@ -242,7 +266,7 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
     const ol = olRef.current;
     const source = sourceRef.current;
     const map = mapRef.current;
-    if (!ol || !source || !map) return;
+    if (!ol || !source || !map || !mapReady) return;
     source.clear();
     objects.forEach((object) => {
       const feature = new ol.Feature({
@@ -261,14 +285,14 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
         easing: ol.easeOut,
       });
     }
-  }, [objects]);
+  }, [objects, mapReady]);
 
   useEffect(() => {
     const ol = olRef.current;
     const map = mapRef.current;
     const source = sourceRef.current;
     const object = objects.find((item) => item.id === selectedId);
-    if (!ol || !map || !source) return;
+    if (!ol || !map || !source || !mapReady) return;
     source.getFeatures().forEach((feature) => {
       feature.set("selected", feature.get("objectId") === selectedId);
       feature.changed();
@@ -283,7 +307,7 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
       duration: 680,
       easing: ol.easeOut,
     });
-  }, [selectedId]);
+  }, [selectedId, objects, mapReady]);
 
   return <div className="integrated-map-canvas" ref={elementRef} aria-label="Интерактивная карта объектов Владивостока" />;
 }
@@ -293,8 +317,8 @@ function ProjectCard({ object, selected, onSelect }) {
     <button className={`integrated-object${selected ? " is-active" : ""}`} type="button" aria-pressed={selected} onClick={onSelect}>
       <img src={object.image} alt="" />
       <span>
-        <strong>{object.displayTitle}</strong>
-        <small>{object.short}</small>
+        <strong><MaskedWords text={object.displayTitle} /></strong>
+        <FadeText as="small">{object.short}</FadeText>
       </span>
     </button>
   );
@@ -312,20 +336,20 @@ function DetailOverlay({ object, stage, onClose }) {
       </div>
       <div className="integrated-detail-body">
         <div className="project-detail-title">
-          <h3>{object.detailTitle}</h3>
+          <h3><MaskedWords text={object.detailTitle} /></h3>
         </div>
         <div className="project-status-row">
-          <span className="project-type">{object.industryName}</span>
+          <span className="project-type">{object.categoryDisplayLabel}</span>
           <div className="stage-progress" role="progressbar" aria-label={`Стадия: ${stage?.label ?? "не указана"}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={stageProgress(object.stageId)}>
             <span className="stage-progress-fill" style={{ width: `${stageProgress(object.stageId)}%` }} />
             <span className="stage-progress-label">{stage?.label ?? "Стадия уточняется"}</span>
           </div>
         </div>
-        <p className="project-description">{object.description || object.address}</p>
+        <FadeText as="p" className="project-description">{object.description || object.address}</FadeText>
         <div className="project-metrics">
-          <div><strong>{object.budget}</strong><span>утверждённый бюджет</span></div>
-          <div><strong>{object.deadline}</strong><span>плановый срок</span></div>
-          <div><strong>{object.address || "Владивосток"}</strong><span>локация</span></div>
+          <div><strong>{object.budget}</strong><FadeText>утверждённый бюджет</FadeText></div>
+          <div><strong>{object.deadline}</strong><FadeText>плановый срок</FadeText></div>
+          <div><strong>{object.address || "Владивосток"}</strong><FadeText>локация</FadeText></div>
         </div>
       </div>
     </article>
@@ -397,8 +421,8 @@ export default function IntegratedProjects() {
   return (
     <section className="shell projects-section integrated-projects-section" id="projects" aria-labelledby="projects-title">
       <div className="section-intro">
-        <p className="section-label">Масштаб преобразований</p>
-        <h2 id="projects-title">Ключевые проекты развития Владивостока</h2>
+        <FadeText as="p" className="section-label">Масштаб преобразований</FadeText>
+        <h2 id="projects-title"><MaskedWords text="Ключевые проекты развития Владивостока" /></h2>
       </div>
       <div className="project-categories" aria-label="Фильтры объектов Владивостока">
         {categoryMeta.map((item) => (
@@ -417,8 +441,8 @@ export default function IntegratedProjects() {
       <div className="projects-workspace integrated-workspace">
         <aside className="project-list integrated-list" aria-label="Объекты выбранного направления">
           <div className="project-list-head">
-            <h3>{activeCategory.label}</h3>
-            <div><span>Объекты ИСУП</span><b>{filteredObjects.length}</b></div>
+            <h3><MaskedWords text={activeCategory.label} /></h3>
+            <div><FadeText>Объекты ИСУП</FadeText><b>{filteredObjects.length}</b></div>
           </div>
           {loading ? (
             <div className="project-list-progress"><span aria-hidden="true">•••</span><p>Загружаем объекты ИСУП</p></div>
@@ -436,6 +460,12 @@ export default function IntegratedProjects() {
         </aside>
         <div className="project-map integrated-map">
           <IntegratedMap objects={filteredObjects} selectedId={selectedId} onSelect={setSelectedId} />
+          {loading ? (
+            <div className="integrated-preloader" role="status" aria-live="polite">
+              <span aria-hidden="true" />
+              <FadeText>Готовим карту и объекты</FadeText>
+            </div>
+          ) : null}
           {selectedObject ? <DetailOverlay object={selectedObject} stage={selectedStage} onClose={() => setSelectedId(null)} /> : null}
         </div>
       </div>

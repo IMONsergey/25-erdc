@@ -7,20 +7,27 @@
   flex-wrap: nowrap;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding: 6px 0 10px;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
 }
 
 .integrated-projects-section .category {
+  position: relative;
   flex: 1 0 172px;
   height: 72px;
   padding: 14px 16px;
   gap: 13px;
   color: #8f98a4;
+  z-index: 1;
   scroll-snap-align: start;
   box-shadow: 0 8px 24px rgba(3,28,57,0);
   transition: border-color .24s ease, color .24s ease, transform .24s ease, box-shadow .24s ease, background .24s ease;
+}
+
+.integrated-projects-section .category.is-active,
+.integrated-projects-section .category:hover {
+  z-index: 3;
 }
 
 .integrated-projects-section .category:hover {
@@ -141,6 +148,31 @@
   outline: none;
 }
 
+.integrated-preloader {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  color: rgba(30,36,49,.72);
+  background: rgba(245,248,249,.72);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  transition: opacity .24s ease;
+}
+
+.integrated-preloader > span {
+  width: 34px;
+  height: 34px;
+  border: 3px solid rgba(28,151,217,.18);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: integrated-spin .8s linear infinite;
+}
+
 .integrated-detail-card {
   position: absolute;
   z-index: 5;
@@ -231,6 +263,10 @@
   width: 100%;
 }
 
+.integrated-detail-card .stage-progress-fill::after {
+  display: none;
+}
+
 .integrated-detail-card .stage-progress-label {
   overflow: hidden;
   font-size: 10.5px;
@@ -281,6 +317,32 @@
 
 .integrated-map .map-hint {
   display: none;
+}
+
+.mask-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+}
+
+.mask-word + .mask-word {
+  margin-left: .24em;
+}
+
+.mask-word > span {
+  display: inline-block;
+  transform: translateY(112%);
+  animation: mask-word-up .62s cubic-bezier(.2,.82,.2,1) forwards;
+  animation-delay: calc(var(--word-index, 0) * 48ms);
+}
+
+.fade-line {
+  animation: fade-line-in .48s ease both;
+  animation-delay: 120ms;
+}
+
+.project-description.fade-line {
+  display: block;
 }
 
 @media (max-width: 1280px) {
@@ -399,15 +461,43 @@
   }
 }
 
+@keyframes integrated-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mask-word-up {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .integrated-workspace,
   .integrated-object,
-  .integrated-detail-card {
+  .integrated-detail-card,
+  .integrated-preloader > span,
+  .mask-word > span,
+  .fade-line {
     animation: none;
+    transform: none;
   }
 
   .integrated-projects-section .category,
-  .integrated-object {
+  .integrated-object,
+  .integrated-preloader {
     transition: none;
   }
 }
