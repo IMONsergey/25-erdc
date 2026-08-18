@@ -66,3 +66,10 @@ jobs:
           done
           echo "The public GitHub Pages URL did not become ready." >&2
           exit 1
+
+      - name: Record verified deployment
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Verify live GitHub Pages deployment"
+          git push
