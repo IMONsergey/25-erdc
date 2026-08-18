@@ -56,6 +56,20 @@ function normalizeTitle(title) {
   return title.replace(/\s+/g, " ").trim();
 }
 
+function compactTitle(title, limit = 82) {
+  const normalized = normalizeTitle(title)
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/строительство,\s*реконструкция\s*и\s*капитальный\s*ремонт/gi, "Строительство и ремонт")
+    .replace(/реконструкция\s*и\s*капитальный\s*ремонт/gi, "Реконструкция и ремонт")
+    .replace(/строительство,\s*реконструкция/gi, "Строительство и реконструкция")
+    .replace(/муниципальное бюджетное общеобразовательное учреждение/gi, "Школа")
+    .replace(/муниципальное бюджетное дошкольное образовательное учреждение/gi, "Детский сад")
+    .replace(/государственное бюджетное учреждение здравоохранения/gi, "Медучреждение")
+    .replace(/\s+/g, " ")
+    .trim();
+  return normalized.length > limit ? `${normalized.slice(0, limit - 3).trim()}...` : normalized;
+}
+
 function prepareObject(object) {
   const industryName = object.industryName ?? "Без отрасли";
   return {
@@ -63,6 +77,8 @@ function prepareObject(object) {
     categoryId: object.industryId ?? industryName,
     categoryLabel: industryName,
     title: normalizeTitle(object.title),
+    displayTitle: compactTitle(object.title, 72),
+    detailTitle: compactTitle(object.title, 94),
     short: object.description || object.address || copyForIndustry(industryName),
   };
 }
@@ -252,7 +268,7 @@ function ProjectCard({ object, selected, onSelect }) {
     <button className={`integrated-object${selected ? " is-active" : ""}`} type="button" aria-pressed={selected} onClick={onSelect}>
       <img src={object.image} alt="" />
       <span>
-        <strong>{object.title}</strong>
+        <strong>{object.displayTitle}</strong>
         <small>{object.short}</small>
       </span>
     </button>
@@ -263,25 +279,29 @@ function DetailOverlay({ object, stage, onClose }) {
   if (!object) return null;
   return (
     <article className="integrated-detail-card" aria-live="polite">
-      <div className="project-detail-title">
-        <h3>{object.title}</h3>
+      <div className="integrated-detail-media">
+        <img className="project-detail-photo" src={object.image} alt="" />
         <button className="project-close" type="button" onClick={onClose} aria-label="Закрыть карточку объекта">
           <img src={asset("icon-plus.svg")} alt="" />
         </button>
       </div>
-      <img className="project-detail-photo" src={object.image} alt="" />
-      <div className="project-status-row">
-        <span className="project-type">{object.industryName}</span>
-        <div className="stage-progress" role="progressbar" aria-label={`Стадия: ${stage?.label ?? "не указана"}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={stageProgress(object.stageId)}>
-          <span className="stage-progress-fill" style={{ width: `${stageProgress(object.stageId)}%` }} />
-          <span className="stage-progress-label">{stage?.label ?? "Стадия уточняется"}</span>
+      <div className="integrated-detail-body">
+        <div className="project-detail-title">
+          <h3>{object.detailTitle}</h3>
         </div>
-      </div>
-      <p className="project-description">{object.description || object.address}</p>
-      <div className="project-metrics">
-        <div><strong>{object.budget}</strong><span>утверждённый бюджет</span></div>
-        <div><strong>{object.deadline}</strong><span>плановый срок</span></div>
-        <div><strong>{object.address || "Владивосток"}</strong><span>локация</span></div>
+        <div className="project-status-row">
+          <span className="project-type">{object.industryName}</span>
+          <div className="stage-progress" role="progressbar" aria-label={`Стадия: ${stage?.label ?? "не указана"}`} aria-valuemin="0" aria-valuemax="100" aria-valuenow={stageProgress(object.stageId)}>
+            <span className="stage-progress-fill" style={{ width: `${stageProgress(object.stageId)}%` }} />
+            <span className="stage-progress-label">{stage?.label ?? "Стадия уточняется"}</span>
+          </div>
+        </div>
+        <p className="project-description">{object.description || object.address}</p>
+        <div className="project-metrics">
+          <div><strong>{object.budget}</strong><span>утверждённый бюджет</span></div>
+          <div><strong>{object.deadline}</strong><span>плановый срок</span></div>
+          <div><strong>{object.address || "Владивосток"}</strong><span>локация</span></div>
+        </div>
       </div>
     </article>
   );
@@ -391,10 +411,6 @@ export default function IntegratedProjects() {
         </aside>
         <div className="project-map integrated-map">
           <IntegratedMap objects={filteredObjects} selectedId={selectedId} onSelect={setSelectedId} />
-          <div className="map-hint" aria-hidden="true">
-            <img src={asset("icon-close.svg")} alt="" />
-            <span>Двигайте карту и нажмите на объект, чтобы увидеть подробности</span>
-          </div>
           {selectedObject ? <DetailOverlay object={selectedObject} stage={selectedStage} onClose={() => setSelectedId(null)} /> : null}
         </div>
       </div>
