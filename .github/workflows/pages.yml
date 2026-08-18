@@ -50,3 +50,19 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify public page
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for attempt in {1..12}; do
+            if curl --fail --location --silent --show-error "${PAGE_URL}" --output /tmp/page.html; then
+              grep --quiet "Агломерация Владивосток" /tmp/page.html
+              curl --fail --location --silent --show-error "${PAGE_URL}assets/hero-vladivostok.webp" --output /dev/null
+              curl --fail --location --silent --show-error "${PAGE_URL}assets/fonts/tiktok-sans-cyrillic.woff2" --output /dev/null
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "The public GitHub Pages URL did not become ready." >&2
+          exit 1
