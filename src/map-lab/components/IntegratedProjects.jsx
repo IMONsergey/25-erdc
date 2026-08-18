@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "ol/ol.css";
 import { asset } from "../../data.js";
-import { FadeText, MaskedWords } from "../../components/AnimatedText.jsx";
+import { FadeText, MaskedWords, Text } from "../../components/AnimatedText.jsx";
 import { createMapDataProvider } from "../mapData.js";
 import { isupSnapshot } from "../isupSnapshot.js";
 
@@ -304,8 +304,8 @@ function ProjectCard({ object, selected, onSelect }) {
     <button className={`integrated-object${selected ? " is-active" : ""}`} type="button" aria-pressed={selected} onClick={onSelect}>
       <img src={object.image} alt="" />
       <span>
-        <strong><MaskedWords text={object.displayTitle} /></strong>
-        <FadeText as="small">{object.short}</FadeText>
+        <Text as="strong">{object.displayTitle}</Text>
+        <Text as="small">{object.short}</Text>
       </span>
     </button>
   );
@@ -428,8 +428,8 @@ export default function IntegratedProjects() {
       <div className="projects-workspace integrated-workspace">
         <aside className="project-list integrated-list" aria-label="Объекты выбранного направления">
           <div className="project-list-head">
-            <h3><MaskedWords text={activeCategory.label} /></h3>
-            <div><FadeText>Объекты ИСУП</FadeText><b>{filteredObjects.length}</b></div>
+            <h3><Text>{activeCategory.label}</Text></h3>
+            <div><Text>Объекты ИСУП</Text><b>{filteredObjects.length}</b></div>
           </div>
           {loading ? (
             <div className="project-list-progress"><span aria-hidden="true">•••</span><p>Загружаем объекты ИСУП</p></div>
@@ -450,7 +450,7 @@ export default function IntegratedProjects() {
           {loading ? (
             <div className="integrated-preloader" role="status" aria-live="polite">
               <span aria-hidden="true" />
-              <FadeText>Готовим карту и объекты</FadeText>
+              <Text>Готовим карту и объекты</Text>
             </div>
           ) : null}
           {selectedObject ? <DetailOverlay object={selectedObject} stage={selectedStage} onClose={() => setSelectedId(null)} /> : null}

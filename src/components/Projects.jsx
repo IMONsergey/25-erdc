@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { asset, categories, projects } from "../data.js";
-import { FadeText, MaskedWords } from "./AnimatedText.jsx";
+import { FadeText, MaskedWords, Text } from "./AnimatedText.jsx";
 
 function CategoryIcon({ name }) {
   return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
@@ -12,7 +12,7 @@ function ProjectList({ category, activeProjectId, onSelect }) {
   return (
     <aside className="project-list" aria-label="Список проектов">
       <div className="project-list-head">
-        <h3><MaskedWords text={category.label} /></h3>
+        <h3><Text>{category.label}</Text></h3>
         <div><span>{housing ? "Реновация и КРТ" : "Проекты"}</span><b>{housing ? "10" : "—"}</b></div>
       </div>
       {housing ? (
@@ -26,7 +26,7 @@ function ProjectList({ category, activeProjectId, onSelect }) {
               onClick={() => onSelect(project.id)}
             >
               <img src={asset(project.image)} alt="" />
-              <span><strong><MaskedWords text={project.title} /></strong><FadeText as="small">{project.short}</FadeText></span>
+              <span><Text as="strong">{project.title}</Text><Text as="small">{project.short}</Text></span>
             </button>
           ))}
         </div>

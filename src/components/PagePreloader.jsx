@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
+import { asset } from "../data.js";
 
 export default function PagePreloader() {
   const [visible, setVisible] = useState(true);
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
+    document.documentElement.classList.add("motion-armed");
     const startedAt = window.performance.now();
     let removeTimer;
+    const disarmTimer = window.setTimeout(() => {
+      document.documentElement.classList.remove("motion-armed");
+    }, 1300);
 
     const finish = () => {
       const elapsed = window.performance.now() - startedAt;
@@ -26,6 +31,8 @@ export default function PagePreloader() {
     return () => {
       window.removeEventListener("load", finish);
       window.clearTimeout(removeTimer);
+      window.clearTimeout(disarmTimer);
+      document.documentElement.classList.remove("motion-armed");
     };
   }, []);
 
@@ -33,7 +40,7 @@ export default function PagePreloader() {
 
   return (
     <div className={`page-preloader${leaving ? " is-leaving" : ""}`} role="status" aria-live="polite">
-      <div className="page-preloader-mark" aria-hidden="true">25</div>
+      <img className="page-preloader-mark" src={asset("preloader-vector.svg")} alt="" aria-hidden="true" />
       <div className="page-preloader-bar" aria-hidden="true"><span /></div>
       <span className="visually-hidden">Загрузка страницы</span>
     </div>
