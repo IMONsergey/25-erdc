@@ -16,23 +16,45 @@ download() {
   fi
 }
 
-download hero-vladivostok.png "https://www.figma.com/api/mcp/asset/581c318f-0915-4ac0-859b-5b0210a50993.png"
-download crest-vladivostok.png "https://www.figma.com/api/mcp/asset/8716c996-05eb-43f6-886b-96f662357d11.png"
-download city-vladivostok.png "https://www.figma.com/api/mcp/asset/3742721b-4fcc-409d-a99d-38eb66e0d8c3.png"
-download crest-artem.png "https://www.figma.com/api/mcp/asset/d27884df-8a07-4735-ab62-ac3cb3316afe.png"
-download city-artem.png "https://www.figma.com/api/mcp/asset/59bed68f-7004-48ba-b3b4-da1ecd66c629.png"
-download crest-bolshoy-kamen.png "https://www.figma.com/api/mcp/asset/39c2df7b-d1a9-495e-ad7a-b41848418fce.png"
-download city-bolshoy-kamen.png "https://www.figma.com/api/mcp/asset/d26ce632-f5c9-41bb-9999-22139d58aefa.png"
-download detail-vladivostok.png "https://www.figma.com/api/mcp/asset/e8138885-08a8-459a-acb2-8f49c6793051.png"
-download mission-map.png "https://www.figma.com/api/mcp/asset/2346c3ba-304f-4623-ae32-d33988aec8cd.png"
-download mission-city.png "https://www.figma.com/api/mcp/asset/079d7de1-54ef-4390-9d7b-44b8c456215a.png"
-download project-kungasny.png "https://www.figma.com/api/mcp/asset/d9c5757f-0444-452c-84a8-9e2a32f56204.png"
-download project-kaluzina.png "https://www.figma.com/api/mcp/asset/27d9b084-91e9-4437-b878-ba8268435fff.png"
-download project-firsova.png "https://www.figma.com/api/mcp/asset/5fc6b72a-f606-4cba-8dc3-d5e3d6418907.png"
-download project-ulyss.png "https://www.figma.com/api/mcp/asset/00088972-25b9-45af-99d9-37190a56c6aa.png"
-download project-neftebaza.png "https://www.figma.com/api/mcp/asset/04cae2d8-b194-4ce4-9f37-40d9e15d2a18.png"
-download projects-map.png "https://www.figma.com/api/mcp/asset/8a1cf980-50f8-492b-b150-2ea8a9c4b186.png"
-download project-marker.png "https://www.figma.com/api/mcp/asset/3846b6b7-ffd4-40b0-bec8-c74af01a0959.png"
+download_raster() {
+  local target="$1"
+  local url="$2"
+  if [[ -s "assets/$target" ]]; then
+    return
+  fi
+  local source_file
+  source_file="$(mktemp)"
+  curl --fail --location --retry 3 --silent --show-error "$url" --output "$source_file"
+  if head -c 64 "$source_file" | grep -qi '<html'; then
+    echo "Raster download failed: $target" >&2
+    rm -f "$source_file"
+    exit 1
+  fi
+  if [[ "$target" == crest-* || "$target" == project-marker.webp ]]; then
+    cwebp -quiet -mt -lossless -z 9 "$source_file" -o "assets/$target"
+  else
+    cwebp -quiet -mt -m 6 -q 84 "$source_file" -o "assets/$target"
+  fi
+  rm -f "$source_file"
+}
+
+download_raster hero-vladivostok.webp "https://www.figma.com/api/mcp/asset/581c318f-0915-4ac0-859b-5b0210a50993.png"
+download_raster crest-vladivostok.webp "https://www.figma.com/api/mcp/asset/8716c996-05eb-43f6-886b-96f662357d11.png"
+download_raster city-vladivostok.webp "https://www.figma.com/api/mcp/asset/3742721b-4fcc-409d-a99d-38eb66e0d8c3.png"
+download_raster crest-artem.webp "https://www.figma.com/api/mcp/asset/d27884df-8a07-4735-ab62-ac3cb3316afe.png"
+download_raster city-artem.webp "https://www.figma.com/api/mcp/asset/59bed68f-7004-48ba-b3b4-da1ecd66c629.png"
+download_raster crest-bolshoy-kamen.webp "https://www.figma.com/api/mcp/asset/39c2df7b-d1a9-495e-ad7a-b41848418fce.png"
+download_raster city-bolshoy-kamen.webp "https://www.figma.com/api/mcp/asset/d26ce632-f5c9-41bb-9999-22139d58aefa.png"
+download_raster detail-vladivostok.webp "https://www.figma.com/api/mcp/asset/e8138885-08a8-459a-acb2-8f49c6793051.png"
+download_raster mission-map.webp "https://www.figma.com/api/mcp/asset/2346c3ba-304f-4623-ae32-d33988aec8cd.png"
+download_raster mission-city.webp "https://www.figma.com/api/mcp/asset/079d7de1-54ef-4390-9d7b-44b8c456215a.png"
+download_raster project-kungasny.webp "https://www.figma.com/api/mcp/asset/d9c5757f-0444-452c-84a8-9e2a32f56204.png"
+download_raster project-kaluzina.webp "https://www.figma.com/api/mcp/asset/27d9b084-91e9-4437-b878-ba8268435fff.png"
+download_raster project-firsova.webp "https://www.figma.com/api/mcp/asset/5fc6b72a-f606-4cba-8dc3-d5e3d6418907.png"
+download_raster project-ulyss.webp "https://www.figma.com/api/mcp/asset/00088972-25b9-45af-99d9-37190a56c6aa.png"
+download_raster project-neftebaza.webp "https://www.figma.com/api/mcp/asset/04cae2d8-b194-4ce4-9f37-40d9e15d2a18.png"
+download_raster projects-map.webp "https://www.figma.com/api/mcp/asset/8a1cf980-50f8-492b-b150-2ea8a9c4b186.png"
+download_raster project-marker.webp "https://www.figma.com/api/mcp/asset/3846b6b7-ffd4-40b0-bec8-c74af01a0959.png"
 download background-mask.svg "https://www.figma.com/api/mcp/asset/44e1527b-e1eb-4dd9-8a9e-b5fb04a3ce39.svg"
 download hero-mask.svg "https://www.figma.com/api/mcp/asset/3f80fddc-120e-4c9b-835d-ce546729f17c.svg"
 download icon-scroll.svg "https://www.figma.com/api/mcp/asset/1fa9a37b-1d75-4045-a6e6-e3f87ef9bebc.svg"
@@ -59,5 +81,7 @@ download icon-close.svg "https://www.figma.com/api/mcp/asset/bf08358d-f51a-445f-
 download icon-plus.svg "https://www.figma.com/api/mcp/asset/702d7ffd-3589-4fb2-b756-af37d08575b6.svg"
 download map-hint.svg "https://www.figma.com/api/mcp/asset/17f8d9ff-8051-4cf5-8d00-6d4cd598aeb5.svg"
 download logo-25-cities.svg "https://www.figma.com/api/mcp/asset/53fa29bf-f22f-44fb-9861-0ed814ac67aa.svg"
+
+find assets -maxdepth 1 -type f -name '*.png' -delete
 
 echo "Figma assets are ready."
