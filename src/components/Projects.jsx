@@ -45,7 +45,7 @@ function ProjectDetail({ project, onClose }) {
       <div className="project-detail-title">
         <h3>{project.title}</h3>
         <button className="project-close" type="button" onClick={onClose} aria-label="Закрыть карточку проекта">
-          <img src={asset("icon-close.svg")} alt="" />
+          <img src={asset("icon-plus.svg")} alt="" />
         </button>
       </div>
       <img className="project-detail-photo" src={asset(project.image)} alt={`Визуализация проекта «${project.title}»`} />
