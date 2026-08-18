@@ -78,7 +78,7 @@ p, h1, h2, h3, h4 { margin: 0; }
 .city-grid { display: grid; margin-top: 66px; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .city-card { min-width: 0; padding: 0; overflow: hidden; border: 2px solid transparent; border-radius: var(--radius); color: var(--ink); background: white; cursor: pointer; text-align: left; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
 .city-card:hover { transform: translateY(-3px); box-shadow: 0 16px 44px rgba(3, 28, 57, .12); }
-.city-card.is-selected { border-color: rgba(28, 151, 217, .42); }
+.city-card.is-selected { border-color: rgba(28, 151, 217, .1); }
 .city-card-body { display: flex; height: 354px; padding: 42px 38px 44px; flex-direction: column; }
 .city-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
 .city-crest { width: auto; height: 76px; object-fit: contain; object-position: left center; }

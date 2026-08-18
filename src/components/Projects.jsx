@@ -134,7 +134,7 @@ function ProjectMap({ activeProject, canSelectProject, onSelectProject, onClose 
         ) : null}
       </div>
       <div className="map-hint" aria-hidden="true">
-        <img src={asset("icon-map-drag.svg")} alt="" />
+        <img src={asset("icon-close.svg")} alt="" />
         <span>{canSelectProject ? "Двигайте карту и нажмите на проект, чтобы увидеть подробности" : "Карту можно перемещать"}</span>
       </div>
       {activeProject ? <ProjectDetail project={activeProject} onClose={onClose} /> : null}
