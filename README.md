@@ -1,21 +1,20 @@
 # 25 ERDC — Владивосток
 
-Адаптивная статическая верстка страницы мастер-плана агломерации Владивостока по Figma-макету.
+Адаптивная React-верстка страницы мастер-плана агломерации Владивостока по Figma-макету.
 
 ## Локальный запуск
 
-После первого GitHub Pages-деплоя Figma-ассеты автоматически сохранятся в `assets/`.
-
 ```bash
-python3 -m http.server 8080
+npm install
+npm run dev
 ```
 
-Откройте `http://localhost:8080`.
+Production-сборка: `npm run build`. GitHub Pages автоматически собирает и публикует `dist/`.
 
 ## Структура
 
-- `index.html` — семантическая разметка страницы;
-- `styles.css` — дизайн-система, desktop/tablet/mobile адаптив;
-- `script.js` — мобильное меню и состояния интерфейса;
+- `src/components/` — независимые блоки и интерактивы страницы;
+- `src/data.js` — контент городов, категорий и проектов;
+- `src/styles.css` — дизайн-система и desktop/tablet/mobile адаптив;
 - `scripts/fetch-assets.sh` — однократное сохранение исходных Figma-ассетов;
 - `.github/workflows/pages.yml` — автоматический деплой на GitHub Pages.

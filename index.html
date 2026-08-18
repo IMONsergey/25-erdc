@@ -6,223 +6,27 @@
     <meta name="theme-color" content="#031c39" />
     <meta name="description" content="Мастер-планы агломерации Владивосток" />
     <title>Агломерация Владивосток — 25 городов</title>
-    <link rel="stylesheet" href="./styles.css" />
-    <script src="./script.js" defer></script>
+    <link rel="preload" href="./assets/fonts/tiktok-sans-cyrillic.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: "TikTok Sans";
+        src: url("./assets/fonts/tiktok-sans-cyrillic.woff2") format("woff2-variations");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 300 900;
+        unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: "TikTok Sans";
+        src: url("./assets/fonts/tiktok-sans-latin.woff2") format("woff2-variations");
+        font-display: swap;
+        font-style: normal;
+        font-weight: 300 900;
+      }
+    </style>
   </head>
   <body>
-    <a class="skip-link" href="#content">Перейти к содержанию</a>
-
-    <header class="site-header" id="top">
-      <div class="shell header-inner">
-        <a class="header-caption" href="#top">Новый облик городов Дальнего Востока</a>
-        <a class="brand" href="#top" aria-label="25 городов — на главную">
-          <img src="./assets/logo-25-cities.svg" alt="25 городов" width="103" height="22" />
-        </a>
-        <button class="menu-button" type="button" aria-expanded="false" aria-controls="main-menu">
-          <span></span><span></span>
-          <span class="visually-hidden">Открыть меню</span>
-        </button>
-        <nav class="main-nav" id="main-menu" aria-label="Основная навигация">
-          <a href="#top">Главная</a>
-          <a href="#about">О проекте</a>
-          <a href="#regions">Регионы</a>
-          <a href="#projects">ДВ Квартал</a>
-          <a href="#projects">Новости</a>
-        </nav>
-      </div>
-    </header>
-
-    <main id="content">
-      <section class="hero" aria-labelledby="hero-title">
-        <img class="hero-image" src="./assets/hero-vladivostok.webp" alt="Владивосток и Русский мост" />
-        <div class="hero-shade"></div>
-        <div class="shell hero-inner">
-          <div class="hero-heading">
-            <p class="hero-eyebrow">Агломерация</p>
-            <h1 id="hero-title">Владивосток</h1>
-          </div>
-
-          <div class="hero-summary" id="about">
-            <div class="hero-stats" aria-label="Основные показатели">
-              <article class="glass-stat">
-                <span>Площадь территории</span><strong>5.3</strong><small>тыс. км²</small>
-              </article>
-              <article class="glass-stat">
-                <span>Население края</span><strong>834.7</strong><small>тыс человек</small>
-              </article>
-              <article class="glass-stat">
-                <span>Горизонт реализации</span><strong>2050</strong><small>год</small>
-              </article>
-            </div>
-            <p>Агломерация объединяет территории, связанные общей экономикой, транспортной системой, рынком труда и единой стратегией пространственного развития.</p>
-            <a class="scroll-cue" href="#regions" aria-label="Перейти к мастер-планам">
-              <img src="./assets/icon-scroll.svg" alt="" width="31" height="31" />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <div class="blue-zone">
-        <section class="shell region-section" id="regions" aria-labelledby="regions-title">
-          <div class="section-intro section-intro--light">
-            <div>
-              <h2 id="regions-title">Мастер-планы агломерации<br />Владивосток</h2>
-              <p>Выберите территорию, чтобы изучить её мастер-план.</p>
-            </div>
-            <div class="selection-hint" aria-hidden="true">
-              <img src="./assets/icon-select-city.svg" alt="" width="26" height="26" />
-              <span>Выберите город<br />для изучения<br />мастер-планов</span>
-            </div>
-          </div>
-
-          <div class="city-grid" aria-label="Территории агломерации">
-            <article class="city-card is-selected">
-              <div class="city-card-body">
-                <div class="city-card-top">
-                  <img class="city-crest" src="./assets/crest-vladivostok.webp" alt="Герб Владивостока" />
-                  <div class="selected-state"><span>выбрано</span><img src="./assets/radio-selected.svg" alt="" /></div>
-                </div>
-                <h3>Владивосток<br />и остров Русский</h3>
-                <p>Морской, административный, научный, образовательный и туристический центр.</p>
-              </div>
-              <img class="city-photo" src="./assets/city-vladivostok.webp" alt="Побережье Владивостока" />
-            </article>
-
-            <article class="city-card">
-              <div class="city-card-body">
-                <div class="city-card-top">
-                  <img class="city-crest" src="./assets/crest-artem.webp" alt="Герб Артема" />
-                  <img class="radio-empty" src="./assets/radio-empty.svg" alt="" />
-                </div>
-                <h3>Артем</h3>
-                <p>Город аэропорта, промышленности и новых жилых территорий.</p>
-              </div>
-              <img class="city-photo" src="./assets/city-artem.webp" alt="Панорама Артема" />
-            </article>
-
-            <article class="city-card">
-              <div class="city-card-body">
-                <div class="city-card-top">
-                  <img class="city-crest city-crest--wide" src="./assets/crest-bolshoy-kamen.webp" alt="Герб Большого Камня" />
-                  <img class="radio-empty" src="./assets/radio-empty.svg" alt="" />
-                </div>
-                <h3>Большой камень</h3>
-                <p>Центр судостроения, производства и развития морской промышленности.</p>
-              </div>
-              <img class="city-photo" src="./assets/city-bolshoy-kamen.webp" alt="Побережье Большого Камня" />
-            </article>
-          </div>
-
-          <div class="soft-divider"></div>
-
-          <div class="city-detail">
-            <article class="city-facts">
-              <div>
-                <h2>Владивосток</h2>
-                <p>Сопки, туманы, вантовые мосты над океанскими бухтами и старый китайский квартал в центре — Владивосток не зря называют русским Сан-Франциско, его города-побратима. Только здесь этот характер не заимствованный, а свой, тихоокеанский.</p>
-              </div>
-              <div>
-                <div class="fact-grid">
-                  <article class="fact-card">
-                    <img src="./assets/icon-population.svg" alt="" />
-                    <span>численность<br />населения</span>
-                    <strong>628.4</strong><small>тыс. чел.</small>
-                  </article>
-                  <article class="fact-card">
-                    <img src="./assets/icon-quality.svg" alt="" />
-                    <span>Индекс качества<br />городской среды<br />на 2024г.*</span>
-                    <strong>205</strong><small>баллов</small>
-                  </article>
-                </div>
-                <p class="fact-note">*0- неблагоприятная городская среда, 360 - максимально благоприятная городская среда (данные сайта индекс-городов.рф)</p>
-              </div>
-            </article>
-            <img class="city-detail-image" src="./assets/detail-vladivostok.webp" alt="Русский мост во Владивостоке" />
-          </div>
-        </section>
-      </div>
-
-      <section class="shell mission-section" aria-labelledby="mission-title">
-        <div class="section-intro">
-          <p class="section-label">Миссия города</p>
-          <h2 id="mission-title">Владивосток — морские ворота России в Азиатско-Тихоокеанский регион</h2>
-        </div>
-        <div class="mission-grid">
-          <article class="mission-card">
-            <div><span class="card-number">01</span><p>Владивосток — административный центр Приморского края и крупнейший морской город Дальнего Востока. Он расположен на полуострове Муравьёва-Амурского и островах залива Петра Великого, на побережье Японского моря.</p></div>
-            <img src="./assets/icon-mission-city.svg" alt="" />
-          </article>
-          <article class="mission-card">
-            <div><span class="card-number">02</span><p>Город объединяет портовую экономику, международную торговлю, образование, науку, туризм и высокотехнологичные отрасли.</p></div>
-            <img src="./assets/icon-mission-industry.svg" alt="" />
-          </article>
-          <article class="mission-card">
-            <div><span class="card-number">03</span><p>Город занимает стратегическое положение между Россией и странами Азиатско-Тихоокеанского региона. Здесь завершается Транссибирская магистраль, действует крупнейший морской порт и расположен международный аэропорт Владивосток.</p></div>
-            <img src="./assets/icon-mission-globe.svg" alt="" />
-          </article>
-          <img class="mission-visual" src="./assets/mission-map.webp" alt="Схема транспортных связей Владивостока" />
-          <img class="mission-visual" src="./assets/mission-city.webp" alt="Городская панорама Владивостока" />
-          <article class="strategic-card">
-            <h3>Стратегическое положение</h3>
-            <ul>
-              <li><span>Транспортная магистраль</span><img src="./assets/icon-rail.svg" alt="" /></li>
-              <li><span>Федеральная трасса Байкал</span><img src="./assets/icon-highway.svg" alt="" /></li>
-              <li><span>Международный аэропорт Байкал</span><img src="./assets/icon-airport.svg" alt="" /></li>
-              <li><span>Связь с Китаем, Монголией, Кореей</span><img src="./assets/icon-global.svg" alt="" /></li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="shell projects-section" id="projects" aria-labelledby="projects-title">
-        <div class="section-intro">
-          <p class="section-label">Масштаб преобразований</p>
-          <h2 id="projects-title">Ключевые проекты развития Владивостока</h2>
-        </div>
-
-        <div class="project-categories" role="list" aria-label="Категории проектов">
-          <button class="category is-active" type="button"><img src="./assets/icon-category-housing.svg" alt="" /><span>Жильё и деловая застройка</span></button>
-          <button class="category" type="button"><img src="./assets/icon-category-social.svg" alt="" /><span>Социальная инфраструктура</span></button>
-          <button class="category" type="button"><img src="./assets/icon-category-transport.svg" alt="" /><span>Транспорт и мобильность</span></button>
-          <button class="category" type="button"><img src="./assets/icon-category-engineering.svg" alt="" /><span>Инженерная инфраструктура</span></button>
-          <button class="category" type="button"><img src="./assets/icon-category-ecology.svg" alt="" /><span>Рекреация и экология</span></button>
-          <button class="category" type="button"><img src="./assets/icon-category-tourism.svg" alt="" /><span>Туризм</span></button>
-        </div>
-
-        <div class="projects-workspace">
-          <aside class="project-list" aria-label="Список проектов">
-            <div class="project-list-head"><h3>Жильё и деловая застройка</h3><div><span>Реновация и КРТ</span><b>10</b></div></div>
-            <div class="project-items">
-              <button class="project-item is-active" type="button"><img src="./assets/project-kungasny.webp" alt="" /><span><strong>КРТ в районе мыса Кунгасного</strong><small>Морской деловой центр на месте нефтебазы.</small></span></button>
-              <button class="project-item" type="button"><img src="./assets/project-kaluzina.webp" alt="" /><span><strong>КРТ мыс Калузина</strong><small>Новый район с жилой и деловой застройкой, намывом территории и выходом к морю.</small></span></button>
-              <button class="project-item" type="button"><img src="./assets/project-firsova.webp" alt="" /><span><strong>КРТ мыс Фирсова</strong><small>Морской деловой центр на месте нефтебазы.</small></span></button>
-              <button class="project-item" type="button"><img src="./assets/project-ulyss.webp" alt="" /><span><strong>КРТ бухта Улисс</strong><small>Развитие прибрежных территорий и парковая зона вдоль бухты.</small></span></button>
-              <button class="project-item" type="button"><img src="./assets/project-neftebaza.webp" alt="" /><span><strong>ЦДР Нефтебаза</strong><small>Преобразование территории в многофункциональный деловой район.</small></span></button>
-            </div>
-          </aside>
-
-          <div class="project-map">
-            <img src="./assets/projects-map.webp" alt="Карта проектов Владивостока" />
-            <div class="map-hint"><img src="./assets/map-hint.svg" alt="" /><span>Нажмите на проект<br />на карте, чтобы<br />увидеть подробности</span></div>
-            <img class="map-marker" src="./assets/project-marker.webp" alt="Отмеченный проект" />
-          </div>
-
-          <article class="project-detail-card">
-            <div class="project-detail-title"><h3>КРТ в районе мыса<br />Кунгасного</h3><img src="./assets/icon-close.svg" alt="" /></div>
-            <img class="project-detail-photo" src="./assets/project-kungasny.webp" alt="Проект на мысе Кунгасного" />
-            <div class="project-tags"><span>Реновация</span><span>Стадия строительства</span></div>
-            <p class="project-description">Комфортная жилая застройка по стандарту ДОМ.РФ, парк, пешеходный мост, культурный и спортивный центр, социальная инфраструктура.</p>
-            <div class="project-metrics"><div><strong>94.22 га</strong><span>площадь участка проектирования</span></div><div><strong>130.5 млрд ₽</strong><span>инвестиций</span></div><div><strong>924,4 тыс. м²</strong><span>общая площадь застройки</span></div></div>
-            <h4>Что появится</h4>
-            <ul class="project-results">
-              <li>Строительство 4 ЖК, гостиничного комплекса и 2 общественно-деловых объектов (2,9 га)</li>
-              <li>Пешеходный мост через реку Улу</li>
-              <li>Культурный и спортивный центр</li>
-              <li>Жильё по стандарту ДОМ.РФ</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-    </main>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

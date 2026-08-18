@@ -1,2 +1,6 @@
 .DS_Store
 assets/test-raw.jpeg
+.DS_Store
+node_modules/
+dist/
+public/

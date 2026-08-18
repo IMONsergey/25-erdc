@@ -81,6 +81,7 @@ download icon-category-tourism.svg "https://www.figma.com/api/mcp/asset/34f0d296
 download icon-close.svg "https://www.figma.com/api/mcp/asset/bf08358d-f51a-445f-b02f-f0a894ed81d5.svg"
 download icon-plus.svg "https://www.figma.com/api/mcp/asset/702d7ffd-3589-4fb2-b756-af37d08575b6.svg"
 download map-hint.svg "https://www.figma.com/api/mcp/asset/17f8d9ff-8051-4cf5-8d00-6d4cd598aeb5.svg"
+download icon-map-drag.svg "https://www.figma.com/api/mcp/asset/571a78bf-e1db-4b48-94a6-26c4b2f6cdb9.svg"
 download logo-25-cities.svg "https://www.figma.com/api/mcp/asset/53fa29bf-f22f-44fb-9861-0ed814ac67aa.svg"
 
 download_font() {
