@@ -26,6 +26,8 @@ jobs:
 
       - name: Fetch and preserve Figma assets
         run: |
+          sudo apt-get update
+          sudo apt-get install --yes webp
           bash scripts/fetch-assets.sh
           if [[ -n "$(git status --porcelain assets)" ]]; then
             git config user.name "github-actions[bot]"
