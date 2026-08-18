@@ -4,3 +4,4 @@ assets/test-raw.jpeg
 node_modules/
 dist/
 public/
+output/
