@@ -95,7 +95,7 @@ download_font() {
 download_font tiktok-sans-cyrillic.woff2 "https://cdn.jsdelivr.net/fontsource/fonts/tiktok-sans:vf@5.3.0/cyrillic-wght-normal.woff2"
 download_font tiktok-sans-latin.woff2 "https://cdn.jsdelivr.net/fontsource/fonts/tiktok-sans:vf@5.3.0/latin-wght-normal.woff2"
 
-find assets -maxdepth 1 -type f -name '*.png' -delete
+find assets -maxdepth 1 -type f -name '*.png' ! -name 'favicon-25.png' -delete
 touch assets/.webp-v2
 
 echo "Figma assets are ready."
