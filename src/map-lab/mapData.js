@@ -136,12 +136,19 @@ export function createMapDataProvider(mode) {
 
 function imageForObject(item) {
   const source = `${item.industryName ?? ""} ${item.title ?? ""}`.toLowerCase();
-  if (source.includes("транспорт")) return asset("city-vladivostok.webp");
-  if (source.includes("жиль")) return asset("project-kungasny.webp");
-  if (source.includes("образ")) return asset("detail-vladivostok.webp");
-  if (source.includes("культур") || source.includes("спорт")) return asset("project-ulyss.webp");
-  if (source.includes("тур")) return asset("project-firsova.webp");
-  return asset("mission-map.webp");
+  if (source.includes("транспорт")) return pickAsset(item, ["city-vladivostok.webp", "project-firsova.webp", "hero-vladivostok.webp"]);
+  if (source.includes("жиль")) return pickAsset(item, ["project-kungasny.webp", "project-kaluzina.webp", "project-neftebaza.webp", "detail-vladivostok.webp"]);
+  if (source.includes("здрав")) return pickAsset(item, ["mission-city.webp", "city-vladivostok.webp", "project-ulyss.webp"]);
+  if (source.includes("образ")) return pickAsset(item, ["detail-vladivostok.webp", "mission-city.webp", "city-artem.webp"]);
+  if (source.includes("культур") || source.includes("спорт")) return pickAsset(item, ["project-ulyss.webp", "city-vladivostok.webp", "mission-map.webp"]);
+  if (source.includes("тур")) return pickAsset(item, ["project-firsova.webp", "project-kungasny.webp", "hero-vladivostok.webp"]);
+  return pickAsset(item, ["mission-map.webp", "project-firsova.webp", "city-bolshoy-kamen.webp", "project-neftebaza.webp"]);
+}
+
+function pickAsset(item, names) {
+  const key = `${item.id ?? ""}${item.title ?? ""}`;
+  const hash = [...key].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return asset(names[hash % names.length]);
 }
 
 function formatBudget(value) {

@@ -12,7 +12,8 @@ const industryIconRules = [
   [/инфраструктур|связь|эконом|производ|безопас/i, "icon-category-engineering.svg"],
   [/туризм/i, "icon-category-tourism.svg"],
   [/эколог/i, "icon-category-ecology.svg"],
-  [/здрав|образ|культур|спорт|социаль/i, "icon-category-social.svg"],
+  [/здрав/i, "icon-category-health.svg"],
+  [/образ|культур|спорт|социаль/i, "icon-category-social.svg"],
 ];
 
 const industryCopyRules = [
@@ -105,11 +106,11 @@ function CategoryIcon({ name }) {
 }
 
 async function loadOpenLayers() {
-  const [MapModule, ViewModule, TileLayerModule, OSMModule, VectorLayerModule, VectorSourceModule, ClusterModule, FeatureModule, GeomModule, StyleModule, ProjectionModule] = await Promise.all([
+  const [MapModule, ViewModule, TileLayerModule, XYZModule, VectorLayerModule, VectorSourceModule, ClusterModule, FeatureModule, GeomModule, StyleModule, ProjectionModule, EasingModule] = await Promise.all([
     import("ol/Map.js"),
     import("ol/View.js"),
     import("ol/layer/Tile.js"),
-    import("ol/source/OSM.js"),
+    import("ol/source/XYZ.js"),
     import("ol/layer/Vector.js"),
     import("ol/source/Vector.js"),
     import("ol/source/Cluster.js"),
@@ -117,12 +118,13 @@ async function loadOpenLayers() {
     import("ol/geom.js"),
     import("ol/style.js"),
     import("ol/proj.js"),
+    import("ol/easing.js"),
   ]);
   return {
     Map: MapModule.default,
     View: ViewModule.default,
     TileLayer: TileLayerModule.default,
-    OSM: OSMModule.default,
+    XYZ: XYZModule.default,
     VectorLayer: VectorLayerModule.default,
     VectorSource: VectorSourceModule.default,
     Cluster: ClusterModule.default,
@@ -134,6 +136,7 @@ async function loadOpenLayers() {
     Style: StyleModule.Style,
     Text: StyleModule.Text,
     fromLonLat: ProjectionModule.fromLonLat,
+    easeOut: EasingModule.easeOut,
   };
 }
 
@@ -198,7 +201,14 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
       const map = new ol.Map({
         target: elementRef.current,
         layers: [
-          new ol.TileLayer({ source: new ol.OSM({ crossOrigin: "anonymous" }) }),
+          new ol.TileLayer({
+            source: new ol.XYZ({
+              url: "https://{a-c}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
+              crossOrigin: "anonymous",
+              transition: 280,
+              attributions: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            }),
+          }),
           objectLayer,
           selectedLayer,
         ],
@@ -247,17 +257,32 @@ function IntegratedMap({ objects, selectedId, onSelect }) {
       map.getView().fit(source.getExtent(), {
         padding: window.innerWidth <= 720 ? [46, 34, 220, 34] : [70, 80, 70, 70],
         maxZoom: 12,
-        duration: 260,
+        duration: 520,
+        easing: ol.easeOut,
       });
     }
-  }, [objects, selectedId]);
+  }, [objects]);
 
   useEffect(() => {
     const ol = olRef.current;
     const map = mapRef.current;
+    const source = sourceRef.current;
     const object = objects.find((item) => item.id === selectedId);
-    if (!ol || !map || !object) return;
-    map.getView().animate({ center: ol.fromLonLat(object.coordinates), zoom: Math.max(map.getView().getZoom(), 13.4), duration: 320 });
+    if (!ol || !map || !source) return;
+    source.getFeatures().forEach((feature) => {
+      feature.set("selected", feature.get("objectId") === selectedId);
+      feature.changed();
+    });
+    if (!object) return;
+    const view = map.getView();
+    const currentZoom = view.getZoom() ?? 11;
+    view.cancelAnimations();
+    view.animate({
+      center: ol.fromLonLat(object.coordinates),
+      zoom: Math.max(currentZoom, 12.45),
+      duration: 680,
+      easing: ol.easeOut,
+    });
   }, [selectedId]);
 
   return <div className="integrated-map-canvas" ref={elementRef} aria-label="Интерактивная карта объектов Владивостока" />;
