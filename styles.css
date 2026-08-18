@@ -114,7 +114,7 @@ p, h1, h2, h3, h4 { margin: 0; }
 .city-facts .fact-note { margin-top: 22px; font-size: 10px; font-weight: 300; line-height: 1.25; }
 .city-detail-image { width: 100%; height: 540px; border-radius: var(--radius); object-fit: cover; }
 
-.mission-section { padding: 140px 0; }
+.mission-section { padding: 0 0 140px; }
 .mission-section .section-intro { margin-bottom: 60px; }
 .mission-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
 .mission-card, .strategic-card { height: 353px; padding: 32px; border-radius: var(--radius); background: white; }
@@ -242,7 +242,7 @@ p, h1, h2, h3, h4 { margin: 0; }
   .fact-card { height: 180px; padding-inline: 10px; }
   .fact-card strong { font-size: 34px; }
   .city-detail-image { height: 72vw; min-height: 260px; }
-  .mission-section { padding: 96px 0; }
+  .mission-section { padding: 0 0 96px; }
   .mission-section .section-intro, .projects-section .section-intro { margin-bottom: 40px; }
   .mission-grid { grid-template-columns: 1fr; }
   .mission-card, .strategic-card, .mission-visual { height: auto; min-height: 330px; }
