@@ -2,16 +2,16 @@ import { isupSnapshot } from "./isupSnapshot.js";
 import { industries, mapObjects, plans, stages } from "./mockData.js";
 import { normalizeIsupFeatureCollection } from "./isupAdapter.js";
 
-const asset = (name) => new URL(`../assets/${name}`, document.baseURI).href;
+const asset = (name) => new URL(`../assets/${name}`, globalThis.document?.baseURI ?? import.meta.url).href;
 
 const dictionaryCache = new Map();
 const wait = (ms, signal) =>
   new Promise((resolve, reject) => {
-    const timeout = window.setTimeout(resolve, ms);
+    const timeout = globalThis.setTimeout(resolve, ms);
     signal?.addEventListener(
       "abort",
       () => {
-        window.clearTimeout(timeout);
+        globalThis.clearTimeout(timeout);
         reject(new DOMException("Request aborted", "AbortError"));
       },
       { once: true },
@@ -60,7 +60,7 @@ export class MockMapDataProvider extends MapDataProvider {
       ...item,
       image: item.image ?? imageForObject(item),
       budget: formatBudget(item.budget),
-      deadline: item.deadline || "срок уточняется",
+      deadline: formatDate(item.deadline),
     }));
   }
 }
@@ -150,4 +150,12 @@ function formatBudget(value) {
   if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} млрд ₽`;
   if (value >= 1_000_000) return `${Math.round(value / 1_000_000)} млн ₽`;
   return `${Math.round(value).toLocaleString("ru-RU")} ₽`;
+}
+
+function formatDate(value) {
+  if (!value) return "срок уточняется";
+  const normalized = String(value).replace(/Z$/, "");
+  const date = new Date(normalized);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return `до ${date.toLocaleDateString("ru-RU", { day: "numeric", month: "short", year: "numeric" })}`;
 }

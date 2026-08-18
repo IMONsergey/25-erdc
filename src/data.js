@@ -1,4 +1,6 @@
-export const asset = (name) => new URL(`${import.meta.env.BASE_URL}assets/${name}`, document.baseURI).href;
+const assetBase = document.baseURI.includes("/map-lab/") ? "../assets/" : `${import.meta.env.BASE_URL}assets/`;
+
+export const asset = (name) => new URL(`${assetBase}${name}`, document.baseURI).href;
 
 export const cities = [
   {

@@ -1,4 +1,4 @@
-const asset = (name) => new URL(`../assets/${name}`, document.baseURI).href;
+const asset = (name) => new URL(`../assets/${name}`, globalThis.document?.baseURI ?? import.meta.url).href;
 
 export const stages = [
   { id: "planned", label: "Запланировано", color: "#cdd3df" },
