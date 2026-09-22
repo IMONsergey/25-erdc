@@ -1633,3 +1633,154 @@
     transition: none;
   }
 }
+
+/* One atmospheric entrance: the heading dissolves into the same illustrated coast. */
+.projects-section {
+  padding-top: 0;
+  background: #053653;
+}
+.projects-overture {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #053653;
+  margin-bottom: -1px;
+}
+.projects-overture-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 24%;
+  opacity: 0.85;
+  filter: saturate(1.15);
+  pointer-events: none;
+}
+.projects-overture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      #05365320,
+      #05365330 25%,
+      #053653b8 72%,
+      #053653 100%
+    ),
+    linear-gradient(90deg, #032b48cc, #032b4824 70%);
+  pointer-events: none;
+}
+.projects-overture .projects-intro {
+  position: relative;
+  z-index: 1;
+  min-height: 390px;
+  padding-top: clamp(64px, 7vw, 110px);
+  padding-bottom: clamp(80px, 8vw, 140px);
+}
+.projects-overture .section-kicker {
+  color: #a1e6fa;
+}
+.projects-overture .section-title {
+  color: #fff;
+  text-shadow: 0 3px 35px #01294145;
+}
+.projects-overture .section-title > span {
+  color: #95dff3;
+}
+.projects-overture .projects-total strong {
+  color: #d7f6ff;
+}
+.projects-overture .projects-total > span {
+  color: #b4d9e9;
+}
+.atlas:not(.is-expanded)::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0 0 auto;
+  height: clamp(115px, 15vw, 200px);
+  background: linear-gradient(180deg, #053653, #0536538a 40%, #05365300);
+  pointer-events: none;
+}
+.atlas-camera {
+  transform-origin: 50% 50%;
+}
+/* All 27 approved entries stay on the artwork. The selected group is highlighted. */
+.atlas-marker {
+  width: 32px;
+  height: 32px;
+  background: #073953e8;
+  color: #edfaff;
+  border-color: var(--marker-color);
+  font-size: 10px;
+  font-weight: 550;
+  transition:
+    transform 0.35s var(--ease),
+    background 0.35s,
+    color 0.35s,
+    opacity 0.35s,
+    box-shadow 0.35s;
+}
+.atlas-marker::before {
+  inset: -4px;
+  border-color: var(--marker-color);
+  opacity: 0.35;
+}
+.atlas-marker::after {
+  border-color: var(--marker-color);
+}
+.atlas-marker.is-context {
+  transform: translate(-50%, -50%) scale(0.85);
+  opacity: 0.8;
+}
+.atlas-marker.is-in-category {
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  background: var(--marker-color);
+  color: #073650;
+  opacity: 1;
+}
+.atlas-marker.is-programme::before {
+  border-style: dashed;
+}
+.atlas-marker:hover,
+.atlas-marker:focus-visible,
+.atlas-marker.is-active {
+  z-index: 4;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.12);
+  background: var(--marker-color);
+  color: #073650;
+}
+.atlas-marker.is-active {
+  box-shadow: 0 0 30px #bdf1ff88;
+}
+.atlas-marker.is-active::before {
+  opacity: 0.8;
+}
+@media (max-width: 700px) {
+  .projects-overture .projects-intro {
+    min-height: 380px;
+    padding-top: 64px;
+    padding-bottom: 85px;
+  }
+  .projects-overture-image {
+    object-position: 66% 25%;
+  }
+  .atlas-marker {
+    width: 28px;
+    height: 28px;
+    font-size: 9px;
+  }
+  .atlas-marker.is-in-category {
+    width: 32px;
+    height: 32px;
+  }
+  .atlas-bottom > span:first-child {
+    max-width: 76%;
+    line-height: 1.4;
+  }
+}

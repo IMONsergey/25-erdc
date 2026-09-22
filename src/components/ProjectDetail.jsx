@@ -129,18 +129,14 @@ export default function ProjectDetail({
               <dd>{scope}</dd>
             </div>
           </dl>
-          {!project.anchor && (
-            <p className="project-location-note">
-              <Icon name="info" size={16} />
-              <span>
-                {project.scope === "program"
-                  ? "Программа охватывает несколько объектов. На схеме показана общая территория."
-                  : project.area === "Остров Русский"
-                    ? "На схеме выделена территория острова Русский."
-                    : "Точная локация в исходном перечне не указана."}
-              </span>
-            </p>
-          )}
+          <p className="project-location-note">
+            <Icon name="info" size={16} />
+            <span>
+              {project.scope === "program"
+                ? "Условная точка городской программы. Она объединяет несколько объектов на территории города."
+                : "Расположение на художественной схеме ориентировочное."}
+            </span>
+          </p>
           <details
             className="project-source"
             onToggle={(event) => setSourceOpen(event.currentTarget.open)}

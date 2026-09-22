@@ -25,6 +25,9 @@ export default function Projects() {
     setFocused(false);
   };
   const chooseProject = (id) => {
+    const chosen = selectedProjects.find((item) => item.id === id);
+    if (!chosen) return;
+    setCategoryId(chosen.category);
     setProjectId(id);
     setFocused(true);
   };
@@ -82,20 +85,30 @@ export default function Projects() {
       className="projects-section"
       aria-labelledby="projects-title"
     >
-      <div className="projects-intro shell reveal">
-        <div>
-          <span className="section-kicker">03 / Масштаб преобразований</span>
-          <h2 className="section-title" id="projects-title">
-            Город меняется.
-            <br />
-            <span>Здесь и сейчас.</span>
-          </h2>
-        </div>
-        <div className="projects-total">
-          <strong>27</strong>
-          <span>
-            {"проектов "}<br />в 7 направлениях
-          </span>
+      <div className="projects-overture">
+        <img
+          className="projects-overture-image"
+          src={asset("atlas-vladivostok.webp")}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+        />
+        <div className="projects-intro shell reveal">
+          <div>
+            <span className="section-kicker">03 / Масштаб преобразований</span>
+            <h2 className="section-title" id="projects-title">
+              Город меняется.
+              <br />
+              <span>Здесь и сейчас.</span>
+            </h2>
+          </div>
+          <div className="projects-total">
+            <strong>27</strong>
+            <span>
+              {"проектов "}
+              <br />в 7 направлениях
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -112,9 +125,9 @@ export default function Projects() {
             style={{
               "--target-x": `${target[0]}%`,
               "--target-y": `${target[1]}%`,
-              "--zoom": focused ? 1.17 : 1,
-              "--camera-x": focused ? `${(63 - target[0]) * 0.32}%` : "0%",
-              "--camera-y": focused ? `${(42 - target[1]) * 0.1}%` : "0%",
+              "--zoom": focused ? 1.08 : 1,
+              "--camera-x": focused ? `${(50 - target[0]) * 1.08}%` : "0%",
+              "--camera-y": focused ? `${(50 - target[1]) * 1.08}%` : "0%",
             }}
           >
             <img
@@ -128,25 +141,31 @@ export default function Projects() {
               Остров Русский
             </span>
             <span className="atlas-sea">Амурский залив</span>
-            <div className="atlas-markers" key={categoryId}>
-              {projects
-                .filter((p) => p.anchor)
-                .map((p) => (
-                  <button
-                    key={p.id}
-                    style={{ left: `${p.anchor[0]}%`, top: `${p.anchor[1]}%` }}
-                    className={`atlas-marker ${projectId === p.id ? "is-active" : ""}`}
-                    aria-label={p.title}
-                    aria-pressed={projectId === p.id}
-                    onClick={() => chooseProject(p.id)}
-                  >
-                    <span>{padded(p.number)}</span>
-                    <span className="marker-tooltip">{p.shortTitle}</span>
-                  </button>
-                ))}
+            <div
+              className="atlas-markers"
+              aria-label="27 согласованных проектов на карте"
+            >
+              {selectedProjects.map((p) => (
+                <button
+                  key={p.id}
+                  style={{
+                    left: `${p.anchor[0]}%`,
+                    top: `${p.anchor[1]}%`,
+                    "--marker-color": projectCategories.find(
+                      (c) => c.id === p.category,
+                    ).color,
+                  }}
+                  className={`atlas-marker ${p.category === categoryId ? "is-in-category" : "is-context"} ${projectId === p.id ? "is-active" : ""} ${p.scope === "program" ? "is-programme" : ""}`}
+                  aria-label={p.title}
+                  aria-pressed={projectId === p.id}
+                  onClick={() => chooseProject(p.id)}
+                >
+                  <span>{padded(p.number)}</span>
+                  <span className="marker-tooltip">{p.shortTitle}</span>
+                </button>
+              ))}
             </div>
             {project &&
-              !project.anchor &&
               (project.scope === "program" ||
                 project.area === "Остров Русский") && (
                 <div
@@ -220,7 +239,7 @@ export default function Projects() {
           </div>
         </aside>
         <div className="atlas-toolbar">
-          <span className="atlas-mode">Владивосток · 2050</span>
+          <span className="atlas-mode">27 проектов на карте</span>
           <button
             type="button"
             aria-label="Общий вид карты"
@@ -279,7 +298,7 @@ export default function Projects() {
           />
         )}
         <div className="atlas-bottom">
-          <span>Художественная схема · расположение условное</span>
+          <span>Художественная схема · расположение ориентировочное</span>
           <span>
             С<Icon name="up" size={18} />
           </span>
