@@ -1,55 +1,107 @@
+import { useState } from "react";
 import { asset } from "../data.js";
-import { FadeText, MaskedWords } from "./AnimatedText.jsx";
-
-const missionCards = [
+const items = [
   {
-    number: "01",
-    text: "Владивосток — административный центр Приморского края и крупнейший морской город Дальнего Востока. Он расположен на полуострове Муравьёва-Амурского и островах залива Петра Великого, на побережье Японского моря.",
+    title: "Морские ворота",
+    text: "Владивосток — административный центр Приморского края и крупнейший морской город Дальнего Востока. Он расположен на полуострове Муравьёва-Амурского и островах залива Петра Великого.",
+    image: "mission-city.webp",
     icon: "icon-mission-city.svg",
   },
   {
-    number: "02",
+    title: "Точка притяжения",
     text: "Город объединяет портовую экономику, международную торговлю, образование, науку, туризм и высокотехнологичные отрасли.",
+    image: "city-vladivostok.webp",
     icon: "icon-mission-industry.svg",
   },
   {
-    number: "03",
-    text: "Город занимает стратегическое положение между Россией и странами Азиатско-Тихоокеанского региона. Здесь завершается Транссибирская магистраль, действует крупнейший морской порт и расположен международный аэропорт Владивосток.",
+    title: "Связь с миром",
+    text: "Здесь завершается Транссибирская магистраль, действует крупнейший морской порт и расположен международный аэропорт Владивосток. Город связывает Россию со странами Азиатско-Тихоокеанского региона.",
+    image: "mission-map.webp",
     icon: "icon-mission-globe.svg",
   },
 ];
-
-const strategicItems = [
-  ["Транссибирская магистраль", "icon-rail.svg"],
-  ["Федеральная трасса Уссури", "icon-highway.svg"],
-  ["Международный аэропорт Владивосток", "icon-airport.svg"],
-  ["Связь с Китаем, Кореей, Японией", "icon-global.svg"],
-];
-
 export default function Mission() {
+  const [active, setActive] = useState(0);
   return (
-    <section className="shell mission-section" aria-labelledby="mission-title">
-      <div className="section-intro">
-        <FadeText as="p" className="section-label">Миссия города</FadeText>
-        <h2 id="mission-title"><MaskedWords text="Владивосток — морские ворота России в Азиатско-Тихоокеанский регион" /></h2>
+    <section
+      className="mission-section shell"
+      id="mission"
+      aria-labelledby="mission-title"
+    >
+      <div className="section-head reveal">
+        <span className="section-kicker">02 / Миссия города</span>
+        <span className="section-aside">
+          Россия · Азиатско-Тихоокеанский регион
+        </span>
       </div>
-      <div className="mission-grid">
-        {missionCards.map((card) => (
-          <article className="mission-card" key={card.number}>
-            <div><span className="card-number">{card.number}</span><FadeText as="p">{card.text}</FadeText></div>
-            <img src={asset(card.icon)} alt="" />
-          </article>
+      <h2 className="section-title reveal" id="mission-title">
+        Морские ворота России.
+        <br />
+        <span>Открыты будущему.</span>
+      </h2>
+      <div className="mission-composition reveal">
+        <div className="mission-accordion">
+          {items.map((item, i) => (
+            <article
+              className={`mission-item ${i === active ? "is-active" : ""}`}
+              key={item.title}
+            >
+              <h3>
+                <button
+                  aria-expanded={i === active}
+                  aria-controls={`mission-panel-${i}`}
+                  onClick={() => setActive(i)}
+                >
+                  <span className="mission-number">0{i + 1}</span>
+                  {item.title}
+                  <span className="mission-plus">
+                    {i === active ? "−" : "+"}
+                  </span>
+                </button>
+              </h3>
+              <div id={`mission-panel-${i}`} hidden={i !== active}>
+                <p>{item.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className={`mission-media ${active === 2 ? "is-diagram" : ""}`}>
+          <img
+            key={active}
+            src={asset(items[active].image)}
+            alt={
+              active === 2
+                ? "Схема международных транспортных связей Владивостока"
+                : "Владивосток — город у моря"
+            }
+            loading="lazy"
+          />
+          <span className="mission-media-index">
+            0{active + 1}
+            <span> / 03</span>
+          </span>
+          <img
+            className="mission-media-icon"
+            src={asset(items[active].icon)}
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="connections reveal">
+        {[
+          ["icon-rail.svg", "Транссибирская", "магистраль"],
+          ["icon-highway.svg", "Уссури", "федеральная трасса"],
+          ["icon-airport.svg", "Владивосток", "международный аэропорт"],
+          ["icon-global.svg", "Китай, Корея, Япония", "международные связи"],
+        ].map(([icon, title, text]) => (
+          <div key={title}>
+            <img src={asset(icon)} alt="" />
+            <span>
+              <strong>{title}</strong>
+              <small>{text}</small>
+            </span>
+          </div>
         ))}
-        <img className="mission-visual" src={asset("mission-map.webp")} alt="Схема транспортных связей Владивостока" />
-        <img className="mission-visual" src={asset("mission-city.webp")} alt="Городская панорама Владивостока" />
-        <article className="strategic-card">
-          <h3><MaskedWords text="Стратегическое положение" /></h3>
-          <ul>
-            {strategicItems.map(([label, icon]) => (
-              <li key={label}><span>{label}</span><img src={asset(icon)} alt="" /></li>
-            ))}
-          </ul>
-        </article>
       </div>
     </section>
   );

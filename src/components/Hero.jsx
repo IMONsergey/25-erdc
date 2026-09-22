@@ -1,35 +1,89 @@
+import { useEffect, useRef } from "react";
 import { asset } from "../data.js";
-import { FadeText, MaskedWords } from "./AnimatedText.jsx";
-
-const stats = [
-  ["Площадь территории", "5.3", "тыс. км²"],
-  ["Население края", "834.7", "тыс человек"],
-  ["Горизонт реализации", "2050", "год"],
-];
 
 export default function Hero() {
+  const hero = useRef(null);
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const progress = Math.min(
+          window.scrollY / hero.current.offsetHeight,
+          1,
+        );
+        hero.current.style.setProperty("--hero-scroll", progress);
+      });
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => {
+      window.removeEventListener("scroll", update);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
   return (
-    <section className="hero" aria-labelledby="hero-title">
-      <img className="hero-image" src={asset("hero-vladivostok.webp")} alt="Владивосток и Русский мост" />
-      <div className="hero-shade" aria-hidden="true" />
-      <div className="shell hero-inner">
-        <div className="hero-heading">
-          <FadeText as="p" className="hero-eyebrow">Агломерация</FadeText>
-          <h1 id="hero-title"><MaskedWords text="Владивосток" /></h1>
-        </div>
-        <div className="hero-summary" id="about">
-          <div className="hero-stats" aria-label="Основные показатели">
-            {stats.map(([label, value, unit]) => (
-              <article className="glass-stat" key={label}>
-                <FadeText>{label}</FadeText><strong><MaskedWords text={value} /></strong><small>{unit}</small>
-              </article>
-            ))}
+    <section className="hero" ref={hero} id="city" aria-labelledby="hero-title">
+      <div className="hero-scene">
+        <img
+          className="hero-image"
+          src={asset("hero-page12.webp")}
+          alt="Золотой мост во Владивостоке на закате"
+          fetchPriority="high"
+        />
+        <div className="hero-shade" />
+      </div>
+      <div className="hero-topline shell">
+        <span>Приморский край</span>
+        <span>Мастер-план · 2050</span>
+      </div>
+      <div className="hero-heading">
+        <p className="hero-eyebrow">Агломерация</p>
+        <h1 id="hero-title">Владивосток</h1>
+        <p className="hero-subtitle">
+          Территории, связанные общей экономикой,
+          <br className="desktop-break" /> транспортной системой и единой
+          стратегией развития.
+        </p>
+      </div>
+      <div className="hero-bottom shell">
+        <a className="hero-explore" href="#projects">
+          <span className="round-arrow">↘</span>
+          <span>
+            Открыть
+            <br />
+            будущее города
+          </span>
+        </a>
+        <div className="hero-stats" aria-label="Показатели агломерации">
+          <div>
+            <span>Площадь территории</span>
+            <strong>
+              5,3<small>тыс. км²</small>
+            </strong>
           </div>
-          <FadeText as="p">Агломерация объединяет территории, связанные общей экономикой, транспортной системой, рынком труда и единой стратегией пространственного развития.</FadeText>
-          <a className="scroll-cue" href="#regions" aria-label="Перейти к мастер-планам">
-            <img src={asset("icon-scroll.svg")} alt="" width="34" height="34" />
-          </a>
+          <div>
+            <span>Население агломерации</span>
+            <strong>
+              834,7<small>тыс. человек</small>
+            </strong>
+          </div>
+          <div>
+            <span>Горизонт реализации</span>
+            <strong>
+              2050<small>год</small>
+            </strong>
+          </div>
         </div>
+        <a
+          href="#regions"
+          className="scroll-cue"
+          aria-label="Листать к территориям"
+        >
+          <span>Листайте вниз</span>
+          <i />
+        </a>
       </div>
     </section>
   );

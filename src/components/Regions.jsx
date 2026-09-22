@@ -1,97 +1,119 @@
 import { asset, cities } from "../data.js";
-import { FadeText, MaskedWords, Text } from "./AnimatedText.jsx";
-
-function CityCard({ city, selected, onSelect }) {
-  return (
-    <button
-      className={`city-card${selected ? " is-selected" : ""}`}
-      type="button"
-      aria-pressed={selected}
-      onClick={() => onSelect(city.id)}
-    >
-      <span className="city-card-body">
-        <span className="city-card-top">
-          <img className="city-crest" data-city={city.id} src={asset(city.crest)} alt={`Герб города ${city.name}`} />
-          <span className="city-choice">
-            {selected ? <span className="selected-label">выбрано</span> : null}
-            <span className="city-radio" aria-hidden="true"><span /></span>
-          </span>
-        </span>
-        <Text className="city-card-title">{city.name}</Text>
-        <Text className="city-card-description">{city.description}</Text>
-      </span>
-      <img className="city-photo" src={asset(city.photo)} alt={city.alt} />
-    </button>
-  );
-}
-
-function VladivostokDetail() {
-  return (
-    <>
-      <div className="soft-divider" />
-      <div className="city-detail">
-        <article className="city-facts">
-          <div className="city-copy">
-            <h2>Владивосток</h2>
-            <Text as="p">Сопки, туманы, вантовые мосты над океанскими бухтами и старый китайский квартал в центре — Владивосток не зря называют русским Сан-Франциско, его города-побратима. Только здесь этот характер не заимствованный, а свой, тихоокеанский.</Text>
-          </div>
-          <div className="city-facts-bottom">
-            <div className="fact-grid">
-              <article className="fact-card">
-                <img src={asset("icon-population.svg")} alt="" />
-                <span>численность<br />населения</span>
-                <strong>628.4</strong><small>тыс. чел.</small>
-              </article>
-              <article className="fact-card">
-                <img src={asset("icon-quality.svg")} alt="" />
-                <span>Индекс качества<br />городской среды<br />на 2024г.*</span>
-                <strong>205</strong><small>баллов</small>
-              </article>
-            </div>
-            <Text as="p" className="fact-note">*0 — неблагоприятная городская среда, 360 — максимально благоприятная городская среда (данные сайта индекс-городов.рф)</Text>
-          </div>
-        </article>
-        <img className="city-detail-image" src={asset("detail-vladivostok.webp")} alt="Русский мост во Владивостоке" />
-      </div>
-    </>
-  );
-}
-
-function ContentInProgress({ city }) {
-  return (
-    <div className="city-progress" role="status">
-      <span className="progress-mark" aria-hidden="true">↗</span>
-      <div>
-        <p>Мастер-план: {city.name}</p>
-        <h2>Контент в работе</h2>
-        <Text>Материалы по территории будут добавлены в следующей итерации.</Text>
-      </div>
-    </div>
-  );
-}
-
 export default function Regions({ selectedCity, onSelectCity }) {
-  const city = cities.find((item) => item.id === selectedCity) ?? cities[0];
-  const isVladivostok = selectedCity === "vladivostok";
-
+  const city = cities.find((c) => c.id === selectedCity);
   return (
-    <section className="shell region-section" id="regions" aria-labelledby="regions-title">
-      <div className="section-intro section-intro--light">
-        <div>
-          <h2 id="regions-title"><MaskedWords text="Мастер-планы агломерации Владивосток" /></h2>
-          <FadeText as="p">Выберите территорию, чтобы изучить её мастер-план.</FadeText>
+    <section
+      id="regions"
+      className="region-section"
+      aria-labelledby="regions-title"
+    >
+      <div className="shell">
+        <div className="section-head reveal">
+          <span className="section-kicker">01 / Территории</span>
+          <span className="section-aside">
+            Единая агломерация.
+            <br />
+            Разные возможности.
+          </span>
         </div>
-        <div className="selection-hint" aria-hidden="true">
-          <img src={asset("icon-select-city.svg")} alt="" width="29" height="29" />
-          <span>Выберите город<br />для изучения<br />мастер-планов</span>
+        <h2 className="section-title reveal" id="regions-title">
+          Масштаб города.
+          <br />
+          <span>Горизонт региона.</span>
+        </h2>
+        <div className="city-grid reveal" aria-label="Территории агломерации">
+          {cities.map((c, i) => (
+            <button
+              key={c.id}
+              className={`city-card ${selectedCity === c.id ? "is-selected" : ""}`}
+              aria-pressed={selectedCity === c.id}
+              onClick={() => onSelectCity(c.id)}
+            >
+              <img
+                className="city-photo"
+                src={asset(c.photo)}
+                alt={c.alt}
+                loading="lazy"
+              />
+              <div className="city-card-shade" />
+              <span className="city-card-top">
+                <span>0{i + 1}</span>
+                <img src={asset(c.crest)} alt="" />
+              </span>
+              <span className="city-card-body">
+                <strong>{c.name}</strong>
+                <span>{c.description}</span>
+                <span className="city-card-link">
+                  {selectedCity === c.id ? "Выбрано" : "Открыть территорию"}
+                  <b>↗</b>
+                </span>
+              </span>
+            </button>
+          ))}
         </div>
+        {selectedCity === "vladivostok" ? (
+          <article className="city-detail reveal" id="city-detail">
+            <img
+              className="city-detail-image"
+              src={asset("detail-vladivostok.webp")}
+              alt="Панорама Русского моста"
+              loading="lazy"
+            />
+            <div className="city-detail-shade" />
+            <div className="city-detail-copy">
+              <span className="section-kicker">Город у океана</span>
+              <h3>
+                Характер —<br />
+                тихоокеанский.
+              </h3>
+              <p>
+                Сопки, туманы, вантовые мосты над океанскими бухтами и старый
+                китайский квартал в центре.
+              </p>
+            </div>
+            <div className="city-detail-facts">
+              <div>
+                <img src={asset("icon-population.svg")} alt="" />
+                <strong>628,4</strong>
+                <span>
+                  тыс. человек
+                  <br />
+                  население города
+                </span>
+              </div>
+              <div>
+                <img src={asset("icon-quality.svg")} alt="" />
+                <strong>
+                  205<span> / 360</span>
+                </strong>
+                <span>
+                  индекс качества
+                  <br />
+                  городской среды, 2024
+                </span>
+              </div>
+            </div>
+          </article>
+        ) : (
+          <div className="city-unavailable" key={selectedCity} role="status">
+            <img src={asset(city.crest)} alt="" />
+            <div>
+              <span className="section-kicker">{city.name}</span>
+              <h3>
+                Мастер-план готовится
+                <br />к публикации
+              </h3>
+              <p>{city.description}</p>
+            </div>
+            <button
+              className="text-button"
+              onClick={() => onSelectCity("vladivostok")}
+            >
+              К проектам Владивостока ↗
+            </button>
+          </div>
+        )}
       </div>
-      <div className="city-grid" aria-label="Территории агломерации">
-        {cities.map((item) => (
-          <CityCard key={item.id} city={item} selected={item.id === selectedCity} onSelect={onSelectCity} />
-        ))}
-      </div>
-      {isVladivostok ? <VladivostokDetail /> : <ContentInProgress city={city} />}
     </section>
   );
 }
