@@ -92,8 +92,7 @@ export default function Projects() {
         <div className="projects-total">
           <strong>27</strong>
           <span>
-            проектов
-            <br />в 7 направлениях
+            проектов <br />в 7 направлениях
           </span>
         </div>
       </div>

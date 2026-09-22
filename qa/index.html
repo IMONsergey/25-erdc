@@ -1,5 +1,78 @@
 <!doctype html>
 <html lang="ru">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Проверка адаптивности — Владивосток</title><style>*{box-sizing:border-box}body{margin:0;background:#dce5eb;font:14px Arial;color:#153f54}header{height:58px;display:flex;align-items:center;justify-content:center;gap:20px}select{font:inherit;padding:8px;border:1px solid #7895a4;background:white;border-radius:5px}.stage{display:flex;justify-content:center;align-items:flex-start;padding:0 12px 24px}iframe{border:0;box-shadow:0 8px 40px #143b5433;background:#032b46;flex:none}a{text-decoration:none;color:inherit}</style></head>
-<body><header><label for="size">Размер экрана</label><select id="size"><option value="390,844">Телефон 390 × 844</option><option value="320,740">Телефон 320 × 740</option><option value="768,850">Планшет 768 × 850</option><option value="1024,850">Планшет 1024 × 850</option></select><a href="../">Открыть сайт</a></header><div class="stage"><iframe id="preview" title="Адаптивное превью" src="../index.html" width="390" height="844"></iframe></div><script>const control=document.getElementById('size'),frame=document.getElementById('preview');control.addEventListener('change',()=>{const [width,height]=control.value.split(',');frame.width=width;frame.height=height;});</script></body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Проверка адаптивности — Владивосток</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #dce5eb;
+        font: 14px Arial;
+        color: #153f54;
+      }
+      header {
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+      }
+      select {
+        font: inherit;
+        padding: 8px;
+        border: 1px solid #7895a4;
+        background: white;
+        border-radius: 5px;
+      }
+      .stage {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0 12px 24px;
+      }
+      iframe {
+        border: 0;
+        box-shadow: 0 8px 40px #143b5433;
+        background: #032b46;
+        flex: none;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <label for="size">Размер экрана</label
+      ><select id="size">
+        <option value="390,844">Телефон 390 × 844</option>
+        <option value="320,740">Телефон 320 × 740</option>
+        <option value="768,850">Планшет 768 × 850</option>
+        <option value="1024,850">Планшет 1024 × 850</option></select
+      ><a href="../">Открыть сайт</a>
+    </header>
+    <div class="stage">
+      <iframe
+        id="preview"
+        title="Адаптивное превью"
+        src="../index.html"
+        width="390"
+        height="844"
+      ></iframe>
+    </div>
+    <script>
+      const control = document.getElementById("size"),
+        frame = document.getElementById("preview");
+      control.addEventListener("change", () => {
+        const [width, height] = control.value.split(",");
+        frame.width = width;
+        frame.height = height;
+      });
+    </script>
+  </body>
 </html>

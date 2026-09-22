@@ -51,8 +51,7 @@ export default function Hero() {
         <a className="hero-explore" href="#projects">
           <span className="round-arrow">↘</span>
           <span>
-            Открыть
-            <br />
+            Открыть <br />
             будущее города
           </span>
         </a>
