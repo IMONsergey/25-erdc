@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 export default function Motion() {
   const [current, setCurrent] = useState("city");
   useEffect(() => {
+    const initialSection = document.getElementById(location.hash.slice(1));
+    const initialFrame = initialSection
+      ? requestAnimationFrame(() =>
+          initialSection.scrollIntoView({ behavior: "instant" }),
+        )
+      : null;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const reveal = new IntersectionObserver(
       (entries) =>
@@ -29,6 +35,7 @@ export default function Motion() {
       if (el) sections.observe(el);
     });
     return () => {
+      if (initialFrame !== null) cancelAnimationFrame(initialFrame);
       reveal.disconnect();
       sections.disconnect();
     };
