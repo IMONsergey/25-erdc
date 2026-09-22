@@ -129,7 +129,11 @@ export default function Regions({ selectedCity, onSelectCity }) {
               <span className="city-card-light" />
               <span className="city-card-top">
                 <span className="city-number">0{index + 1}</span>
-                <img src={asset(city.crest)} alt="" />
+                <span
+                  className={`city-crest ${city.id === "bolshoy-kamen" ? "has-wide-source" : ""}`}
+                >
+                  <img src={asset(city.crest)} alt="" />
+                </span>
               </span>
               <span className="city-card-body">
                 <span className="city-type">
