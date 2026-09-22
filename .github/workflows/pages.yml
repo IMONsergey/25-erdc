@@ -26,7 +26,7 @@ jobs:
 
       - name: Fetch and preserve Figma assets
         run: |
-          if [[ ! -f assets/.webp-v2 ]]; then
+          if [[ ! -f assets/.webp-v2 || ! -f assets/project-kungasny-page12.webp ]]; then
             sudo apt-get update
             sudo apt-get install --yes webp
           fi

@@ -50,6 +50,7 @@ download_raster detail-vladivostok.webp "https://www.figma.com/api/mcp/asset/e81
 download_raster mission-map.webp "https://www.figma.com/api/mcp/asset/2346c3ba-304f-4623-ae32-d33988aec8cd.png" 1200
 download_raster mission-city.webp "https://www.figma.com/api/mcp/asset/079d7de1-54ef-4390-9d7b-44b8c456215a.png" 1200
 download_raster project-kungasny.webp "https://www.figma.com/api/mcp/asset/d9c5757f-0444-452c-84a8-9e2a32f56204.png" 1000
+download_raster project-kungasny-page12.webp "https://www.figma.com/api/mcp/asset/c74ad5a9-4dfe-4e08-97e0-335740f8784b.png" 1440
 download_raster project-kaluzina.webp "https://www.figma.com/api/mcp/asset/27d9b084-91e9-4437-b878-ba8268435fff.png" 1000
 download_raster project-firsova.webp "https://www.figma.com/api/mcp/asset/5fc6b72a-f606-4cba-8dc3-d5e3d6418907.png" 1000
 download_raster project-ulyss.webp "https://www.figma.com/api/mcp/asset/00088972-25b9-45af-99d9-37190a56c6aa.png" 1000

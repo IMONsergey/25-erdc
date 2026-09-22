@@ -5,7 +5,7 @@ const concept = (name) => `concept-${name}.webp`;
 const entries = [
   {
     number: 1,
-    image: "project-kungasny.webp",
+    image: "project-kungasny-page12.webp",
     imageKind: "Визуализация из макета",
     tag: "Реновация и КРТ",
     description:
