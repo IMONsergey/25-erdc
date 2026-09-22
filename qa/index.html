@@ -60,7 +60,7 @@
       <iframe
         id="preview"
         title="Адаптивное превью"
-        src="../index.html"
+        data-root="../"
         width="390"
         height="844"
       ></iframe>
@@ -68,6 +68,7 @@
     <script>
       const control = document.getElementById("size"),
         frame = document.getElementById("preview");
+      frame.src = frame.dataset.root + "?qa=" + Date.now();
       control.addEventListener("change", () => {
         const [width, height] = control.value.split(",");
         frame.width = width;
