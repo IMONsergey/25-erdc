@@ -1704,6 +1704,9 @@
   background: linear-gradient(180deg, #053653, #0536538a 40%, #05365300);
   pointer-events: none;
 }
+.atlas:not(.is-expanded) .atlas-vignette {
+  mask-image: linear-gradient(180deg, transparent, #000 180px);
+}
 .atlas-camera {
   transform-origin: 50% 50%;
 }
