@@ -33,8 +33,8 @@ export default function Hero() {
           alt="Золотой мост во Владивостоке на закате"
           fetchPriority="high"
         />
-        <div className="hero-shade" />
       </div>
+      <div className="hero-shade" aria-hidden="true" />
       <div className="hero-topline shell">
         <span>Приморский край</span>
         <span>Мастер-план · 2050</span>
@@ -54,7 +54,8 @@ export default function Hero() {
             <Icon name="diagonal" hoverName="down" size={27} />
           </span>
           <span>
-            {"Открыть "}<br />
+            {"Открыть "}
+            <br />
             будущее города
           </span>
         </a>

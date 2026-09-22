@@ -1,0 +1,14 @@
+{
+  "asset": "assets/mission-atr-port-v1.webp",
+  "purpose": "Миссия города → АТР / международные связи",
+  "method": "Built-in image_gen.imagegen",
+  "prompt": "Use case: photorealistic-natural. Asset type: premium website photography for the Vladivostok city mission, tab 'Asia-Pacific international connections'. Create a striking but believable wide aerial photograph of a Pacific Russian seaport inspired by Vladivostok. A modern container ship moving out of a sheltered bay toward the open ocean is the clear central subject, its gentle curved wake catching the morning light. Working container terminals and elegant gantry cranes occupy one side of the harbour, a hilly coastal city and a distant cable-stayed bridge fade into pale marine haze in the background. The image should communicate international maritime trade and connection with the Asia-Pacific region through a coherent real-world scene, not through graphics. Photographic detail in water ripples, hull, stacked containers and green coastal slopes. Cool blue and teal seawater, soft pale-cyan sky, restrained warm sunrise highlights, bright natural atmosphere matching an elegant blue-white editorial website. Polished architectural and travel photography, natural perspective, no exaggerated futuristic buildings. Landscape 3:2 composition, main ship and shoreline readable in a centre crop; keep top-left uncluttered for a small website label. No text, lettering, logos, flags, maps, glowing network arcs, globe graphics, borders or interface elements. This is a conceptual generated visual, not a claim of documentary photography.",
+  "source": "Generated concept image; not a documentary photograph",
+  "original": "generated_images/exec-01c9188c-c7e6-4246-aa02-df6b965b1f8e.png",
+  "webExport": {
+    "format": "webp",
+    "quality": 88,
+    "width": 1536,
+    "height": 1024
+  }
+}
