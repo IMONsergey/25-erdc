@@ -1564,6 +1564,13 @@
 }
 @media (max-width: 360px) {
   .atlas-categories button {
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    text-align: center;
+    gap: 6px;
+    padding: 10px 6px;
+    min-height: 66px;
     font-size: 11px;
   }
   .atlas-categories button small {
