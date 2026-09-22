@@ -46,6 +46,10 @@ download_raster crest-artem.webp "https://www.figma.com/api/mcp/asset/d27884df-8
 download_raster city-artem.webp "https://www.figma.com/api/mcp/asset/59bed68f-7004-48ba-b3b4-da1ecd66c629.png" 1200
 download_raster crest-bolshoy-kamen.webp "https://www.figma.com/api/mcp/asset/39c2df7b-d1a9-495e-ad7a-b41848418fce.png" 240
 download_raster city-bolshoy-kamen.webp "https://www.figma.com/api/mcp/asset/d26ce632-f5c9-41bb-9999-22139d58aefa.png" 1200
+# Page 12: original cyan line-art panoramas for the territory selector.
+download_raster city-lineart-vladivostok.webp "https://www.figma.com/api/mcp/asset/5f0b2a31-5654-4b9a-aa41-2ff02d65bb38.png" 1280
+download_raster city-lineart-artem.webp "https://www.figma.com/api/mcp/asset/c5171c94-c4db-4596-810f-f08289534634.png" 1280
+download_raster city-lineart-bolshoy-kamen.webp "https://www.figma.com/api/mcp/asset/a6c10e6b-ba5d-4a40-877e-2b0d2118eb14.png" 1280
 download_raster detail-vladivostok.webp "https://www.figma.com/api/mcp/asset/e8138885-08a8-459a-acb2-8f49c6793051.png" 1800
 download_raster mission-map.webp "https://www.figma.com/api/mcp/asset/2346c3ba-304f-4623-ae32-d33988aec8cd.png" 1200
 download_raster mission-city.webp "https://www.figma.com/api/mcp/asset/079d7de1-54ef-4390-9d7b-44b8c456215a.png" 1200

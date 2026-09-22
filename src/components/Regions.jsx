@@ -3,6 +3,7 @@ import { asset, cities } from "../data.js";
 import Icon from "./Icon.jsx";
 const stories = {
   vladivostok: {
+    illustration: "city-lineart-vladivostok.webp",
     name: "Владивосток",
     tag: "Город у океана",
     title: (
@@ -21,6 +22,7 @@ const stories = {
     ],
   },
   artem: {
+    illustration: "city-lineart-artem.webp",
     name: "Артём",
     tag: "Воздушные ворота агломерации",
     title: <>Город в движении.</>,
@@ -34,6 +36,7 @@ const stories = {
     ],
   },
   "bolshoy-kamen": {
+    illustration: "city-lineart-bolshoy-kamen.webp",
     name: "Большой Камень",
     tag: "Морская промышленность",
     title: (
@@ -117,9 +120,9 @@ export default function Regions({ selectedCity, onSelectCity }) {
               onPointerMove={followLight}
             >
               <img
-                className="city-photo"
-                src={asset(city.photo)}
-                alt={city.alt}
+                className="city-photo city-illustration"
+                src={asset(stories[city.id].illustration)}
+                alt={`Контурная панорама: ${stories[city.id].name}`}
                 loading="lazy"
               />
               <span className="city-card-shade" />
@@ -231,28 +234,30 @@ export default function Regions({ selectedCity, onSelectCity }) {
           </div>
           <div className="city-story-bottom">
             {selectedCity === "vladivostok" && view === "about" ? (
-              <div className="city-detail-facts">
-                <div>
-                  <Icon name="people" size={28} />
-                  <strong>628,4</strong>
-                  <span>
-                    тыс. человек
-                    <br />
-                    население города
-                  </span>
+              <dl className="city-metrics" aria-label="Показатели Владивостока">
+                <div className="city-metric">
+                  <dt>
+                    <Icon name="people" size={26} />
+                    <span>Население города</span>
+                  </dt>
+                  <dd>
+                    <strong>628,4</strong>
+                    <small>тыс. человек</small>
+                  </dd>
                 </div>
-                <div>
-                  <Icon name="quality" size={28} />
-                  <strong>
-                    205<span> / 360</span>
-                  </strong>
-                  <span>
-                    индекс городской среды
-                    <br />
-                    2024 год
-                  </span>
+                <div className="city-metric">
+                  <dt>
+                    <Icon name="quality" size={26} />
+                    <span>Индекс городской среды</span>
+                  </dt>
+                  <dd>
+                    <strong>
+                      205<span> / 360</span>
+                    </strong>
+                    <small>2024 год</small>
+                  </dd>
                 </div>
-              </div>
+              </dl>
             ) : (
               <div className="city-story-note">
                 {selectedCity === "vladivostok"

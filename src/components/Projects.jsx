@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { asset } from "../data.js";
 import { projectCategories, selectedProjects } from "../selectedProjects.js";
 import Icon from "./Icon.jsx";
 import ProjectDetail from "./ProjectDetail.jsx";
+import { getAtlasCamera } from "../atlasCamera.js";
 const padded = (n) => String(n).padStart(2, "0");
 export default function Projects() {
   const [categoryId, setCategoryId] = useState("housing");
@@ -13,12 +14,30 @@ export default function Projects() {
   const section = useRef(null);
   const expandButton = useRef(null);
   const detail = useRef(null);
+  const viewportRef = useRef(null);
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
   const category = projectCategories.find((c) => c.id === categoryId);
   const projects = selectedProjects.filter((p) => p.category === categoryId);
   const project = projects.find((p) => p.id === projectId);
   const target =
     project?.anchor ??
     (project?.area === "Остров Русский" ? [59, 67] : [63, 34]);
+  const camera = getAtlasCamera(
+    viewport.width,
+    viewport.height,
+    target,
+    focused,
+  );
+  useLayoutEffect(() => {
+    const element = viewportRef.current;
+    if (!element) return;
+    const measure = () =>
+      setViewport({ width: element.clientWidth, height: element.clientHeight });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [expanded]);
   const chooseCategory = (id) => {
     setCategoryId(id);
     setProjectId(null);
@@ -86,13 +105,6 @@ export default function Projects() {
       aria-labelledby="projects-title"
     >
       <div className="projects-overture">
-        <img
-          className="projects-overture-image"
-          src={asset("atlas-vladivostok.webp")}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-        />
         <div className="projects-intro shell reveal">
           <div>
             <span className="section-kicker">03 / Масштаб преобразований</span>
@@ -119,15 +131,17 @@ export default function Projects() {
         aria-label="Атлас проектов Владивостока"
         style={{ "--accent": category.color }}
       >
-        <div className="atlas-viewport">
+        <div className="atlas-viewport" ref={viewportRef}>
           <div
             className="atlas-camera"
             style={{
               "--target-x": `${target[0]}%`,
               "--target-y": `${target[1]}%`,
-              "--zoom": focused ? 1.08 : 1,
-              "--camera-x": focused ? `${(50 - target[0]) * 1.08}%` : "0%",
-              "--camera-y": focused ? `${(50 - target[1]) * 1.08}%` : "0%",
+              width: viewport.width ? `${camera.width}px` : undefined,
+              height: viewport.height ? `${camera.height}px` : undefined,
+              "--zoom": camera.zoom,
+              "--camera-x": `${camera.x}px`,
+              "--camera-y": `${camera.y}px`,
             }}
           >
             <img

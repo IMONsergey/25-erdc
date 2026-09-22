@@ -132,8 +132,8 @@
     0 18px 60px #00365038;
 }
 .city-photo {
-  opacity: 0.95;
-  object-position: 50% 45%;
+  opacity: 1;
+  object-position: 50% 65%;
   transition:
     transform 1.3s var(--ease),
     filter 0.7s;
@@ -145,10 +145,10 @@
 .city-card-shade {
   background: linear-gradient(
     180deg,
-    #002d4628,
-    transparent 22%,
-    #0637547a 52%,
-    #02354bea 100%
+    #032c4910,
+    transparent 35%,
+    #032c4920 72%,
+    #032c4980 100%
   );
 }
 .city-card-light {
@@ -336,16 +336,98 @@
   padding: 12px 48px 38px;
   gap: 24px;
 }
-.city-story .city-detail-facts {
+/* Dedicated metric layout: icon, label and value each retain their own space. */
+.city-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: min(560px, 100%);
+  flex: 0 1 560px;
   margin: 0;
 }
-.city-story .city-detail-facts > div {
-  width: 225px;
+.city-metric {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #d9f0ff45;
   border-radius: 12px;
   background: #1b6f8859;
+  backdrop-filter: blur(12px);
 }
-.city-story .city-detail-facts .morph-icon {
+.city-metric dt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #cde7f2;
+}
+.city-metric dt .morph-icon {
+  flex: none;
   opacity: 0.85;
+}
+.city-metric dd {
+  margin: 22px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.city-metric dd strong {
+  font-size: 42px;
+  font-weight: 550;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.city-metric dd strong span {
+  font-size: 17px;
+  font-weight: 400;
+  color: #b1d7e8;
+  letter-spacing: 0;
+}
+.city-metric dd small {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #cde7f2;
+}
+@media (max-width: 700px) {
+  .city-metrics {
+    flex-basis: auto;
+    gap: 10px;
+    width: 100%;
+  }
+  .city-metric {
+    padding: 16px 12px;
+  }
+  .city-metric dt {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 64px;
+    font-size: 11px;
+  }
+  .city-metric dd {
+    margin-top: 16px;
+  }
+  .city-metric dd strong {
+    font-size: 32px;
+  }
+  .city-metric dd strong span {
+    font-size: 12px;
+  }
+  .city-metric dd small {
+    font-size: 11px;
+  }
+}
+@media (max-width: 360px) {
+  .city-metrics {
+    grid-template-columns: 1fr;
+  }
+  .city-metric dt {
+    flex-direction: row;
+    align-items: center;
+    min-height: 28px;
+  }
 }
 .city-story-note {
   font-size: 13px;
@@ -1094,9 +1176,6 @@
     padding: 13px 18px;
     font-size: 12px;
   }
-  .city-story .city-detail-facts > div {
-    width: 200px;
-  }
   .mission-layout {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -1298,32 +1377,6 @@
     padding: 0 20px 24px;
     gap: 20px;
     align-items: stretch;
-  }
-  .city-story .city-detail-facts {
-    width: 100%;
-    gap: 8px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .city-story .city-detail-facts > div {
-    width: 100%;
-    padding: 16px 12px;
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .city-story .city-detail-facts strong {
-    font-size: 29px;
-  }
-  .city-story .city-detail-facts strong span {
-    font-size: 11px;
-  }
-  .city-story .city-detail-facts > div > span {
-    grid-column: 1;
-    font-size: 10px;
-  }
-  .city-story .city-detail-facts .morph-icon {
-    width: 23px !important;
-    height: 23px !important;
   }
   .city-story-cta {
     justify-content: space-between;
@@ -1634,7 +1687,7 @@
   }
 }
 
-/* One atmospheric entrance: the heading dissolves into the same illustrated coast. */
+/* A solid introduction; the coast fades in only inside the atlas. */
 .projects-section {
   padding-top: 0;
   background: #053653;
@@ -1645,32 +1698,6 @@
   overflow: hidden;
   background: #053653;
   margin-bottom: -1px;
-}
-.projects-overture-image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 24%;
-  opacity: 0.85;
-  filter: saturate(1.15);
-  pointer-events: none;
-}
-.projects-overture::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      #05365320,
-      #05365330 25%,
-      #053653b8 72%,
-      #053653 100%
-    ),
-    linear-gradient(90deg, #032b48cc, #032b4824 70%);
-  pointer-events: none;
 }
 .projects-overture .projects-intro {
   position: relative;
@@ -1769,9 +1796,6 @@
     min-height: 380px;
     padding-top: 64px;
     padding-bottom: 85px;
-  }
-  .projects-overture-image {
-    object-position: 66% 25%;
   }
   .atlas-marker {
     width: 28px;
