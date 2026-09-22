@@ -113,7 +113,7 @@ export default function Projects() {
               "--target-y": `${target[1]}%`,
               "--zoom": focused ? 1.17 : 1,
               "--camera-x": focused ? `${(63 - target[0]) * 0.32}%` : "0%",
-              "--camera-y": focused ? `${(42 - target[1]) * 0.3}%` : "0%",
+              "--camera-y": focused ? `${(42 - target[1]) * 0.1}%` : "0%",
             }}
           >
             <img
