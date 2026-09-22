@@ -1,0 +1,108 @@
+{
+  "tool": "built-in ImageGen",
+  "usage": "Conceptual illustrations, not approved architecture renders",
+  "assets": [
+    {
+      "name": "innovation",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A coastal innovation and university campus on Russky Island: low-rise sculptural white stone and glass laboratories, landscaped paths, mature pine trees, a blue Pacific bay beyond. Elevated architectural view with people as tiny scale figures, soft golden morning, no skyscrapers.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-cf378927-8204-43a8-8f3e-1621831250f2.png",
+      "file": "assets/concept-innovation.webp"
+    },
+    {
+      "name": "health",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A contemporary public outpatient clinic in a leafy coastal Russian city: welcoming light limestone building, glazed entrances, accessible gently sloped approach, a few people, green landscaping, calm blue sky. Three-quarter ground level wide shot, clean optimistic daylight, no medical symbols.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-9f835dbd-6ff7-404c-96da-6c6a87ba03e7.png",
+      "file": "assets/concept-health.webp"
+    },
+    {
+      "name": "sport",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. Interior of a world-class curling arena, low oblique view across immaculate ice sheets with red and blue target circles, a few curling stones, sculptural timber ceiling beams, large glazing, warm sunlight against cool ice. No hockey arena, no players, no lettering.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-a40b3b55-dec9-40ac-b27a-98add59be0b2.png",
+      "file": "assets/concept-sport.webp"
+    },
+    {
+      "name": "mobility",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. An elegant modern blue and white trolleybus on a broad hilly street in Vladivostok, overhead electric wires and double trolley poles visible, early 20th century architecture mixed with green hills, glimpses of a brilliant blue sea, restrained pedestrians and trees. Cinematic morning street photography, no legible writing, no logos.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-f0f3a56f-371e-4e0d-a163-6a2d33a56561.png",
+      "file": "assets/concept-mobility.webp"
+    },
+    {
+      "name": "waterfront",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A beautiful new public waterfront promenade along Amur Bay in Vladivostok: broad terraced timber and pale stone steps following the water, slender grasses, mature trees, people cycling and strolling, expansive blue bay and distant hills. Aerial oblique editorial architecture view, warm sun, natural serene premium materials.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-bbf224ef-cb48-4962-a957-01b5e54eed56.png",
+      "file": "assets/concept-waterfront.webp"
+    },
+    {
+      "name": "park",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A transformed public park in a hilly Far Eastern Russian city: a curving lake with timber boardwalk, native trees, stepped landscape seating, elegant slim pedestrian bridge, people walking, warm afternoon sun through summer foliage. Aerial medium-height view, rich green and maritime blue water, plausible contemporary landscape architecture.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-cbc5e169-02c7-437b-9bbf-6fc7152afcca.png",
+      "file": "assets/concept-park.webp"
+    },
+    {
+      "name": "heritage",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. An atmospheric restored courtyard inspired by Vladivostok's historical Millionka district: intricate old red brick facades with white masonry trim, arched passage, balconies, beautiful stone paving, subtle warm cafe lights, a few people, mature small trees. Authentic Far Eastern port-city architecture, no Chinese fantasy ornament, no text. Golden late-afternoon architectural photo.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-38893415-553b-4387-a6e3-54060fb38230.png",
+      "file": "assets/concept-heritage.webp"
+    },
+    {
+      "name": "beach",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A spectacular quiet beach on Russky Island near Vladivostok: turquoise sea, wooded green rocky headlands, pale sand, carefully designed timber coastal walking path and simple low pavilion integrated into nature, a few small people. High-end aerial landscape photography at morning sun, no tropical palms, no resort towers.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-dc029e05-78c7-458d-b124-db3550b71c18.png",
+      "file": "assets/concept-beach.webp"
+    },
+    {
+      "name": "energy",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A beautifully ordered modern electrical substation on the edge of a green hilly coastal city. Pale blue and silver transformers, symmetrical insulators and busbars, low clean utility buildings, landscaping, blue bay in the background. Elevated cinematic architectural photography, clear summer sun, no power plant smokestacks, no lettering.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-6530247a-d1ea-4e93-8ddb-05a2b10feb22.png",
+      "file": "assets/concept-energy.webp"
+    },
+    {
+      "name": "water",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A contemporary clean water treatment facility within green hills by the Pacific: precise circular settling basins of turquoise water, silver utility structures, light low-rise plant buildings, thoughtfully landscaped periphery. Cinematic oblique aerial photography, beautiful geometric composition, warm bright daylight. No people close-up, no text.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-b147eb63-0998-4707-9ff2-d19ee43aa41d.png",
+      "file": "assets/concept-water.webp"
+    },
+    {
+      "name": "logistics",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A modern coastal agro-logistics and seafood distribution hub near Vladivostok: elegant low refrigerated warehouse buildings, loading bays, a few trucks, an ordered distribution yard, a port and distant blue sea, verdant hills behind. High-end aerial architecture visualization, crisp navy white orange accents, warm morning sun, no legible marks.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-9cb1d3a6-20e9-4dc1-863d-4b7eb07fbcce.png",
+      "file": "assets/concept-logistics.webp"
+    },
+    {
+      "name": "pier",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A small rebuilt island passenger pier in a green Russian Far East bay: one modest sleek passenger ferry alongside a carefully designed concrete and timber landing, blue water, forested hills, tiny passengers, clear summer sky. Cinematic elevated three-quarter angle, practical maritime architecture, no giant cruise ships, no text.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-762b4a3b-343e-4362-af4d-4c71e93ae577.png",
+      "file": "assets/concept-pier.webp"
+    },
+    {
+      "name": "citysport",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A bright new neighborhood sports park in Vladivostok's green hills, tasteful terracotta running track, blue multiuse court, outdoor exercise area, young trees and small groups of people, low residential buildings behind, distant sea. Elegant aerial oblique photography, warm afternoon daylight, no stadium crowds or logos.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-ef047f9d-bf59-4222-84c0-1a55477b257f.png",
+      "file": "assets/concept-citysport.webp"
+    },
+    {
+      "name": "heritagefort",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. An evocative conceptual visitor route through a preserved early twentieth-century coastal fortress in Vladivostok: broad weathered concrete fortification partially embedded in green grass, restored stone paths, discreet timber viewing platform, wooded coastal hills and deep blue sea. Cinematic aerial at golden light. No weapons, no flags, no signage.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-37fe10f8-b698-44e6-8f6e-2b09c0b6cd18.png",
+      "file": "assets/concept-heritagefort.webp"
+    },
+    {
+      "name": "bridge",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A contemporary urban road bridge over a leafy valley in a hilly Far Eastern Russian coastal city, clean pale concrete structure with slim railings and landscaped approaches, light realistic traffic, pastel mid-rise neighborhoods, blue sky, distant sea. Oblique architectural aerial view, bright early morning, no cable-stayed suspension towers, no text.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-6ea853e2-1b04-48a6-9292-a236034325f9.png",
+      "file": "assets/concept-bridge.webp"
+    },
+    {
+      "name": "recycling",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A modern enclosed municipal organics composting facility set in a carefully landscaped green industrial park: low long buildings, orderly covered processing lanes, a few small service trucks, planted buffers and forested hills beyond. Clean practical environmental infrastructure, cinematic oblique aerial daylight, no visible trash heaps, no symbols or writing.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-27504088-6d9c-406d-a006-a72c1bb3c985.png",
+      "file": "assets/concept-recycling.webp"
+    },
+    {
+      "name": "heat",
+      "prompt": "Create a premium architectural editorial visualization for a bright Vladivostok master-plan website. Wide landscape 16:9 composition. Photorealistic and exceptionally polished, crisp material detail, warm sun and fresh maritime cyan/blue, natural green hills. Sophisticated real-world architecture, never science fiction. No text, no labels, no typography, no UI, no logos, no watermarks. This is explicitly a conceptual illustration, not a depiction of an approved building. A modern compact district heating plant in a green hilly Russian coastal city: clean pale metal industrial halls, silver insulated pipes, a pair of slender chimneys with very light water vapor, landscaped surroundings and apartments far away. Optimistic precise industrial architectural photo, crisp sunny blue sky, no smoke pollution, no writing.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-990d8ae3-98df-452c-9654-72c6c4c6eebe.png",
+      "file": "assets/concept-heat.webp"
+    }
+  ]
+}

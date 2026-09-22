@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { asset } from "../data.js";
 import { projectCategories, selectedProjects } from "../selectedProjects.js";
+import Icon from "./Icon.jsx";
+import ProjectDetail from "./ProjectDetail.jsx";
 const padded = (n) => String(n).padStart(2, "0");
 export default function Projects() {
   const [categoryId, setCategoryId] = useState("housing");
@@ -50,7 +52,7 @@ export default function Projects() {
       }
       if (e.key === "Tab") {
         const nodes = [
-          ...section.current.querySelectorAll("button,a[href]"),
+          ...section.current.querySelectorAll("button,a[href],summary"),
         ].filter((el) => el.getClientRects().length);
         const first = nodes[0],
           last = nodes.at(-1);
@@ -92,7 +94,7 @@ export default function Projects() {
         <div className="projects-total">
           <strong>27</strong>
           <span>
-            проектов <br />в 7 направлениях
+            {"проектов "}<br />в 7 направлениях
           </span>
         </div>
       </div>
@@ -179,7 +181,7 @@ export default function Projects() {
                 aria-pressed={categoryId === c.id}
                 onClick={() => chooseCategory(c.id)}
               >
-                <img src={asset(c.icon)} alt="" />
+                <Icon name={c.id} size={21} />
                 <span>{c.shortLabel}</span>
                 <small>
                   {padded(
@@ -212,7 +214,7 @@ export default function Projects() {
                     {p.scope === "program" ? "Городская программа" : p.area}
                   </small>
                 </span>
-                <b>↗</b>
+                <Icon name="arrow" hoverName="right" size={17} />
               </button>
             ))}
           </div>
@@ -227,7 +229,7 @@ export default function Projects() {
               setProjectId(null);
             }}
           >
-            ↺
+            <Icon name="reset" size={22} />
           </button>
           <button
             ref={expandButton}
@@ -238,7 +240,12 @@ export default function Projects() {
             aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}
           >
-            {expanded ? "×" : "⤢"}
+            <Icon
+              name="expand"
+              active={expanded}
+              activeName="close"
+              size={23}
+            />
           </button>
         </div>
         {!project && (
@@ -250,77 +257,31 @@ export default function Projects() {
               <span>проектов направления</span>
               <h3>{category.label}</h3>
               <button onClick={() => chooseProject(projects[0].id)}>
-                Исследовать <span>↗</span>
+                Исследовать <Icon name="arrow" hoverName="right" size={22} />
               </button>
             </div>
           </div>
         )}
         {project && (
-          <article
-            ref={detail}
-            className="atlas-detail"
+          <ProjectDetail
             key={project.id}
-            aria-live="polite"
-          >
-            <div className="atlas-detail-top">
-              <span>
-                {padded(project.number)} / {category.shortLabel}
-              </span>
-              <button
-                aria-label="Закрыть карточку проекта"
-                onClick={() => {
-                  setProjectId(null);
-                  setFocused(false);
-                }}
-              >
-                ×
-              </button>
-            </div>
-            {project.image && (
-              <img
-                src={asset(project.image)}
-                className="atlas-detail-image"
-                alt={`Визуализация проекта: ${project.shortTitle}`}
-              />
-            )}
-            <div className="atlas-detail-body">
-              <span className="atlas-detail-location">{project.area}</span>
-              <h3>{project.title}</h3>
-              <p>{project.group}</p>
-              <div className="atlas-detail-scope">
-                {project.scope === "program"
-                  ? "Городская программа"
-                  : project.scope === "area"
-                    ? "Развитие территории"
-                    : "Проект мастер-плана"}
-              </div>
-              {!project.anchor && (
-                <small className="atlas-location-note">
-                  {project.scope === "program"
-                    ? "Программа охватывает несколько объектов."
-                    : project.area === "Остров Русский"
-                      ? "На карте выделен остров Русский."
-                      : "Расположение проекта уточняется."}
-                </small>
-              )}
-            </div>
-            <div className="atlas-detail-nav">
-              <button onClick={prev} aria-label="Предыдущий проект">
-                ←
-              </button>
-              <span>
-                {padded(index + 1)} <small>/ {padded(projects.length)}</small>
-              </span>
-              <button onClick={next} aria-label="Следующий проект">
-                →
-              </button>
-            </div>
-          </article>
+            project={project}
+            category={category}
+            index={index}
+            total={projects.length}
+            onPrev={prev}
+            onNext={next}
+            detailRef={detail}
+            onClose={() => {
+              setProjectId(null);
+              setFocused(false);
+            }}
+          />
         )}
         <div className="atlas-bottom">
           <span>Художественная схема · расположение условное</span>
           <span>
-            С<span className="north-arrow">↑</span>
+            С<Icon name="up" size={18} />
           </span>
           <span>Владивосток / остров Русский</span>
         </div>

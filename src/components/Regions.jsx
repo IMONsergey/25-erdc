@@ -1,6 +1,78 @@
+import { useState } from "react";
 import { asset, cities } from "../data.js";
+import Icon from "./Icon.jsx";
+const stories = {
+  vladivostok: {
+    name: "Владивосток",
+    tag: "Город у океана",
+    title: (
+      <>
+        Характер —<br />
+        тихоокеанский.
+      </>
+    ),
+    text: "Сопки, туманы, вантовые мосты над океанскими бухтами и старый китайский квартал в центре.",
+    photo: "detail-vladivostok.webp",
+    alt: "Панорама Русского моста",
+    themes: [
+      ["anchor", "Морская экономика"],
+      ["social", "Наука и образование"],
+      ["tourism", "Туризм"],
+    ],
+  },
+  artem: {
+    name: "Артём",
+    tag: "Воздушные ворота агломерации",
+    title: <>Город в движении.</>,
+    text: "Город аэропорта, промышленности и новых жилых территорий. Артём связывает воздушные маршруты с повседневной жизнью агломерации.",
+    photo: "city-artem.webp",
+    alt: "Панорама Артёма",
+    themes: [
+      ["plane", "Международный аэропорт"],
+      ["factory", "Промышленность"],
+      ["housing", "Жилые территории"],
+    ],
+  },
+  "bolshoy-kamen": {
+    name: "Большой Камень",
+    tag: "Морская промышленность",
+    title: (
+      <>
+        Масштаб —<br />
+        океанский.
+      </>
+    ),
+    text: "Центр судостроения, производства и развития морской промышленности. Территория, чья экономика тесно связана с морем.",
+    photo: "city-bolshoy-kamen.webp",
+    alt: "Морской пейзаж Приморья из макета",
+    themes: [
+      ["ship", "Судостроение"],
+      ["factory", "Производство"],
+      ["waves", "Морская промышленность"],
+    ],
+  },
+};
 export default function Regions({ selectedCity, onSelectCity }) {
-  const city = cities.find((c) => c.id === selectedCity);
+  const [hovered, setHovered] = useState(null);
+  const [view, setView] = useState("about");
+  const story = stories[selectedCity];
+  const active = hovered || selectedCity;
+  const select = (id) => {
+    onSelectCity(id);
+    setView("about");
+  };
+  const followLight = (event) => {
+    if (event.pointerType !== "mouse") return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    event.currentTarget.style.setProperty(
+      "--pointer-x",
+      `${event.clientX - rect.left}px`,
+    );
+    event.currentTarget.style.setProperty(
+      "--pointer-y",
+      `${event.clientY - rect.top}px`,
+    );
+  };
   return (
     <section
       id="regions"
@@ -16,103 +88,188 @@ export default function Regions({ selectedCity, onSelectCity }) {
             Разные возможности.
           </span>
         </div>
-        <h2 className="section-title reveal" id="regions-title">
-          Масштаб города.
-          <br />
-          <span>Горизонт региона.</span>
-        </h2>
-        <div className="city-grid reveal" aria-label="Территории агломерации">
-          {cities.map((c, i) => (
+        <div className="regions-heading reveal">
+          <h2 className="section-title" id="regions-title">
+            Масштаб города.
+            <br />
+            <span>Горизонт региона.</span>
+          </h2>
+          <span className="regions-hint">
+            <Icon name="pin" size={19} /> Выберите территорию
+          </span>
+        </div>
+        <div
+          className="city-grid reveal"
+          data-active={active}
+          aria-label="Территории агломерации"
+          onMouseLeave={() => setHovered(null)}
+        >
+          {cities.map((city, index) => (
             <button
-              key={c.id}
-              className={`city-card ${selectedCity === c.id ? "is-selected" : ""}`}
-              aria-pressed={selectedCity === c.id}
-              onClick={() => onSelectCity(c.id)}
+              key={city.id}
+              className={`city-card ${selectedCity === city.id ? "is-selected" : ""} ${active === city.id ? "is-emphasized" : ""}`}
+              aria-pressed={selectedCity === city.id}
+              aria-controls="city-detail"
+              onClick={() => select(city.id)}
+              onMouseEnter={() => setHovered(city.id)}
+              onFocus={() => setHovered(city.id)}
+              onBlur={() => setHovered(null)}
+              onPointerMove={followLight}
             >
               <img
                 className="city-photo"
-                src={asset(c.photo)}
-                alt={c.alt}
+                src={asset(city.photo)}
+                alt={city.alt}
                 loading="lazy"
               />
-              <div className="city-card-shade" />
+              <span className="city-card-shade" />
+              <span className="city-card-light" />
               <span className="city-card-top">
-                <span>0{i + 1}</span>
-                <img src={asset(c.crest)} alt="" />
+                <span className="city-number">0{index + 1}</span>
+                <img src={asset(city.crest)} alt="" />
               </span>
               <span className="city-card-body">
-                <strong>{c.name}</strong>
-                <span>{c.description}</span>
+                <span className="city-type">
+                  {index === 0
+                    ? "Море · наука · культура"
+                    : index === 1
+                      ? "Авиация · промышленность"
+                      : "Море · судостроение"}
+                </span>
+                <strong>
+                  {index === 0 ? (
+                    <>
+                      Владивосток<small>и остров Русский</small>
+                    </>
+                  ) : (
+                    stories[city.id].name
+                  )}
+                </strong>
+                <span className="city-card-description">
+                  {city.description}
+                </span>
                 <span className="city-card-link">
-                  {selectedCity === c.id ? "Выбрано" : "Открыть территорию"}
-                  <b>↗</b>
+                  <span>
+                    {selectedCity === city.id
+                      ? "Выбранная территория"
+                      : "Исследовать город"}
+                  </span>
+                  <span className="city-card-arrow">
+                    <Icon
+                      name="arrow"
+                      active={selectedCity === city.id}
+                      activeName="check"
+                      hoverName="right"
+                      size={23}
+                    />
+                  </span>
                 </span>
               </span>
             </button>
           ))}
         </div>
-        {selectedCity === "vladivostok" ? (
-          <article className="city-detail reveal" id="city-detail">
-            <img
-              className="city-detail-image"
-              src={asset("detail-vladivostok.webp")}
-              alt="Панорама Русского моста"
-              loading="lazy"
-            />
-            <div className="city-detail-shade" />
-            <div className="city-detail-copy">
-              <span className="section-kicker">Город у океана</span>
-              <h3>
-                Характер —<br />
-                тихоокеанский.
-              </h3>
-              <p>
-                Сопки, туманы, вантовые мосты над океанскими бухтами и старый
-                китайский квартал в центре.
-              </p>
+        <article
+          className={`city-detail city-story ${view === "directions" ? "is-directions" : ""}`}
+          id="city-detail"
+          aria-label={`О городе ${story.name}`}
+        >
+          <img
+            key={story.photo}
+            className="city-detail-image"
+            src={asset(story.photo)}
+            alt={story.alt}
+            loading="lazy"
+          />
+          <div className="city-detail-shade" />
+          <div className="city-story-top">
+            <span>
+              <Icon name="pin" size={18} /> {story.name}
+            </span>
+            <div className="city-story-tabs" aria-label="Сведения о территории">
+              <button
+                aria-pressed={view === "about"}
+                onClick={() => setView("about")}
+              >
+                О городе
+              </button>
+              <button
+                aria-pressed={view === "directions"}
+                onClick={() => setView("directions")}
+              >
+                Направления
+              </button>
             </div>
-            <div className="city-detail-facts">
-              <div>
-                <img src={asset("icon-population.svg")} alt="" />
-                <strong>628,4</strong>
-                <span>
-                  тыс. человек
-                  <br />
-                  население города
-                </span>
-              </div>
-              <div>
-                <img src={asset("icon-quality.svg")} alt="" />
-                <strong>
-                  205<span> / 360</span>
-                </strong>
-                <span>
-                  индекс качества
-                  <br />
-                  городской среды, 2024
-                </span>
-              </div>
-            </div>
-          </article>
-        ) : (
-          <div className="city-unavailable" key={selectedCity} role="status">
-            <img src={asset(city.crest)} alt="" />
-            <div>
-              <span className="section-kicker">{city.name}</span>
-              <h3>
-                Мастер-план готовится
-                <br />к публикации
-              </h3>
-              <p>{city.description}</p>
-            </div>
-            <button
-              className="text-button"
-              onClick={() => onSelectCity("vladivostok")}
-            >
-              К проектам Владивостока ↗
-            </button>
           </div>
-        )}
+          <div
+            className="city-story-content"
+            key={`${selectedCity}-${view}`}
+            aria-live="polite"
+          >
+            <span className="section-kicker">{story.tag}</span>
+            <h3>
+              {view === "about" ? (
+                story.title
+              ) : (
+                <>
+                  Сильные стороны
+                  <br />
+                  территории.
+                </>
+              )}
+            </h3>
+            <p>{story.text}</p>
+            {view === "directions" && (
+              <div className="city-themes">
+                {story.themes.map(([icon, text]) => (
+                  <span key={text}>
+                    <Icon name={icon} size={22} />
+                    {text}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="city-story-bottom">
+            {selectedCity === "vladivostok" && view === "about" ? (
+              <div className="city-detail-facts">
+                <div>
+                  <Icon name="people" size={28} />
+                  <strong>628,4</strong>
+                  <span>
+                    тыс. человек
+                    <br />
+                    население города
+                  </span>
+                </div>
+                <div>
+                  <Icon name="quality" size={28} />
+                  <strong>
+                    205<span> / 360</span>
+                  </strong>
+                  <span>
+                    индекс городской среды
+                    <br />
+                    2024 год
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="city-story-note">
+                {selectedCity === "vladivostok"
+                  ? "27 проектов Владивостока и острова Русский — в атласе развития."
+                  : "Подробные проекты этой территории готовятся к публикации."}
+              </div>
+            )}
+            <a className="city-story-cta" href="#projects">
+              <span>
+                {selectedCity === "vladivostok"
+                  ? "К проектам города"
+                  : "К атласу Владивостока"}
+              </span>
+              <Icon name="arrow" hoverName="right" size={25} />
+            </a>
+          </div>
+        </article>
       </div>
     </section>
   );

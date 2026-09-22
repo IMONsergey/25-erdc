@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { asset } from "../data.js";
+import Icon from "./Icon.jsx";
 
 export default function Hero() {
   const hero = useRef(null);
@@ -49,9 +50,11 @@ export default function Hero() {
       </div>
       <div className="hero-bottom shell">
         <a className="hero-explore" href="#projects">
-          <span className="round-arrow">↘</span>
+          <span className="round-arrow">
+            <Icon name="diagonal" hoverName="down" size={27} />
+          </span>
           <span>
-            Открыть <br />
+            {"Открыть "}<br />
             будущее города
           </span>
         </a>
@@ -81,7 +84,7 @@ export default function Hero() {
           aria-label="Листать к территориям"
         >
           <span>Листайте вниз</span>
-          <i />
+          <Icon name="down" size={24} />
         </a>
       </div>
     </section>

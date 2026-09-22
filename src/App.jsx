@@ -5,6 +5,7 @@ import Regions from "./components/Regions.jsx";
 import Mission from "./components/Mission.jsx";
 import Projects from "./components/Projects.jsx";
 import Motion from "./components/Motion.jsx";
+import Icon from "./components/Icon.jsx";
 import { asset } from "./data.js";
 export default function App() {
   const [selectedCity, setSelectedCity] = useState("vladivostok");
@@ -37,7 +38,7 @@ export default function App() {
             Дальнего Востока
           </p>
           <a href="#top">
-            Вернуться к началу <span>↑</span>
+            Вернуться к началу <Icon name="arrow" hoverName="up" size={24} />
           </a>
         </div>
         <div className="shell footer-bottom">

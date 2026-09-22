@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { asset } from "../data.js";
+import Icon from "./Icon.jsx";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -50,7 +51,7 @@ export default function Header() {
           ))}
         </nav>
         <a className="header-cta" href="#projects">
-          Изучить мастер-план <span>↗</span>
+          Изучить мастер-план <Icon name="arrow" hoverName="right" size={20} />
         </a>
         <button
           className={`menu-button ${menuOpen ? "is-open" : ""}`}
@@ -59,8 +60,7 @@ export default function Header() {
           aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span />
-          <span />
+          <Icon name="menu" active={menuOpen} activeName="close" size={26} />
         </button>
       </div>
     </header>

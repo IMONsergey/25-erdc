@@ -1,107 +1,143 @@
 import { useState } from "react";
 import { asset } from "../data.js";
+import Icon from "./Icon.jsx";
 const items = [
   {
-    title: "Морские ворота",
-    text: "Владивосток — административный центр Приморского края и крупнейший морской город Дальнего Востока. Он расположен на полуострове Муравьёва-Амурского и островах залива Петра Великого.",
-    image: "mission-city.webp",
-    icon: "icon-mission-city.svg",
+    icon: "housing",
+    title: "Город у моря",
+    text: "Владивосток — административный центр Приморского края и крупнейший морской город Дальнего Востока. Он расположен на полуострове Муравьёва-Амурского и островах залива Петра Великого, на побережье Японского моря.",
   },
   {
-    title: "Точка притяжения",
+    icon: "anchor",
+    title: "Экономика притяжения",
     text: "Город объединяет портовую экономику, международную торговлю, образование, науку, туризм и высокотехнологичные отрасли.",
-    image: "city-vladivostok.webp",
-    icon: "icon-mission-industry.svg",
   },
   {
+    icon: "globe",
     title: "Связь с миром",
-    text: "Здесь завершается Транссибирская магистраль, действует крупнейший морской порт и расположен международный аэропорт Владивосток. Город связывает Россию со странами Азиатско-Тихоокеанского региона.",
+    text: "Город занимает стратегическое положение между Россией и странами Азиатско-Тихоокеанского региона. Здесь завершается Транссибирская магистраль, действует морской порт и расположен международный аэропорт Владивосток.",
+  },
+];
+const connections = [
+  {
+    icon: "train",
+    title: "Транссиб",
+    sub: "железная дорога",
+    text: "Владивосток — конечная точка Транссибирской магистрали. Железная дорога соединяет город с регионами России.",
     image: "mission-map.webp",
-    icon: "icon-mission-globe.svg",
+  },
+  {
+    icon: "route",
+    title: "Уссури",
+    sub: "федеральная трасса",
+    text: "Федеральная трасса «Уссури» связывает Владивосток с Хабаровском и территориями Приморского края.",
+    image: "concept-bridge.webp",
+  },
+  {
+    icon: "plane",
+    title: "Аэропорт",
+    sub: "международный",
+    text: "Международный аэропорт Владивосток находится в Артёме — одной из территорий агломерации.",
+    image: "city-artem.webp",
+  },
+  {
+    icon: "globe",
+    title: "АТР",
+    sub: "международные связи",
+    text: "Морские ворота России в Азиатско-Тихоокеанский регион. Порт, образование и торговля формируют международные связи города.",
+    image: "mission-map.webp",
   },
 ];
 export default function Mission() {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(3);
+  const connection = connections[active];
   return (
     <section
-      className="mission-section shell"
+      className="mission-section"
       id="mission"
       aria-labelledby="mission-title"
     >
-      <div className="section-head reveal">
-        <span className="section-kicker">02 / Миссия города</span>
-        <span className="section-aside">
-          Россия · Азиатско-Тихоокеанский регион
-        </span>
-      </div>
-      <h2 className="section-title reveal" id="mission-title">
-        Морские ворота России.
-        <br />
-        <span>Открыты будущему.</span>
-      </h2>
-      <div className="mission-composition reveal">
-        <div className="mission-accordion">
-          {items.map((item, i) => (
-            <article
-              className={`mission-item ${i === active ? "is-active" : ""}`}
-              key={item.title}
-            >
-              <h3>
-                <button
-                  aria-expanded={i === active}
-                  aria-controls={`mission-panel-${i}`}
-                  onClick={() => setActive(i)}
-                >
-                  <span className="mission-number">0{i + 1}</span>
-                  {item.title}
-                  <span className="mission-plus">
-                    {i === active ? "−" : "+"}
-                  </span>
-                </button>
-              </h3>
-              <div id={`mission-panel-${i}`} hidden={i !== active}>
-                <p>{item.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className={`mission-media ${active === 2 ? "is-diagram" : ""}`}>
-          <img
-            key={active}
-            src={asset(items[active].image)}
-            alt={
-              active === 2
-                ? "Схема международных транспортных связей Владивостока"
-                : "Владивосток — город у моря"
-            }
-            loading="lazy"
-          />
-          <span className="mission-media-index">
-            0{active + 1}
-            <span> / 03</span>
-          </span>
-          <img
-            className="mission-media-icon"
-            src={asset(items[active].icon)}
-            alt=""
-          />
-        </div>
-      </div>
-      <div className="connections reveal">
-        {[
-          ["icon-rail.svg", "Транссибирская", "магистраль"],
-          ["icon-highway.svg", "Уссури", "федеральная трасса"],
-          ["icon-airport.svg", "Владивосток", "международный аэропорт"],
-          ["icon-global.svg", "Китай, Корея, Япония", "международные связи"],
-        ].map(([icon, title, text]) => (
-          <div key={title}>
-            <img src={asset(icon)} alt="" />
-            <span>
-              <strong>{title}</strong>
-              <small>{text}</small>
-            </span>
+      <div className="shell mission-layout">
+        <div className="mission-copy reveal">
+          <span className="section-kicker">02 / Миссия города</span>
+          <h2 id="mission-title">
+            Владивосток —<br />
+            морские ворота России <span>в Азиатско-Тихоокеанский регион.</span>
+          </h2>
+          <div className="mission-principles">
+            {items.map((item, index) => (
+              <article
+                className="mission-principle"
+                key={item.title}
+                data-icon-trigger
+              >
+                <div className="mission-emblem">
+                  <Icon
+                    name={item.icon}
+                    hoverName={
+                      index === 0 ? "waves" : index === 1 ? "ship" : "plane"
+                    }
+                    size={32}
+                  />
+                </div>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              </article>
+            ))}
           </div>
-        ))}
+        </div>
+        <div className="mission-strategy reveal">
+          <div
+            className={`strategy-visual ${active === 0 || active === 3 ? "is-map" : ""}`}
+          >
+            <img
+              key={connection.image}
+              src={asset(connection.image)}
+              alt={
+                active === 0 || active === 3
+                  ? "Схема связей Владивостока с Москвой, Хабаровском, Пекином, Сеулом и Токио"
+                  : active === 1
+                    ? "Концептуальная иллюстрация дорожной инфраструктуры"
+                    : "Панорама Артёма — города международного аэропорта"
+              }
+              loading="lazy"
+            />
+            <span className="strategy-label">
+              <Icon name={connection.icon} size={18} /> {connection.title}
+            </span>
+            {active === 1 && (
+              <span className="image-caption">Концептуальная иллюстрация</span>
+            )}
+            {(active === 0 || active === 3) && (
+              <span className="strategy-beacon" aria-hidden="true" />
+            )}
+          </div>
+          <div className="strategy-body">
+            <div className="strategy-heading">
+              <h3>Стратегическое положение</h3>
+              <span>0{active + 1} / 04</span>
+            </div>
+            <div className="strategy-tabs" aria-label="Транспортные связи">
+              {connections.map((item, index) => (
+                <button
+                  key={item.title}
+                  aria-pressed={active === index}
+                  onClick={() => setActive(index)}
+                  className={active === index ? "is-active" : ""}
+                >
+                  <Icon name={item.icon} size={32} />
+                  <strong>{item.title}</strong>
+                  <small>{item.sub}</small>
+                </button>
+              ))}
+            </div>
+            <p className="strategy-description" key={active} aria-live="polite">
+              {connection.text}
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );

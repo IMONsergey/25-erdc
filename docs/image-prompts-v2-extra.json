@@ -1,0 +1,23 @@
+{
+  "tool": "built-in ImageGen",
+  "assets": [
+    {
+      "name": "cycling",
+      "prompt": "Create one premium architectural editorial concept illustration, wide 16:9 landscape, no text logos or UI. A scenic recreational bicycle route through the wooded hills of Russky Island in the Russian Far East: an elegant pale smooth path curves through maritime pines above a turquoise blue rocky bay, a few cyclists ride naturally in the middle distance, timber viewpoint at a curve, authentic temperate coastal forest, no tropical palms and no suspension bridge. Low elevated perspective, crisp rich detail, fresh warm summer morning, photorealistic, clear cinematic architectural composition.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-60638e3b-2d0b-4bfe-8838-7fe8b1fa0399.png",
+      "file": "assets/concept-cycling.webp"
+    },
+    {
+      "name": "square",
+      "prompt": "Create one premium architectural editorial concept illustration for a public urban master-plan website, wide 16:9, no text logos or UI. A grand civic square in a hilly Russian Far East port city, inspired by central Vladivostok: broad pale granite paving, a distant tall historic monument at one side, restrained water jets, orderly trees and generous accessible walking space, early 20th century administrative facades mixed with mid-rise architecture around the perimeter, a few small people, blue coastal sky. Elevated three-quarter architectural view, bright clean sunlight, refined realistic public landscape, not a courtyard, no bridge. This is a conceptual image, not an exact reconstruction.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-90f72ae2-f9d0-47a5-84a9-5f51d13525fb.png",
+      "file": "assets/concept-square.webp"
+    },
+    {
+      "name": "river",
+      "prompt": "One premium architectural environmental concept illustration, wide 16:9 image, no text, logos, UI or labels. An urban river restoration and dredging project in the Russian Far East: a modest straight river channel passing through a green city valley toward a distant sea inlet, a small practical dredging workboat in the middle distance, clean blue-green water, planted banks, low maintenance paths, existing mid-rise buildings far behind. Photorealistic elevated oblique view, bright clean daylight, cinematic natural green and blue palette, practical plausible infrastructure, no idyllic fantasy waterpark, no giant bridges.",
+      "source": "/workspace/scratch/46c26052f8d3/generated_images/exec-b36fb51a-bb40-49fc-9e38-1e07bbc5e0be.png",
+      "file": "assets/concept-river.webp"
+    }
+  ]
+}
