@@ -1,43 +1,67 @@
 import { useEffect, useState } from "react";
 import { asset } from "../data.js";
-
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const update = () => setScrolled(window.scrollY > 30);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
   }, []);
-
-  const closeMenu = () => setMenuOpen(false);
-
+  useEffect(() => {
+    if (!menuOpen) return;
+    const key = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [menuOpen]);
   return (
-    <header className={`site-header${scrolled ? " is-scrolled" : ""}`} id="top">
-      <div className="shell header-inner">
-        <a className="header-caption" href="#top">Новый облик городов Дальнего Востока</a>
+    <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
+      <div className="header-inner shell">
         <a className="brand" href="#top" aria-label="25 городов — на главную">
-          <img src={asset("logo-25-cities.svg")} alt="25 городов" width="112" height="24" />
+          <img
+            src={asset("logo-25-cities.svg")}
+            alt="25 городов"
+            width="112"
+            height="26"
+          />
+        </a>
+        <span className="header-caption">
+          Новый облик городов
+          <br />
+          Дальнего Востока
+        </span>
+        <nav
+          id="main-menu"
+          className={`main-nav ${menuOpen ? "is-open" : ""}`}
+          aria-label="Основная навигация"
+        >
+          {[
+            ["#city", "Город"],
+            ["#regions", "Территории"],
+            ["#mission", "Миссия"],
+            ["#projects", "Проекты"],
+          ].map(([href, label]) => (
+            <a key={href} href={href} onClick={() => setMenuOpen(false)}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        <a className="header-cta" href="#projects">
+          Изучить мастер-план <span>↗</span>
         </a>
         <button
-          className="menu-button"
-          type="button"
-          aria-expanded={menuOpen}
+          className={`menu-button ${menuOpen ? "is-open" : ""}`}
           aria-controls="main-menu"
-          onClick={() => setMenuOpen((current) => !current)}
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          <span /><span />
-          <span className="visually-hidden">Открыть меню</span>
+          <span />
+          <span />
         </button>
-        <nav className={`main-nav${menuOpen ? " is-open" : ""}`} id="main-menu" aria-label="Основная навигация">
-          <a href="#top" onClick={closeMenu}>Главная</a>
-          <a href="#about" onClick={closeMenu}>О проекте</a>
-          <a href="#regions" onClick={closeMenu}>Регионы</a>
-          <a href="#projects" onClick={closeMenu}>ДВ Квартал</a>
-          <a href="#projects" onClick={closeMenu}>Новости</a>
-        </nav>
       </div>
     </header>
   );

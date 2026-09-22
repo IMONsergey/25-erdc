@@ -1,187 +1,330 @@
-import { useRef, useState } from "react";
-import { asset, categories, projects } from "../data.js";
-import { FadeText, MaskedWords, Text } from "./AnimatedText.jsx";
-
-function CategoryIcon({ name }) {
-  return <span className="category-icon" style={{ "--category-icon": `url(${asset(name)})` }} aria-hidden="true" />;
-}
-
-function ProjectList({ category, activeProjectId, onSelect }) {
-  const housing = category.id === "housing";
-
-  return (
-    <aside className="project-list" aria-label="Список проектов">
-      <div className="project-list-head">
-        <h3><Text>{category.label}</Text></h3>
-        <div><span>{housing ? "Реновация и КРТ" : "Проекты"}</span><b>{housing ? "10" : "—"}</b></div>
-      </div>
-      {housing ? (
-        <div className="project-items">
-          {projects.map((project) => (
-            <button
-              className={`project-item${activeProjectId === project.id ? " is-active" : ""}`}
-              type="button"
-              key={project.id}
-              aria-pressed={activeProjectId === project.id}
-              onClick={() => onSelect(project.id)}
-            >
-              <img src={asset(project.image)} alt="" />
-              <span><Text as="strong">{project.title}</Text><Text as="small">{project.short}</Text></span>
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div className="project-list-progress">
-          <span aria-hidden="true">•••</span>
-          <p>Контент в работе</p>
-        </div>
-      )}
-    </aside>
-  );
-}
-
-function ProjectDetail({ project, onClose }) {
-  return (
-    <article className="project-detail-card" aria-live="polite">
-      <div className="project-detail-title">
-        <h3><MaskedWords text={project.title} /></h3>
-        <button className="project-close" type="button" onClick={onClose} aria-label="Закрыть карточку проекта">
-          <img src={asset("icon-plus.svg")} alt="" />
-        </button>
-      </div>
-      <img className="project-detail-photo" src={asset(project.image)} alt={`Визуализация проекта «${project.title}»`} />
-      {project.complete ? (
-        <>
-          <div className="project-status-row">
-            <span className="project-type">Реновация</span>
-            <div className="stage-progress" role="progressbar" aria-label="Стадия строительства" aria-valuemin="0" aria-valuemax="100" aria-valuenow="73">
-              <span className="stage-progress-fill" />
-              <span className="stage-progress-label">Стадия строительства</span>
-            </div>
-          </div>
-          <FadeText as="p" className="project-description">Комфортная жилая застройка по стандарту ДОМ.РФ, парк, пешеходный мост, культурный и спортивный центр, социальная инфраструктура.</FadeText>
-          <div className="project-metrics">
-            <div><strong>94.22 га</strong><FadeText>площадь участка проектирования</FadeText></div>
-            <div><strong>130.5 млрд ₽</strong><FadeText>инвестиций</FadeText></div>
-            <div><strong>924,4 тыс. м²</strong><FadeText>общая площадь застройки</FadeText></div>
-          </div>
-          <h4>Что появится</h4>
-          <ul className="project-results">
-            <li>Строительство 4 ЖК, гостиничного комплекса и 2 общественно-деловых объектов (2,9 га)</li>
-            <li>Пешеходный мост через реку Улу</li>
-            <li>Культурный и спортивный центр</li>
-            <li>Жильё по стандарту ДОМ.РФ</li>
-          </ul>
-        </>
-      ) : (
-        <div className="detail-progress-copy">
-          <FadeText as="p">{project.short}</FadeText>
-          <strong>Подробный контент в работе</strong>
-        </div>
-      )}
-    </article>
-  );
-}
-
-function ProjectMap({ activeProject, canSelectProject, onSelectProject, onClose }) {
-  const canvasRef = useRef(null);
-  const panRef = useRef({ x: 0, y: 0 });
-  const dragRef = useRef(null);
-
-  const applyPan = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.style.setProperty("--pan-x", `${panRef.current.x}px`);
-    canvas.style.setProperty("--pan-y", `${panRef.current.y}px`);
-  };
-
-  const onPointerDown = (event) => {
-    if (event.target.closest("button")) return;
-    event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, startX: panRef.current.x, startY: panRef.current.y };
-    event.currentTarget.classList.add("is-dragging");
-  };
-
-  const onPointerMove = (event) => {
-    const drag = dragRef.current;
-    if (!drag || drag.pointerId !== event.pointerId) return;
-    panRef.current = {
-      x: Math.max(-90, Math.min(90, drag.startX + event.clientX - drag.x)),
-      y: Math.max(-70, Math.min(70, drag.startY + event.clientY - drag.y)),
-    };
-    applyPan();
-  };
-
-  const finishDrag = (event) => {
-    if (dragRef.current?.pointerId !== event.pointerId) return;
-    dragRef.current = null;
-    event.currentTarget.classList.remove("is-dragging");
-  };
-
-  return (
-    <div
-      className="project-map"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={finishDrag}
-      onPointerCancel={finishDrag}
-    >
-      <div className="project-map-canvas" ref={canvasRef}>
-        <img className="project-map-image" src={asset("projects-map.webp")} alt="Карта проектов Владивостока" draggable="false" />
-        {canSelectProject ? (
-          <button className="map-marker" type="button" onClick={() => onSelectProject("kungasny")} aria-label="Открыть проект на мысе Кунгасного">
-            <img src={asset("project-marker.webp")} alt="" draggable="false" />
-          </button>
-        ) : null}
-      </div>
-      <div className="map-hint" aria-hidden="true">
-        <img src={asset("icon-close.svg")} alt="" />
-        <span>{canSelectProject ? "Двигайте карту и нажмите на проект, чтобы увидеть подробности" : "Карту можно перемещать"}</span>
-      </div>
-      {activeProject ? <ProjectDetail project={activeProject} onClose={onClose} /> : null}
-    </div>
-  );
-}
-
+import { useEffect, useRef, useState } from "react";
+import { asset } from "../data.js";
+import { projectCategories, selectedProjects } from "../selectedProjects.js";
+const padded = (n) => String(n).padStart(2, "0");
 export default function Projects() {
   const [categoryId, setCategoryId] = useState("housing");
-  const [activeProjectId, setActiveProjectId] = useState(null);
-  const category = categories.find((item) => item.id === categoryId) ?? categories[0];
-  const activeProject = projects.find((item) => item.id === activeProjectId) ?? null;
-
-  const selectCategory = (id) => {
+  const [projectId, setProjectId] = useState(null);
+  const [focused, setFocused] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const panel = useRef(null);
+  const section = useRef(null);
+  const expandButton = useRef(null);
+  const detail = useRef(null);
+  const category = projectCategories.find((c) => c.id === categoryId);
+  const projects = selectedProjects.filter((p) => p.category === categoryId);
+  const project = projects.find((p) => p.id === projectId);
+  const target =
+    project?.anchor ??
+    (project?.area === "Остров Русский" ? [59, 67] : [63, 34]);
+  const chooseCategory = (id) => {
     setCategoryId(id);
-    setActiveProjectId(null);
+    setProjectId(null);
+    setFocused(false);
   };
-
+  const chooseProject = (id) => {
+    setProjectId(id);
+    setFocused(true);
+  };
+  useEffect(() => {
+    if (panel.current) panel.current.scrollTop = 0;
+  }, [categoryId]);
+  useEffect(() => {
+    if (projectId && matchMedia("(max-width: 700px)").matches) {
+      detail.current?.scrollIntoView({
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+        block: "nearest",
+      });
+    }
+  }, [projectId]);
+  useEffect(() => {
+    if (!expanded) return;
+    const before = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const key = (e) => {
+      if (e.key === "Escape") {
+        setExpanded(false);
+        expandButton.current?.focus();
+      }
+      if (e.key === "Tab") {
+        const nodes = [
+          ...section.current.querySelectorAll("button,a[href]"),
+        ].filter((el) => el.getClientRects().length);
+        const first = nodes[0],
+          last = nodes.at(-1);
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", key);
+    expandButton.current?.focus();
+    return () => {
+      document.body.style.overflow = before;
+      window.removeEventListener("keydown", key);
+    };
+  }, [expanded]);
+  const index = project ? projects.indexOf(project) : -1;
+  const next = () => chooseProject(projects[(index + 1) % projects.length].id);
+  const prev = () =>
+    chooseProject(projects[(index - 1 + projects.length) % projects.length].id);
   return (
-    <section className="shell projects-section" id="projects" aria-labelledby="projects-title">
-      <div className="section-intro">
-        <FadeText as="p" className="section-label">Масштаб преобразований</FadeText>
-        <h2 id="projects-title"><MaskedWords text="Ключевые проекты развития Владивостока" /></h2>
+    <section
+      id="projects"
+      className="projects-section"
+      aria-labelledby="projects-title"
+    >
+      <div className="projects-intro shell reveal">
+        <div>
+          <span className="section-kicker">03 / Масштаб преобразований</span>
+          <h2 className="section-title" id="projects-title">
+            Город меняется.
+            <br />
+            <span>Здесь и сейчас.</span>
+          </h2>
+        </div>
+        <div className="projects-total">
+          <strong>27</strong>
+          <span>
+            проектов
+            <br />в 7 направлениях
+          </span>
+        </div>
       </div>
-      <div className="project-categories" aria-label="Категории проектов">
-        {categories.map((item) => (
-          <button
-            className={`category${item.id === categoryId ? " is-active" : ""}`}
-            type="button"
-            key={item.id}
-            aria-pressed={item.id === categoryId}
-            onClick={() => selectCategory(item.id)}
+      <div
+        ref={section}
+        className={`atlas ${expanded ? "is-expanded" : ""}`}
+        role={expanded ? "dialog" : undefined}
+        aria-modal={expanded ? true : undefined}
+        aria-label="Атлас проектов Владивостока"
+        style={{ "--accent": category.color }}
+      >
+        <div className="atlas-viewport">
+          <div
+            className="atlas-camera"
+            style={{
+              "--target-x": `${target[0]}%`,
+              "--target-y": `${target[1]}%`,
+              "--zoom": focused ? 1.17 : 1,
+              "--camera-x": focused ? `${(63 - target[0]) * 0.32}%` : "0%",
+              "--camera-y": focused ? `${(42 - target[1]) * 0.3}%` : "0%",
+            }}
           >
-            <CategoryIcon name={item.icon} />
-            <span>{item.label}</span>
+            <img
+              className="atlas-terrain"
+              src={asset("atlas-vladivostok.webp")}
+              alt="Художественная панорама побережья Владивостока и острова Русский"
+              loading="lazy"
+            />
+            <span className="atlas-place atlas-place-city">Владивосток</span>
+            <span className="atlas-place atlas-place-island">
+              Остров Русский
+            </span>
+            <span className="atlas-sea">Амурский залив</span>
+            <div className="atlas-markers" key={categoryId}>
+              {projects
+                .filter((p) => p.anchor)
+                .map((p) => (
+                  <button
+                    key={p.id}
+                    style={{ left: `${p.anchor[0]}%`, top: `${p.anchor[1]}%` }}
+                    className={`atlas-marker ${projectId === p.id ? "is-active" : ""}`}
+                    aria-label={p.title}
+                    aria-pressed={projectId === p.id}
+                    onClick={() => chooseProject(p.id)}
+                  >
+                    <span>{padded(p.number)}</span>
+                    <span className="marker-tooltip">{p.shortTitle}</span>
+                  </button>
+                ))}
+            </div>
+            {project &&
+              !project.anchor &&
+              (project.scope === "program" ||
+                project.area === "Остров Русский") && (
+                <div
+                  key={project.id}
+                  className={`atlas-area ${project.area === "Остров Русский" ? "is-island" : ""}`}
+                  aria-hidden="true"
+                >
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              )}
+          </div>
+        </div>
+        <div className="atlas-vignette" />
+        <aside className="atlas-sidebar">
+          <div className="atlas-sidebar-head">
+            <span className="section-kicker">Атлас развития</span>
+            <h3>
+              Владивосток
+              <br />и остров Русский
+            </h3>
+            <span className="atlas-project-count">
+              27 проектов / 7 направлений
+            </span>
+          </div>
+          <div className="atlas-categories" aria-label="Направления развития">
+            {projectCategories.map((c, i) => (
+              <button
+                key={c.id}
+                className={categoryId === c.id ? "is-active" : ""}
+                aria-pressed={categoryId === c.id}
+                onClick={() => chooseCategory(c.id)}
+              >
+                <img src={asset(c.icon)} alt="" />
+                <span>{c.shortLabel}</span>
+                <small>
+                  {padded(
+                    selectedProjects.filter((p) => p.category === c.id).length,
+                  )}
+                </small>
+              </button>
+            ))}
+          </div>
+          <div className="atlas-list-head">
+            <span>{category.label}</span>
+            <span>{padded(projects.length)}</span>
+          </div>
+          <div
+            className="atlas-project-list"
+            ref={panel}
+            aria-label="Проекты выбранного направления"
+          >
+            {projects.map((p) => (
+              <button
+                className={`atlas-project ${projectId === p.id ? "is-active" : ""}`}
+                key={p.id}
+                aria-pressed={projectId === p.id}
+                onClick={() => chooseProject(p.id)}
+              >
+                <span className="atlas-project-number">{padded(p.number)}</span>
+                <span>
+                  {p.shortTitle}
+                  <small>
+                    {p.scope === "program" ? "Городская программа" : p.area}
+                  </small>
+                </span>
+                <b>↗</b>
+              </button>
+            ))}
+          </div>
+        </aside>
+        <div className="atlas-toolbar">
+          <span className="atlas-mode">Владивосток · 2050</span>
+          <button
+            type="button"
+            aria-label="Общий вид карты"
+            onClick={() => {
+              setFocused(false);
+              setProjectId(null);
+            }}
+          >
+            ↺
           </button>
-        ))}
-      </div>
-      <div className="projects-workspace">
-        <ProjectList category={category} activeProjectId={activeProjectId} onSelect={setActiveProjectId} />
-        <ProjectMap
-          activeProject={activeProject}
-          canSelectProject={category.id === "housing"}
-          onSelectProject={setActiveProjectId}
-          onClose={() => setActiveProjectId(null)}
-        />
+          <button
+            ref={expandButton}
+            type="button"
+            aria-label={
+              expanded ? "Закрыть полный экран" : "Открыть карту на весь экран"
+            }
+            aria-expanded={expanded}
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? "×" : "⤢"}
+          </button>
+        </div>
+        {!project && (
+          <div className="atlas-invitation" key={categoryId}>
+            <span className="atlas-invitation-count">
+              {padded(projects.length)}
+            </span>
+            <div>
+              <span>проектов направления</span>
+              <h3>{category.label}</h3>
+              <button onClick={() => chooseProject(projects[0].id)}>
+                Исследовать <span>↗</span>
+              </button>
+            </div>
+          </div>
+        )}
+        {project && (
+          <article
+            ref={detail}
+            className="atlas-detail"
+            key={project.id}
+            aria-live="polite"
+          >
+            <div className="atlas-detail-top">
+              <span>
+                {padded(project.number)} / {category.shortLabel}
+              </span>
+              <button
+                aria-label="Закрыть карточку проекта"
+                onClick={() => {
+                  setProjectId(null);
+                  setFocused(false);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            {project.image && (
+              <img
+                src={asset(project.image)}
+                className="atlas-detail-image"
+                alt={`Визуализация проекта: ${project.shortTitle}`}
+              />
+            )}
+            <div className="atlas-detail-body">
+              <span className="atlas-detail-location">{project.area}</span>
+              <h3>{project.title}</h3>
+              <p>{project.group}</p>
+              <div className="atlas-detail-scope">
+                {project.scope === "program"
+                  ? "Городская программа"
+                  : project.scope === "area"
+                    ? "Развитие территории"
+                    : "Проект мастер-плана"}
+              </div>
+              {!project.anchor && (
+                <small className="atlas-location-note">
+                  {project.scope === "program"
+                    ? "Программа охватывает несколько объектов."
+                    : project.area === "Остров Русский"
+                      ? "На карте выделен остров Русский."
+                      : "Расположение проекта уточняется."}
+                </small>
+              )}
+            </div>
+            <div className="atlas-detail-nav">
+              <button onClick={prev} aria-label="Предыдущий проект">
+                ←
+              </button>
+              <span>
+                {padded(index + 1)} <small>/ {padded(projects.length)}</small>
+              </span>
+              <button onClick={next} aria-label="Следующий проект">
+                →
+              </button>
+            </div>
+          </article>
+        )}
+        <div className="atlas-bottom">
+          <span>Художественная схема · расположение условное</span>
+          <span>
+            С<span className="north-arrow">↑</span>
+          </span>
+          <span>Владивосток / остров Русский</span>
+        </div>
       </div>
     </section>
   );
