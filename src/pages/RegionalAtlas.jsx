@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import { Search } from "../portal/icons.jsx";
 import { media, cityById, cityPath } from "../portal/data.js";
@@ -6,7 +6,7 @@ import { siteHref, siteRoot } from "../site.js";
 import atlasIndex from "../content/atlas-regions.json";
 import "./regional-atlas.css";
 
-const RegionalMap = lazy(() => import("./RegionalMap.jsx"));
+import RegionalMap from "./RegionalMap.jsx";
 const categories = [
   { id: "housing", title: "Жильё и среда", icon: "housing", color: "#79dffa" },
   { id: "social", title: "Социальная среда", icon: "social", color: "#bbcbff" },
@@ -29,7 +29,7 @@ export default function RegionalAtlas({ region, focusCity }) {
   const [entered, setEntered] = useState(false), [data, setData] = useState(null), [error, setError] = useState(false), [attempt, setAttempt] = useState(0);
   const [planId, setPlanId] = useState(() => meta.plans.some(p => p.id === projectSearch().get("atlas-city")) ? projectSearch().get("atlas-city") : "");
   const [category, setCategory] = useState(""), [query, setQuery] = useState(""), [stageId, setStageId] = useState("");
-  const [selected, setSelected] = useState(() => projectSearch().get("object")), [expanded, setExpanded] = useState(false), [light, setLight] = useState(false), [clusterIds, setClusterIds] = useState(null), [limit, setLimit] = useState(40), [imageIndex, setImageIndex] = useState(0), [copied, setCopied] = useState(false), [copyFallback, setCopyFallback] = useState(false);
+  const [selected, setSelected] = useState(() => projectSearch().get("object")), [expanded, setExpanded] = useState(false), [limit, setLimit] = useState(40), [imageIndex, setImageIndex] = useState(0), [copied, setCopied] = useState(false), [copyFallback, setCopyFallback] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const onReady = useCallback(value => { api.current = value; setMapReady(Boolean(value)); }, []);
   useEffect(() => {
@@ -47,14 +47,14 @@ export default function RegionalAtlas({ region, focusCity }) {
   useEffect(() => {
     if (!focusCity) return;
     const plan = meta.plans.find(p => p.cityIds.includes(focusCity.city));
-    setPlanId(plan?.id || ""); setCategory(""); setQuery(""); setStageId(""); setSelected(null); setClusterIds(null); setEntered(true);
+    setPlanId(plan?.id || ""); setCategory(""); setQuery(""); setStageId(""); setSelected(null); setEntered(true);
   }, [focusCity]);
   const filtered = useMemo(() => (data?.objects || []).filter(o => (!planId || o.planId === planId) && (!category || o.category === category) && (!stageId || o.stage === stageId) && (!query || normalize(`${o.title} ${o.description} ${o.address} ${o.industry}`).includes(normalize(query)))), [data, planId, category, stageId, query]);
-  const shown = clusterIds ? filtered.filter(o => clusterIds.includes(o.id)) : filtered;
+  const shown = filtered;
   const object = data?.objects.find(o => o.id === selected);
   const objectPlan = meta.plans.find(p => p.id === object?.planId);
   const activeCategory = categories.find(c => c.id === category);
-  const changeFilter = fn => { fn(); setSelected(null); setClusterIds(null); setLimit(40); setImageIndex(0); list.current?.scrollTo({ top: 0 }); };
+  const changeFilter = fn => { fn(); setSelected(null); setLimit(40); setImageIndex(0); list.current?.scrollTo({ top: 0 }); };
   const choose = useCallback(id => {
     previousFocus.current = document.activeElement;
     setSelected(id); setImageIndex(0); setCopied(false); setCopyFallback(false);
@@ -66,7 +66,6 @@ export default function RegionalAtlas({ region, focusCity }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [selected, expanded]);
-  const onCluster = useCallback(ids => { setClusterIds(ids); setSelected(null); setLimit(40); list.current?.scrollTo({ top: 0 }); }, []);
   useEffect(() => {
     if (!object) return;
     if (matchMedia("(max-width: 899px)").matches) detail.current?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "nearest" });
@@ -101,8 +100,8 @@ export default function RegionalAtlas({ region, focusCity }) {
   return <section id="projects" className="projects-section regional-atlas-section" aria-labelledby="projects-title" ref={section}>
     <div className="projects-overture"><div className="projects-intro shell reveal"><div><span className="section-kicker">03 / Масштаб преобразований</span><h2 className="section-title" id="projects-title">Регион меняется.<br /><span>Здесь и сейчас.</span></h2></div><div className="projects-total"><strong>{meta.count}</strong><span>{objectWord(meta.count)} развития<br />в мастер-планах региона</span></div></div></div>
     <div className={`regional-atlas-stage ${expanded ? "is-expanded" : ""} ${object ? "has-selection" : ""}`} ref={stage} role={expanded ? "dialog" : "region"} aria-modal={expanded ? true : undefined} aria-label={`Атлас проектов — ${region.name}`} style={{ "--atlas-accent": activeCategory?.color || "#79dffa" }}>
-      {data && <Suspense fallback={null}><RegionalMap objects={filtered} plans={data.plans} selected={selected} expanded={expanded} light={light} onChoose={choose} onCluster={onCluster} onReady={onReady} /></Suspense>}
-      {!mapReady && <div className="regional-map-loading" role="status"><Icon name="globe" size={40} /><span>{error ? "Не удалось открыть карту" : "Загружаем карту региона"}</span>{error && <button onClick={() => setAttempt(attempt + 1)}>Попробовать ещё раз</button>}</div>}
+      <RegionalMap regionId={region.id} regionName={region.name} objects={filtered} plans={meta.plans} planId={planId} selected={selected} expanded={expanded} onPlan={id => changeFilter(() => setPlanId(id))} onReady={onReady} />
+      {(error || !mapReady) && <div className="regional-map-loading" role="status"><Icon name="globe" size={40} /><span>{error ? "Не удалось открыть карту" : "Загружаем карту региона"}</span>{error && <button onClick={() => setAttempt(attempt + 1)}>Попробовать ещё раз</button>}</div>}
       <div className="regional-map-vignette" aria-hidden="true" />
       <aside className="regional-atlas-sidebar">
         <div className="regional-sidebar-head"><span className="section-kicker">Атлас развития</span><h3>{region.name}</h3><span>{meta.count} {objectWord(meta.count)} · {meta.plans.length} {meta.plans.length === 1 ? "мастер-план" : meta.plans.length < 5 ? "мастер-плана" : "мастер-планов"}</span></div>
@@ -110,12 +109,11 @@ export default function RegionalAtlas({ region, focusCity }) {
           <div className="regional-atlas-selects"><label><span className="visually-hidden">Город на карте региона</span><select aria-label="Город на карте региона" value={planId} onChange={e => changeFilter(() => setPlanId(e.target.value))}><option value="">Все территории</option>{meta.plans.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label><span className="visually-hidden">Стадия объекта</span><select aria-label="Стадия объекта" value={stageId} onChange={e => changeFilter(() => setStageId(e.target.value))}><option value="">Все стадии</option>{Object.entries(stages).map(([key,label]) => <option key={key} value={key}>{label}</option>)}</select></label></div>
         </div>
         <div className="regional-atlas-categories" aria-label="Направления развития региона"><button className={!category ? "is-active" : ""} aria-pressed={!category} onClick={() => changeFilter(() => setCategory(""))}><Icon name="globe" size={21} /><span>Все направления</span><small>{(data?.objects || []).filter(o => !planId || o.planId === planId).length || meta.count}</small></button>{categories.filter(c => meta.categories[c.id]).map(c => { const count = data ? data.objects.filter(o => o.category === c.id && (!planId || o.planId === planId)).length : meta.categories[c.id]; return <button key={c.id} className={category === c.id ? "is-active" : ""} aria-pressed={category === c.id} disabled={!count} style={{ "--category-color": c.color }} onClick={() => changeFilter(() => setCategory(c.id))}><Icon name={c.icon} size={20} /><span>{c.title}</span><small>{count}</small></button>; })}</div>
-        <div className="regional-list-heading"><span aria-live="polite">{clusterIds ? "Объекты рядом" : "Объекты на карте"} <b>{shown.length}</b></span>{(clusterIds || query || category || planId || stageId) && <button onClick={clusterIds ? () => setClusterIds(null) : reset}>{clusterIds ? "Все объекты" : "Сбросить"}</button>}</div>
+        <div className="regional-list-heading"><span aria-live="polite">Проекты территории <b>{shown.length}</b></span>{(query || category || planId || stageId) && <button onClick={reset}>Сбросить</button>}</div>
         <div className="regional-atlas-list" ref={list} aria-label="Объекты региона">{shown.slice(0,limit).map((o,i) => <button key={o.id} className={selected === o.id ? "is-active" : ""} aria-pressed={selected === o.id} onClick={() => choose(o.id)}><span className="regional-object-number">{String(i + 1).padStart(2,"0")}</span><span><strong>{o.title}</strong><small>{meta.plans.find(p => p.id === o.planId)?.name}</small></span><Icon name="arrow" size={17} /></button>)}{data && !shown.length && <div className="regional-atlas-empty"><strong>Ничего не найдено</strong><p>Попробуйте другое название или измените фильтры.</p><button onClick={reset}>Сбросить фильтры</button></div>}{limit < shown.length && <button className="regional-load-more" onClick={() => setLimit(limit + 40)}>Показать ещё <Icon name="plus" size={18} /></button>}</div>
       </aside>
-      <div className="regional-map-toolbar"><span className="regional-map-count">{filtered.filter(o => o.coordinates).length} {objectWord(filtered.filter(o => o.coordinates).length)} на карте</span><button aria-label="Приблизить карту" disabled={!mapReady} onClick={() => api.current?.zoom(1)}><Icon name="plus" size={22} /></button><button aria-label="Отдалить карту" disabled={!mapReady} onClick={() => api.current?.zoom(-1)}><Icon name="minus" size={22} /></button><button aria-label="Общий вид региона" disabled={!mapReady} onClick={() => { setSelected(null); setClusterIds(null); api.current?.fit(); }}><Icon name="reset" size={21} /></button><button aria-label={light ? "Тёмная карта" : "Светлая карта"} aria-pressed={light} onClick={() => setLight(!light)}><Icon name="globe" size={22} /></button><button ref={expandButton} aria-label={expanded ? "Закрыть полный экран" : "Открыть карту на весь экран"} aria-expanded={expanded} onClick={() => setExpanded(!expanded)}><Icon name={expanded ? "close" : "expand"} size={21} /></button></div>
+      <div className="regional-map-toolbar"><span className="regional-map-count">Панорама региона</span><button aria-label="Приблизить карту" disabled={!mapReady} onClick={() => api.current?.zoom(1)}><Icon name="plus" size={22} /></button><button aria-label="Отдалить карту" disabled={!mapReady} onClick={() => api.current?.zoom(-1)}><Icon name="minus" size={22} /></button><button aria-label="Общий вид региона" disabled={!mapReady} onClick={reset}><Icon name="reset" size={21} /></button><button ref={expandButton} aria-label={expanded ? "Закрыть полный экран" : "Открыть карту на весь экран"} aria-expanded={expanded} onClick={() => setExpanded(!expanded)}><Icon name={expanded ? "close" : "expand"} size={21} /></button></div>
       {object && <article className="regional-object-card" ref={detail} aria-label={object.title} aria-live="polite"><div className="regional-object-top"><span><Icon name={categories.find(c => c.id === object.category)?.icon || "pin"} size={18} />{object.industry}</span><button aria-label="Закрыть карточку объекта" onClick={closeDetail}><Icon name="close" size={22} /></button></div><div className="regional-object-scroll"><figure className="regional-object-image"><img src={media(object.images[imageIndex] || objectPlan.image)} alt={object.images.length ? object.title : objectPlan.name} /><figcaption>{object.images.length ? objectPlan.name : `Город · ${objectPlan.name}`}</figcaption>{object.images.length > 1 && <div className="regional-image-controls"><button aria-label="Предыдущее изображение" onClick={() => setImageIndex((imageIndex - 1 + object.images.length) % object.images.length)}><Icon name="left" size={18} /></button><span>{imageIndex + 1} / {object.images.length}</span><button aria-label="Следующее изображение" onClick={() => setImageIndex((imageIndex + 1) % object.images.length)}><Icon name="right" size={18} /></button></div>}</figure><div className="regional-object-copy"><span className={`regional-object-status stage-${object.stage}`}>{stages[object.stage] || "В мастер-плане"}</span><h3>{object.title}</h3>{object.description && normalize(object.description) !== normalize(object.title) && <p>{object.description}</p>}<dl>{object.budget && <div className="regional-object-budget"><dt>Объём финансирования</dt><dd>{money(object.budget)}</dd></div>}{object.deadline && <div><dt>Срок реализации</dt><dd>{date(object.deadline)}</dd></div>}<div><dt>Территория</dt><dd>{objectPlan.name}</dd></div>{object.address && !/Местоположение установлен/i.test(object.address) && <div><dt>Адрес</dt><dd>{object.address}</dd></div>}</dl><div className="regional-object-links"><a href={siteHref(cityPath(cityById[object.cityId]))}>Мастер-план территории<Icon name="arrow" size={19} /></a>{object.projectId && <a href={siteHref(`projects/${object.projectId}`)}>Подробнее о проекте<Icon name="arrow" size={19} /></a>}<button onClick={share}>{copied ? "Ссылка скопирована" : "Скопировать ссылку"}<Icon name={copied ? "check" : "external"} size={18} /></button>{copyFallback && <input aria-label="Ссылка на объект" readOnly value={location.href.replace(/#.*$/, "") + "#projects"} onFocus={e => e.target.select()} />}</div></div></div><div className="regional-object-navigation"><button aria-label="Предыдущий объект" disabled={shown.length < 2} onClick={() => next(-1)}><Icon name="left" size={22} /></button><span><strong>{index + 1}</strong> / {shown.length}<small>Объекты направления</small></span><button aria-label="Следующий объект" disabled={shown.length < 2} onClick={() => next(1)}><Icon name="right" size={22} /></button></div></article>}
-      <div className="regional-map-credit"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap contributors</a></div>
     </div>
   </section>;
 }

@@ -67,6 +67,9 @@ try {
     assert.ok(!page.includes('p-page-hero'), `${path}: generic portal hero returned`);
     if (isRegion) {
       assert.ok(page.includes('regional-atlas-stage'), `${path}: interactive regional atlas missing`);
+      assert.ok(page.includes(`atlas-region-${entity.id}.webp`), `${path}: regional illustration missing`);
+      assert.ok(page.includes('regional-territory-markers'), `${path}: illustration interactions missing`);
+      assert.ok(!page.includes('OpenStreetMap'), `${path}: tiled map replaced the approved illustration`);
       assert.ok(page.includes('Город на карте региона'), `${path}: city filtering missing`);
       assert.ok(page.includes('Объекты на карте'), `${path}: territory-to-map navigation missing`);
     }

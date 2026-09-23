@@ -21,6 +21,8 @@ assert.equal(c.quarter.projects.length, 7);
 const atlasIndex = JSON.parse(await readFile("src/content/atlas-regions.json", "utf8"));
 const atlasIds = new Set();
 for (const region of c.regions) {
+  const artwork = await readFile(`dist/assets/atlas-region-${region.id}.webp`);
+  assert.ok(artwork.length > 1000 && artwork.toString("ascii", 0, 4) === "RIFF" && artwork.toString("ascii", 8, 12) === "WEBP", `${region.id}: regional artwork is invalid`);
   const atlas = JSON.parse(await readFile(`dist/content/atlas/${region.id}.json`, "utf8"));
   assert.equal(atlas.region, region.id);
   assert.equal(atlas.objects.length, atlasIndex[region.id].count);

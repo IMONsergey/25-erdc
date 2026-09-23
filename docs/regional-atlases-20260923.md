@@ -1,5 +1,8 @@
 # Regional atlases and approved blue cards — 23 September 2026
 
+Superseded: the user rejected the tiled street-map presentation. The subsequent
+correction is documented in `illustrated-regions-correction-20260923.md`.
+
 The restored Vladivostok page remains the historical application from
 `5203d67dd8ac8da6520f3f80ecfdb091e2418b53`. At the user's request, its city-card
 colours now use the exact later approved `refinements.css` from
