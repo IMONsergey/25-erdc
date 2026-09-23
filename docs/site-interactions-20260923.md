@@ -3,8 +3,9 @@
 The user's requested reference for Vladivostok is commit `4d0d45b`,
 22 September 2026, 15:02:55 Moscow. The seven key images (hero, atlas,
 transport map, ATR port and three city illustrations) are byte-identical to
-that revision. Project data, map coordinates, camera logic and original design
-styles also match it. The expanded Rudnevsky Bridge view was compared with
+that revision. Project selection, numeric indicators, map coordinates, camera logic and original
+design styles also match it. References to the internal project list were removed
+from public labels and descriptions. The expanded Rudnevsky Bridge view was compared with
 `docs/previews/atlas-fullscreen-rudnevsky-v3.jpg`.
 
 Saved root URLs with `?v=20260922…` now lead to `/vladivostok/`; previously
