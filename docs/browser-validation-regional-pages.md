@@ -46,3 +46,12 @@ are byte-for-byte unchanged from the preceding version.
   failing immediately when the first returned page is still cached.
 
 Published desktop preview: `previews/home-published-20260923.jpg`.
+
+## Final mobile follow-up
+
+Mobile fixes published in `7d7a35520957dcd817b6643f514e83f615ed65de`;
+workflow https://github.com/IMONsergey/25-erdc/actions/runs/35835490105
+completed successfully. In the refreshed 320 px preview, the Primorye title
+fits, `1 807,5` stays on one line and the CTA reads «Открыть мастер-планы».
+The Quarter heading's measured client and scroll widths are both 215 px.
+Its source map image is decorative and has empty alternative text.

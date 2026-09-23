@@ -350,7 +350,7 @@ export default function HomePage() {
           <div className="home-quarter reveal">
             <img
               src={asset("home-quarter.webp")}
-              alt="Жилой квартал — визуализация с портала проекта"
+              alt=""
               loading="lazy"
             />
             <div className="home-quarter-shade" />
