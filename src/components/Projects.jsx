@@ -323,7 +323,7 @@ export default function Projects() {
           />
         )}
         <div className="atlas-bottom">
-          <span>Художественная схема · расположение ориентировочное</span>
+          <span aria-hidden="true" />
           <span>
             С<Icon name="up" size={18} />
           </span>

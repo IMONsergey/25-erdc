@@ -97,7 +97,7 @@ export default function Mission() {
                 active === 0
                   ? "Схема связей Владивостока с Москвой, Хабаровском, Пекином, Сеулом и Токио"
                   : active === 1
-                    ? "Концептуальная иллюстрация дорожной инфраструктуры"
+                    ? "Дорожная инфраструктура"
                     : active === 2
                       ? "Панорама Артёма — города международного аэропорта"
                       : "Порт и выходящее в океан контейнерное судно — образ международных связей Владивостока"
@@ -107,9 +107,6 @@ export default function Mission() {
             <span className="strategy-label">
               <Icon name={connection.icon} size={18} /> {connection.title}
             </span>
-            {(active === 1 || active === 3) && (
-              <span className="image-caption">Концептуальная иллюстрация</span>
-            )}
             {active === 0 && (
               <span className="strategy-beacon" aria-hidden="true" />
             )}

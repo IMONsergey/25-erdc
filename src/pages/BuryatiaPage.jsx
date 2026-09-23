@@ -64,18 +64,9 @@ export default function BuryatiaPage() {
               <img
                 key={item.id}
                 src={asset(item.image)}
-                alt={
-                  item.image.startsWith("concept-")
-                    ? `Концептуальная иллюстрация: ${item.title}`
-                    : "Визуализация КРТ «Батарейка» из макета"
-                }
+                alt={item.title}
                 loading="lazy"
               />
-              <span>
-                {item.image.startsWith("concept-")
-                  ? "Концептуальная иллюстрация"
-                  : "Визуализация из мастер-плана"}
-              </span>
             </div>
             <div key={item.title} className="direction-copy" aria-live="polite">
               <span className="section-kicker">0{active + 1} / 04</span>

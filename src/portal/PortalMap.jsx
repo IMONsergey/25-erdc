@@ -445,7 +445,7 @@ export default function PortalMap() {
                 </div>
                 {object.deadline && (
                   <div>
-                    <dt>Срок по данным ИСУП</dt>
+                    <dt>Срок реализации</dt>
                     <dd>{String(object.deadline).slice(0, 10)}</dd>
                   </div>
                 )}
@@ -453,10 +453,6 @@ export default function PortalMap() {
             </section>
           )}
         </div>
-      </div>
-      <div className="p-map-footnote">
-        Сведения ИСУП на 18 августа 2026 года · {valid.length} объектов ·{" "}
-        {plans.length} мастер-плана
       </div>
     </div>
   );

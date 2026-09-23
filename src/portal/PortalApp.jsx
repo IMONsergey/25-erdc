@@ -26,6 +26,9 @@ import {
 } from "./icons.jsx";
 import { siteHref, currentPath, siteRoot } from "../site.js";
 import { asset } from "../data.js";
+import { selectedProjects } from "../selectedProjects.js";
+import { NewsProvider, NewsLink } from "./NewsModal.jsx";
+import { useQueryState, ShareButton, BackToTop } from "./interactions.jsx";
 import VladivostokPage from "../pages/VladivostokPage.jsx";
 import TerritoryPage from "../pages/TerritoryPage.jsx";
 import {
@@ -48,6 +51,7 @@ import {
 } from "./data.js";
 const ApprovedProjectPage = lazy(() => import("./ApprovedProjectPage.jsx"));
 const PortalMap = lazy(() => import("./PortalMap.jsx"));
+const legacyVladivostok = !currentPath && /^20260922(?:-|$)/.test(new URLSearchParams(location.search).get("v") || "");
 const fmt = (n) => String(n).padStart(2, "0");
 const Arrow = ({ size = 22, ...p }) => (
   <ArrowUpRight size={size} strokeWidth={1.6} {...p} />
@@ -136,18 +140,6 @@ function Stats({ items, className = "" }) {
     </dl>
   );
 }
-function SourceNote({ url, label = "Материалы мастер-плана" }) {
-  return (
-    <div className="p-source-note">
-      <span>{label} · сведения исходного портала на 23 сентября 2026 года</span>
-      {url && (
-        <a href={url} target="_blank" rel="noreferrer">
-          Источник <ExternalLink size={14} />
-        </a>
-      )}
-    </div>
-  );
-}
 function useDocument(path) {
   const [state, set] = useState({ loading: true, data: null, error: false });
   useEffect(() => {
@@ -188,6 +180,14 @@ function DocError() {
   );
 }
 function Header() {
+  const vladivostok = legacyVladivostok || ["vladivostok", "cities/vladivostok"].includes(currentPath);
+  useEffect(() => {
+    const shortcut = e => {
+      if (e.key === "/" && !e.metaKey && !e.ctrlKey && !document.querySelector("dialog[open]") && !["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName) && !e.target.isContentEditable) { e.preventDefault(); setSearch(true); setOpen(false); }
+    };
+    window.addEventListener("keydown", shortcut);
+    return () => window.removeEventListener("keydown", shortcut);
+  }, []);
   const [open, setOpen] = useState(false),
     [search, setSearch] = useState(false),
     [q, setQ] = useState(""),
@@ -255,10 +255,12 @@ function Header() {
             path: `projects/${p.id}`,
             kind: cityById[p.city]?.name || regionShort[p.region],
           })),
+          ...quarter.projects.map(p => ({ name: `${p.name} — ${quarterRegion(p.region)}`, path: "dvkvartal", hash: `#quarter-${p.id}`, kind: "ДВ Квартал" })),
           ...news.map((n) => ({
             name: n.title,
             path: `news/tpost/${n.id}`,
             kind: "Новость",
+            post: n,
           })),
         ]
           .filter((x) => normalize(x.name).includes(term))
@@ -290,9 +292,9 @@ function Header() {
           <a href={siteHref("dvkvartal")}>ДВ Квартал</a>
           <a href={siteHref("news")}>Новости</a>
         </nav>
-        <a className="p-header-map" href={siteHref("map")}>
+        <a className="p-header-map" href={vladivostok ? "#projects" : siteHref("map")}>
           <MapIcon size={17} />
-          Карта проектов
+          {vladivostok ? "Атлас Владивостока" : "Карта проектов"}
         </a>
         <button
           ref={searchTrigger}
@@ -378,11 +380,7 @@ function Header() {
                 <div className="p-search-results" aria-live="polite">
                   {matches.length ? (
                     matches.map((m, i) => (
-                      <a href={siteHref(m.path)} key={i}>
-                        <span>{m.kind}</span>
-                        <strong>{m.name}</strong>
-                        <Arrow />
-                      </a>
+                      m.post ? <NewsLink post={m.post} key={i} onOpen={() => { setSearch(false); setOpen(false); }}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></NewsLink> : <a href={siteHref(m.path, m.hash || "")} key={i}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></a>
                     ))
                   ) : (
                     <p>
@@ -523,7 +521,7 @@ function CityCard({ city: c, index = 0 }) {
       </div>
       <div className="p-city-card-text">
         <h3>{c.name}</h3>
-        <span>{c.projects.length} проектов</span>
+        <span>{c.id === "vladivostok" ? selectedProjects.length : c.projects.length} проектов</span>
       </div>
       <p>{c.mission}</p>
     </a>
@@ -564,8 +562,8 @@ function ProjectCard({ project: p, index = 0 }) {
 }
 function NewsCard({ post: n, featured = false }) {
   return (
-    <a
-      href={siteHref(`news/tpost/${n.id}`)}
+    <NewsLink
+      post={n}
       className={`p-news-card ${featured ? "p-news-featured" : ""}`}
     >
       <div className="p-news-image">
@@ -576,10 +574,12 @@ function NewsCard({ post: n, featured = false }) {
       </div>
       <time dateTime={n.date}>{dateText(n.date)}</time>
       <h3>{n.title}</h3>
-    </a>
+    </NewsLink>
   );
 }
 function Home() {
+  const [regionQuery, setRegionQuery] = useState("");
+  const homeRegions = regions.filter(r => normalize(r.name + " " + r.cities.map(id => cityById[id].name).join(" ")).includes(normalize(regionQuery)));
   const featured = projects.filter(
     (p) =>
       p.images.length &&
@@ -647,6 +647,7 @@ function Home() {
           </div>
         </div>
       </section>
+      <nav className="p-home-jumps" aria-label="Разделы главной страницы">{[["about","О проекте"],["regions","Регионы"],["projects","Проекты"],["quarter","ДВ Квартал"],["news","Новости"]].map(([id,label]) => <a href={`#${id}`} key={id}>{label}<ArrowDown size={14} /></a>)}</nav>
       <section className="p-home-intro p-shell" id="about">
         <div className="p-intro-side">
           <Eyebrow number="01">О проекте</Eyebrow>
@@ -691,14 +692,16 @@ function Home() {
           >
             География развития
           </SectionHead>
+          <label className="p-search-field p-home-region-search"><Search size={20} /><input placeholder="Найти регион или город" aria-label="Найти регион на главной" value={regionQuery} onChange={e => setRegionQuery(e.target.value)} />{regionQuery && <button aria-label="Очистить поиск регионов" onClick={() => setRegionQuery("")}><X size={18} /></button>}</label>
           <div className="p-region-grid">
-            {regions.map((r, i) => (
+            {homeRegions.map((r, i) => (
               <RegionCard region={r} index={i} key={r.id} />
             ))}
           </div>
+          {!homeRegions.length && <Empty onReset={() => setRegionQuery("")} />}
         </div>
       </section>
-      <section className="p-home-projects p-shell">
+      <section className="p-home-projects p-shell" id="projects">
         <SectionHead
           number="03"
           title={
@@ -731,9 +734,8 @@ function Home() {
         <div className="p-editorial-image">
           <Image
             src="masterplan-editorial-v1.webp"
-            alt="Концептуальная иллюстрация городского развития"
+            alt="Городская набережная и общественные пространства"
           />
-          <span>Концептуальная иллюстрация</span>
         </div>
         <div className="p-editorial-copy">
           <Eyebrow>В центре — человек</Eyebrow>
@@ -762,7 +764,7 @@ function Home() {
         </div>
       </section>
       <QuarterTeaser />
-      <section className="p-shell p-home-news">
+      <section className="p-shell p-home-news" id="news">
         <SectionHead
           number="05"
           title={
@@ -866,48 +868,26 @@ function PageHero({
   );
 }
 function RegionsPage() {
-  const [q, setQ] = useState("");
-  const matches = regions.filter((r) =>
-    normalize(
-      r.name + " " + r.cities.map((id) => cityById[id].name).join(" "),
-    ).includes(normalize(q)),
-  );
-  return (
-    <>
-      <PageHero
-        title={
-          <>
-            Один Дальний Восток.
-            <br />
-            <em>11 характеров.</em>
-          </>
-        }
-        eyebrow="Регионы-участники"
-        crumbs={[["Регионы"]]}
-        compact
-      />
-      <section className="p-shell p-section">
-        <div className="p-filter-bar">
-          <p>Выберите регион, чтобы познакомиться с городами и проектами.</p>
-          <label className="p-search-field">
-            <Search size={20} />
-            <input
-              aria-label="Найти регион или город"
-              placeholder="Регион или город"
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-            />
-          </label>
+  const [q, setQ] = useQueryState("q"), [view, setView] = useQueryState("view", "regions");
+  const cityView = view === "cities";
+  const matches = regions.filter(r => normalize(r.name + " " + r.cities.map(id => cityById[id].name).join(" ")).includes(normalize(q)));
+  const matchingCities = cities.filter(c => normalize(c.name + " " + regionById[c.region]?.name).includes(normalize(q)));
+  const count = cityView ? matchingCities.length : matches.length;
+  return <>
+    <PageHero title={<>Один Дальний Восток.<br /><em>11 характеров.</em></>} eyebrow="Регионы-участники" crumbs={[["Регионы"]]} compact />
+    <section className="p-shell p-section">
+      <div className="p-filter-bar">
+        <div className="p-directory-tabs" role="group" aria-label="Показать территории">
+          <button aria-pressed={!cityView} onClick={() => setView("regions")}>Регионы <small>{regions.length}</small></button>
+          <button aria-pressed={cityView} onClick={() => setView("cities")}>Города и агломерации <small>{cities.length}</small></button>
         </div>
-        <div className="p-region-grid p-regions-catalog">
-          {matches.map((r, i) => (
-            <RegionCard key={r.id} region={r} index={i} />
-          ))}
-        </div>
-        {!matches.length && <Empty onReset={() => setQ("")} />}
-      </section>
-    </>
-  );
+        <label className="p-search-field"><Search size={20} /><input aria-label="Найти регион или город" placeholder="Регион или город" value={q} onChange={e => setQ(e.target.value)} />{q && <button aria-label="Очистить поиск территорий" onClick={() => setQ("")}><X size={18} /></button>}</label>
+      </div>
+      <div className="p-directory-count" aria-live="polite">Найдено: {count}{q && <button onClick={() => setQ("")}>Сбросить поиск <X size={15} /></button>}</div>
+      {cityView ? <div className="p-city-grid">{matchingCities.map((c,i) => <CityCard city={c} index={i} key={c.id} />)}</div> : <div className="p-region-grid p-regions-catalog">{matches.map((r,i) => <RegionCard key={r.id} region={r} index={i} />)}</div>}
+      {!count && <Empty onReset={() => setQ("")} />}
+    </section>
+  </>;
 }
 function NextRegion({ region: r }) {
   const next = regions[r.index % regions.length];
@@ -1125,9 +1105,9 @@ function ProgramPage({ region: r, program: id }) {
   const program = r.programs[id],
     ps = program.projects.map((id) => projectById[id]);
   const state = useDocument(`programs/${r.id}-${id}`);
-  const [place, setPlace] = useState("");
+  const [place, setPlace] = useQueryState("place"), [query, setQuery] = useQueryState("q");
   const places = [...new Set(ps.map((p) => p.place).filter(Boolean))];
-  const shown = ps.filter((p) => !place || p.place === place);
+  const shown = ps.filter(p => (!place || p.place === place) && normalize(p.title + " " + p.place).includes(normalize(query)));
   return (
     <>
       <PageHero
@@ -1167,13 +1147,14 @@ function ProgramPage({ region: r, program: id }) {
             </label>
           )}
         </div>
+        <div className="p-filter-bar"><label className="p-search-field"><Search size={20} /><input aria-label="Поиск объектов программы" placeholder="Название объекта" value={query} onChange={e => setQuery(e.target.value)} /></label><span className="p-directory-count" aria-live="polite">Найдено: {shown.length}</span></div>
+        {!shown.length && <Empty onReset={() => { setQuery(""); setPlace(""); }} />}
         <div className="p-project-grid">
           {shown.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} />
           ))}
         </div>
         {state.error && <DocError />}
-        <SourceNote url={r.source} label={program.name} />
       </section>
     </>
   );
@@ -1192,11 +1173,8 @@ function Empty({ onReset }) {
   );
 }
 function ProjectsPage() {
-  const params = new URLSearchParams(location.search);
-  const [query, setQ] = useState(params.get("q") || ""),
-    [region, setR] = useState(params.get("region") || ""),
-    [program, setP] = useState(""),
-    [page, setPage] = useState(1);
+  const [query, setQ] = useQueryState("q"), [region, setR] = useQueryState("region"), [program, setP] = useQueryState("program"), [pageValue, setPage] = useQueryState("page", "1");
+
   const filtered = useMemo(
     () =>
       projects.filter(
@@ -1209,11 +1187,12 @@ function ProjectsPage() {
       ),
     [query, region, program],
   );
-  useEffect(() => setPage(1), [query, region, program]);
+
+  const page = Math.min(Math.max(1, Math.ceil(filtered.length / 18)), Math.max(1, Number.parseInt(pageValue, 10) || 1));
   const reset = () => {
     setQ("");
     setR("");
-    setP("");
+    setP(""); setPage(1);
   };
   return (
     <>
@@ -1229,20 +1208,20 @@ function ProjectsPage() {
         crumbs={[["Все проекты"]]}
         compact
       />
-      <section className="p-shell p-section">
+      <section className="p-shell p-section" id="project-results">
         <div className="p-catalog-filters">
           <label className="p-search-field">
             <Search size={20} />
             <input
               value={query}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => { setQ(e.target.value); setPage(1); }}
               placeholder="Название проекта или город"
               aria-label="Поиск проектов"
             />
           </label>
           <label className="p-select-field">
             Регион
-            <select value={region} onChange={(e) => setR(e.target.value)}>
+            <select value={region} onChange={(e) => { setR(e.target.value); setPage(1); }}>
               <option value="">Все регионы</option>
               {regions.map((r) => (
                 <option value={r.id} key={r.id}>
@@ -1253,7 +1232,7 @@ function ProjectsPage() {
           </label>
           <label className="p-select-field">
             Программа
-            <select value={program} onChange={(e) => setP(e.target.value)}>
+            <select value={program} onChange={(e) => { setP(e.target.value); setPage(1); }}>
               <option value="">Все программы</option>
               {Object.entries(programNames).map(([id, n]) => (
                 <option value={id} key={id}>
@@ -1265,7 +1244,7 @@ function ProjectsPage() {
         </div>
         <div className="p-results-count" aria-live="polite">
           Найдено: {filtered.length}
-          <button onClick={reset}>
+          <button onClick={reset} disabled={!query && !region && !program}>
             Сбросить фильтры
             <X size={16} />
           </button>
@@ -1287,7 +1266,7 @@ function ProjectsPage() {
               onChange={(p) => {
                 setPage(p);
                 document
-                  .getElementById("content")
+                  .getElementById("project-results")
                   .scrollIntoView({ behavior: "instant" });
               }}
             />
@@ -1346,7 +1325,6 @@ function Pagination({ page, count, onChange }) {
 function ProjectPage({ project: p }) {
   const r = regionById[p.region],
     c = cityById[p.city];
-  const [copy, setCopy] = useState(false);
   return (
     <>
       <PageHero
@@ -1392,25 +1370,12 @@ function ProjectPage({ project: p }) {
               )}
               {p.status && (
                 <div>
-                  <dt>Статус в исходных материалах</dt>
+                  <dt>Статус</dt>
                   <dd>{p.status}</dd>
                 </div>
               )}
             </dl>
-            <button
-              className="p-text-link"
-              onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText(location.href);
-                  setCopy(true);
-                } catch {
-                  setCopy(false);
-                }
-              }}
-            >
-              {copy ? "Ссылка скопирована" : "Копировать ссылку"}
-              {copy ? <Check size={18} /> : <Copy size={18} />}
-            </button>
+            <ShareButton />
           </aside>
           <div className="p-project-description">
             {p.stats.length > 0 && <Stats items={p.stats} />}
@@ -1428,7 +1393,6 @@ function ProjectPage({ project: p }) {
                 items={p.images.slice(1).map((url) => ({ url, title: "" }))}
               />
             )}
-            <SourceNote url={`${r.source}#${p.sourceRecord}`} />
           </div>
         </div>
         <a
@@ -1461,22 +1425,19 @@ function ProjectPage({ project: p }) {
   );
 }
 function NewsPage() {
-  const [q, setQ] = useState(""),
-    [tag, setTag] = useState(""),
-    [year, setYear] = useState(""),
-    [page, setPage] = useState(1);
-  const tags = [...new Set(news.flatMap((n) => n.tags))].sort();
+  const [q, setQ] = useQueryState("q"), [sort, setSort] = useQueryState("sort", "newest"), [year, setYear] = useQueryState("year"), [pageValue, setPage] = useQueryState("page", "1");
+
   const filtered = news.filter(
     (n) =>
-      (!tag || n.tags.includes(tag)) &&
       (!year || n.date.startsWith(year)) &&
       normalize(n.title + " " + n.excerpt).includes(normalize(q)),
-  );
-  useEffect(() => setPage(1), [q, tag, year]);
+  ).sort((a, b) => sort === "oldest" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date));
+
+  const page = Math.min(Math.max(1, Math.ceil(filtered.length / 12)), Math.max(1, Number.parseInt(pageValue, 10) || 1));
   const reset = () => {
     setQ("");
-    setTag("");
-    setYear("");
+    setSort("newest");
+    setYear(""); setPage(1);
   };
   return (
     <>
@@ -1492,7 +1453,7 @@ function NewsPage() {
         crumbs={[["Новости"]]}
         compact
       />
-      <section className="p-shell p-section">
+      <section className="p-shell p-section" id="news-results">
         <div className="p-catalog-filters">
           <label className="p-search-field">
             <Search size={20} />
@@ -1500,21 +1461,19 @@ function NewsPage() {
               aria-label="Поиск новостей"
               placeholder="Поиск по новостям"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => { setQ(e.target.value); setPage(1); }}
             />
           </label>
           <label className="p-select-field">
-            Тема
-            <select value={tag} onChange={(e) => setTag(e.target.value)}>
-              <option value="">Все темы</option>
-              {tags.map((t) => (
-                <option key={t}>{t}</option>
-              ))}
+            Порядок
+            <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
+              <option value="newest">Сначала новые</option>
+              <option value="oldest">Сначала ранние</option>
             </select>
           </label>
           <label className="p-select-field">
             Год
-            <select value={year} onChange={(e) => setYear(e.target.value)}>
+            <select value={year} onChange={(e) => { setYear(e.target.value); setPage(1); }}>
               <option value="">За всё время</option>
               {[...new Set(news.map((n) => n.date.slice(0, 4)))].map((y) => (
                 <option key={y}>{y}</option>
@@ -1524,7 +1483,7 @@ function NewsPage() {
         </div>
         <div className="p-results-count" aria-live="polite">
           {filtered.length} публикаций
-          <button onClick={reset}>
+          <button onClick={reset} disabled={!q && sort === "newest" && !year}>
             Сбросить фильтры
             <X size={16} />
           </button>
@@ -1542,7 +1501,7 @@ function NewsPage() {
               onChange={(p) => {
                 setPage(p);
                 document
-                  .getElementById("content")
+                  .getElementById("news-results")
                   .scrollIntoView({ behavior: "instant" });
               }}
             />
@@ -1554,186 +1513,66 @@ function NewsPage() {
     </>
   );
 }
-function ArticlePage({ post: n }) {
-  const state = useDocument(`news/${n.id}`);
-  const body = state.data?.body.replace(
-    /src="(https:[^"]+)"/g,
-    (_, url) => `src="${media(url)}"`,
-  );
-  return (
-    <>
-      <section className="p-article-heading p-shell">
-        <Breadcrumbs items={[["Новости", "news"], ["Публикация"]]} />
-        <div className="p-article-meta">
-          <time dateTime={n.date}>{dateText(n.date)}</time>
-          {n.tags.map((t) => (
-            <span key={t}>{t}</span>
-          ))}
-        </div>
-        <h1>{n.title}</h1>
-      </section>
-      {n.image && (
-        <div className="p-article-cover p-shell">
-          <Image src={n.image} alt="" priority />
-        </div>
-      )}
-      <div className="p-article-body p-shell">
-        {state.loading ? (
-          <Loading />
-        ) : state.error ? (
-          <DocError />
-        ) : (
-          <div className="p-prose" dangerouslySetInnerHTML={{ __html: body }} />
-        )}
-        <SourceNote url={n.source} label="Публикация портала «25 городов»" />
-        <a className="p-back-link" href={siteHref("news")}>
-          <ArrowLeft size={20} />
-          Все новости
-        </a>
-      </div>
-      <section className="p-section p-related-cities">
-        <div className="p-shell">
-          <SectionHead title="Продолжить чтение">Другие новости</SectionHead>
-          <div className="p-news-grid">
-            {news
-              .filter((x) => x.id !== n.id)
-              .slice(0, 3)
-              .map((x) => (
-                <NewsCard post={x} key={x.id} />
-              ))}
-          </div>
-        </div>
-      </section>
-    </>
-  );
+function LegacyArticle({ post }) {
+  useEffect(() => { location.replace(siteHref("news", `?news=${encodeURIComponent(post.id)}`)); }, [post.id]);
+  return <NewsPage />;
 }
-function QuarterPage() {
-  return (
-    <>
-      <PageHero
-        image={quarter.projects[0].image}
-        title={
-          <>
-            Дальневосточный
-            <br />
-            квартал.
-          </>
-        }
-        eyebrow="Новый стандарт повседневной жизни"
-        crumbs={[["ДВ Квартал"]]}
-      >
-        <p>
-          Комфортное и доступное жильё на территориях опережающего развития
-          Дальнего Востока.
-        </p>
-      </PageHero>
-      <div className="p-region-stats">
-        <div className="p-shell">
-          <Stats items={quarter.stats} />
+const quarterRegion = name => ({ "Еврейская АО": "Еврейская автономная область", "Сахалинская обл.": "Сахалинская область", "Забайкальский кр.": "Забайкальский край" }[name] || name);
+const quarterFacts = p => [
+  { label: "Инвестиции", value: p.investment },
+  { label: "Год реализации", value: p.year },
+  ...p.stats.map(s => ({ ...s, value: /\d/.test(s.value) ? s.value : "—" })),
+];
+function QuarterPage({ initialProject }) {
+  const [active, setActive] = useState(initialProject || quarter.projects[0].id);
+  const [compare, setCompare] = useState(false);
+  useEffect(() => {
+    if (initialProject) {
+      history.replaceState(history.state, "", siteHref("dvkvartal", `#quarter-${initialProject}`));
+      document.getElementById(`quarter-${initialProject}`)?.scrollIntoView();
+    }
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio);
+      if (visible[0]) setActive(visible[0].target.dataset.quarter);
+    }, { rootMargin: "-100px 0px -45% 0px", threshold: [0, 0.2, 0.5] });
+    document.querySelectorAll("[data-quarter]").forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, [initialProject]);
+  return <>
+    <PageHero image={quarter.projects[0].image} title={<span className="p-quarter-title">Дальневосточный<br />квартал.</span>} eyebrow="Новый стандарт повседневной жизни" crumbs={[["ДВ Квартал"]]}>
+      <p>Комфортное и доступное жильё на территориях опережающего развития Дальнего Востока.</p>
+      <a className="p-button p-button-light" href="#quarter-projects">Все семь проектов <ArrowDown size={20} /></a>
+    </PageHero>
+    <div className="p-region-stats"><div className="p-shell"><Stats items={quarter.stats} /></div></div>
+    <section className="p-section p-shell" id="quarter-projects">
+      <SectionHead number="01" title={<>Семь проектов.<br /><em>Новая среда.</em></>}>Дальневосточный квартал</SectionHead>
+      <div className="p-quarter-tools">
+        <p>Жильё, социальная инфраструктура и сроки реализации.</p>
+        <button className="p-text-link" aria-expanded={compare} aria-controls="quarter-comparison" onClick={() => setCompare(!compare)}>{compare ? "Закрыть сравнение" : "Сравнить проекты"}{compare ? <X size={19} /> : <Grid2X2 size={19} />}</button>
+      </div>
+      {compare && <div id="quarter-comparison" className="p-quarter-comparison" tabIndex={0} role="region" aria-label="Сравнение проектов ДВ квартала">
+        <table><caption>Показатели семи проектов</caption><thead><tr><th scope="col">Показатель</th>{quarter.projects.map(p => <th scope="col" key={p.id}><a href={`#quarter-${p.id}`}>{p.name}<ArrowDown size={14} /></a><small>{quarterRegion(p.region)}</small></th>)}</tr></thead>
+          <tbody><tr><th scope="row">Стадия</th>{quarter.projects.map(p => <td key={p.id}>{p.status}</td>)}</tr>{quarterFacts(quarter.projects[0]).map((s,i) => <tr key={s.label}><th scope="row">{s.label}</th>{quarter.projects.map(p => <td key={p.id}>{quarterFacts(p)[i].value}</td>)}</tr>)}</tbody>
+        </table>
+      </div>}
+      <div className="p-quarter-layout">
+        <nav className="p-quarter-nav" aria-label="Проекты ДВ квартала">
+          {quarter.projects.map((p,i) => <a key={p.id} href={`#quarter-${p.id}`} aria-current={active === p.id ? "location" : undefined} onClick={() => setActive(p.id)}><span>{fmt(i+1)}</span><div><strong>{p.name}</strong><small>{quarterRegion(p.region)}</small></div><ArrowDown size={16} /></a>)}
+        </nav>
+        <div className="p-quarter-details">
+          {quarter.projects.map((p,i) => <article className="p-quarter-detail" key={p.id} id={`quarter-${p.id}`} data-quarter={p.id} aria-labelledby={`quarter-title-${p.id}`}>
+            <div className="p-quarter-detail-heading"><div><Eyebrow number={fmt(i+1)}>{quarterRegion(p.region)}</Eyebrow><h2 id={`quarter-title-${p.id}`}>{p.name}</h2></div><span className="p-status">{p.status}</span></div>
+            <Gallery items={[{ url: p.image, title: p.name }]} />
+            <Stats className="p-quarter-detail-stats" items={quarterFacts(p)} />
+            <div className="p-quarter-detail-footer"><ShareButton url={siteHref("dvkvartal", `#quarter-${p.id}`)} label="Ссылка на проект" /><a className="p-text-link" href="#quarter-projects">К списку проектов <ArrowUpRight size={17} /></a></div>
+          </article>)}
         </div>
       </div>
-      <section className="p-section p-shell">
-        <SectionHead
-          number="01"
-          title={
-            <>
-              Всё, что нужно.
-              <br />
-              <em>Рядом с домом.</em>
-            </>
-          }
-        >
-          Комплексное развитие
-        </SectionHead>
-        <div className="p-quarter-features">
-          {quarter.features.map((f, i) => (
-            <article key={i}>
-              <Image src={f.images[0]} alt="" />
-              <span>{fmt(i + 1)}</span>
-              <h3>{f.title}</h3>
-              <p>{f.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-      <section className="p-quarter-projects p-section">
-        <div className="p-shell">
-          <SectionHead number="02" title="Семь проектов. Новая среда.">
-            Проекты жилищного строительства
-          </SectionHead>
-          <div className="p-housing-grid">
-            {quarter.projects.map((p, i) => (
-              <a
-                className="p-housing-card"
-                href={siteHref(`dvkvartal/${p.id}`)}
-                key={p.id}
-              >
-                <div className="p-housing-image">
-                  <Image src={p.image} alt="" />
-                  <span className="p-card-circle">
-                    <Arrow />
-                  </span>
-                </div>
-                <div>
-                  <Eyebrow>{p.region}</Eyebrow>
-                  <h3>{p.name}</h3>
-                  <div className="p-housing-facts">
-                    <span>
-                      <strong>{p.investment}</strong>инвестиции
-                    </span>
-                    <span>
-                      <strong>{p.year}</strong>год реализации
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-          <SourceNote
-            url="https://xn--25-flcdf3dabp.xn--p1ai/dvkvartal"
-            label="Дальневосточный квартал"
-          />
-        </div>
-      </section>
-    </>
-  );
-}
-function HousingPage({ project: p }) {
-  return (
-    <>
-      <PageHero
-        image={p.image}
-        title={p.name}
-        eyebrow={p.region}
-        crumbs={[["ДВ Квартал", "dvkvartal"], [p.name]]}
-      />
-      <section className="p-shell p-section">
-        <div className="p-housing-lead">
-          <h2>
-            Дальневосточный квартал
-            <br />
-            <em>{p.region}</em>
-          </h2>
-          <span className="p-status">{p.status}</span>
-        </div>
-        <Stats
-          items={[
-            { label: "Инвестиции", value: p.investment },
-            { label: "Год реализации проекта", value: p.year },
-            ...p.stats,
-          ]}
-        />
-        <SourceNote
-          url="https://xn--25-flcdf3dabp.xn--p1ai/dvkvartal"
-          label="Показатели проекта"
-        />
-        <a className="p-back-link" href={siteHref("dvkvartal")}>
-          <ArrowLeft size={20} />
-          Все жилищные проекты
-        </a>
-      </section>
-    </>
-  );
+    </section>
+    <section className="p-section p-shell p-quarter-lifestyle"><SectionHead number="02" title={<>Всё, что нужно.<br /><em>Рядом с домом.</em></>}>Комплексное развитие</SectionHead>
+      <div className="p-quarter-features">{quarter.features.map((f,i) => <article key={f.id}><Image src={f.images[0]} alt="" /><span>{fmt(i+1)}</span><h3>{f.title}</h3><p>{f.text}</p></article>)}</div>
+    </section>
+  </>;
 }
 function AboutPage() {
   const questions = [
@@ -1764,7 +1603,6 @@ function AboutPage() {
         eyebrow="О проекте «25 городов»"
         crumbs={[["О проекте"]]}
       >
-        <span className="p-concept-label">Концептуальная иллюстрация</span>
       </PageHero>
       <section className="p-shell p-section p-about-body">
         <Eyebrow>Стратегические мастер-планы</Eyebrow>
@@ -1799,7 +1637,7 @@ function AboutPage() {
         </SectionHead>
         <div className="p-faq">
           {questions.map(([q, a], i) => (
-            <details key={q}>
+            <details key={q} name="about-questions">
               <summary>
                 <span>{fmt(i + 1)}</span>
                 <h3>{q}</h3>
@@ -1809,10 +1647,6 @@ function AboutPage() {
             </details>
           ))}
         </div>
-        <SourceNote
-          url="https://xn--25-flcdf3dabp.xn--p1ai/"
-          label="О проекте"
-        />
       </section>
       <Partners />
     </>
@@ -1860,10 +1694,6 @@ function MaterialsPage() {
             </details>
           </>
         )}
-        <SourceNote
-          url="https://xn--25-flcdf3dabp.xn--p1ai/test-sev-ulan1"
-          label="Дополнительные материалы"
-        />
       </section>
     </>
   );
@@ -1958,7 +1788,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   path = aliases[path] || path;
   const [first, second, third] = path.split("/");
   const region = regions.find((r) => regionPath(r) === first || r.id === first);
-  if (!path) return <Home />;
+  if (!path) return legacyVladivostok ? <VladivostokPage /> : <Home />;
   if (path === "regions") return <RegionsPage />;
   if (path === "about") return <AboutPage />;
   if (path === "sitemap") return <Sitemap />;
@@ -1968,7 +1798,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   if (path === "news") return <NewsPage />;
   if (first === "news" && second === "tpost") {
     const n = news.find((n) => n.id === third);
-    return n ? <ArticlePage post={n} /> : <NotFound />;
+    return n ? <LegacyArticle post={n} /> : <NotFound />;
   }
   if (
     first === "vladivostok" &&
@@ -1991,7 +1821,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   if (path === "dvkvartal") return <QuarterPage />;
   if (first === "dvkvartal") {
     const p = quarter.projects.find((p) => p.id === second);
-    return p ? <HousingPage project={p} /> : <NotFound />;
+    return p ? <QuarterPage initialProject={p.id} /> : <NotFound />;
   }
   if (path === "materials/ulan-ude") return <MaterialsPage />;
   if (path === "map")
@@ -2003,8 +1833,9 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   return <NotFound />;
 }
 export default function PortalApp() {
-  const isTerritory = currentPath === "cities/vladivostok" || cities.some(c => cityPath(c) === currentPath) || regions.some(r => [r.id, regionPath(r)].includes(currentPath)) || ["page144867266.html", "page152744266.html"].includes(currentPath);
+  const isTerritory = legacyVladivostok || currentPath === "cities/vladivostok" || cities.some(c => cityPath(c) === currentPath) || regions.some(r => [r.id, regionPath(r)].includes(currentPath)) || ["page144867266.html", "page152744266.html"].includes(currentPath);
   useEffect(() => {
+    if (legacyVladivostok) location.replace(siteHref("vladivostok", location.search + location.hash));
     document.body.classList.toggle("portal", !isTerritory);
     if (location.hash) {
       requestAnimationFrame(() =>
@@ -2016,7 +1847,7 @@ export default function PortalApp() {
     return () => document.body.classList.remove("portal");
   }, []);
   return (
-    <>
+    <NewsProvider>
       <a className="skip-link" href="#content">
         Перейти к содержанию
       </a>
@@ -2026,6 +1857,7 @@ export default function PortalApp() {
         <PortalRoute />
       </main>
       <div className="portal portal-navigation"><Footer /></div>
-    </>
+      {!isTerritory && <BackToTop />}
+    </NewsProvider>
   );
 }

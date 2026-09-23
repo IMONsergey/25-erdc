@@ -37,14 +37,16 @@ for (const p of c.quarter.projects)
   routes.push({
     path: `dvkvartal/${p.id}`,
     title: p.name + " — Дальневосточный квартал",
-    type: "housing",
+    type: "housing-redirect",
+    redirect: `dvkvartal/#quarter-${p.id}`,
   });
 for (const n of news)
   routes.push({
     path: `news/tpost/${n.id}`,
     title: n.title,
     description: n.excerpt,
-    type: "article",
+    type: "article-redirect",
+    redirect: `news/?news=${encodeURIComponent(n.id)}`,
   });
 const approved = (await import("../src/selectedProjects.js")).selectedProjects;
 for (const p of approved)
@@ -54,6 +56,7 @@ for (const p of approved)
     type: "approved-project",
   });
 const aliases = {
+  "cities/vladivostok": "vladivostok",
   primkrai: "primorye",
   "page144867266.html": "primorye",
   "page144867796.html": "materials/ulan-ude",
@@ -91,7 +94,7 @@ for (const r of routes) {
       : 0;
   const prefix = depth ? "../".repeat(depth) : "./";
   const canonical =
-    base + (r.canonical ?? r.path) + ((r.canonical ?? r.path) ? "/" : "");
+    r.redirect ? new URL(r.redirect, base).href : base + (r.canonical ?? r.path) + ((r.canonical ?? r.path) ? "/" : "");
   const title = esc(r.title + " — 25 городов");
   const description = esc(
     r.description ||
@@ -117,6 +120,7 @@ for (const r of routes) {
       '<div id="root"></div>',
       `<div id="root"></div><noscript><main><h1>${esc(r.title)}</h1><p>Для работы карты и фильтров включите JavaScript.</p><a href="${prefix}">Главная</a> · <a href="${prefix}regions/">Регионы</a> · <a href="${prefix}projects/">Проекты</a> · <a href="${prefix}news/">Новости</a></main></noscript>`,
     );
+  if (r.redirect) h = h.replace("</head>", `<meta http-equiv="refresh" content="0;url=${esc(canonical)}" /></head>`);
   await mkdir(file.slice(0, file.lastIndexOf("/")), { recursive: true });
   await writeFile(file, h);
 }
@@ -124,7 +128,7 @@ await writeFile("dist/routes.json", JSON.stringify(routes));
 await writeFile(
   "dist/sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${routes
-    .filter((r) => r.type !== "alias")
+    .filter((r) => r.type !== "alias" && !r.redirect)
     .map((r) => `<url><loc>${base}${r.path}${r.path ? "/" : ""}</loc></url>`)
     .join("")}</urlset>`,
 );
@@ -146,5 +150,5 @@ await writeFile(
     ),
 );
 console.log(
-  `Emitted ${routes.length} static routes; ${routes.filter((r) => r.type !== "alias").length} canonical pages.`,
+  `Emitted ${routes.length} static routes; ${routes.filter((r) => r.type !== "alias" && !r.redirect).length} canonical pages.`,
 );

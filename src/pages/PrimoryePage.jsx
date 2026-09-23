@@ -136,7 +136,7 @@ export default function PrimoryePage() {
                 <div className="change-image">
                   <img
                     src={asset(image)}
-                    alt={`Концептуальная иллюстрация: ${title}`}
+                    alt={title}
                     loading="lazy"
                   />
                   <span>0{i + 1}</span>
@@ -149,9 +149,6 @@ export default function PrimoryePage() {
               </article>
             ))}
           </div>
-          <p className="concept-note">
-            Концептуальные иллюстрации направлений развития.
-          </p>
         </div>
       </section>
       <section className="region-next">

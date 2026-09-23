@@ -2,7 +2,6 @@ import { useState } from "react";
 import { asset } from "../data.js";
 import { projectDetails } from "../projectDetails.js";
 import Icon from "./Icon.jsx";
-import { siteHref } from "../site.js";
 const padded = (n) => String(n).padStart(2, "0");
 export default function ProjectDetail({
   project,
@@ -15,7 +14,6 @@ export default function ProjectDetail({
   detailRef,
 }) {
   const data = projectDetails[project.id];
-  const [sourceOpen, setSourceOpen] = useState(false);
   const [reading, setReading] = useState(false);
   const scope =
     project.scope === "program"
@@ -57,16 +55,9 @@ export default function ProjectDetail({
         <figure className="project-cover">
           <img
             src={asset(data.image)}
-            alt={`${data.imageKind}: ${project.shortTitle}`}
+            alt={project.shortTitle}
             decoding="async"
           />
-          <figcaption>
-            <Icon
-              name={data.image.startsWith("concept-") ? "spark" : "camera"}
-              size={13}
-            />
-            {data.imageKind}
-          </figcaption>
         </figure>
         <div className="project-body">
           <div className="project-badges">
@@ -80,9 +71,6 @@ export default function ProjectDetail({
           <p className="project-description">{data.description}</p>
           {data.facts.length > 0 && (
             <div className="project-facts-wrap">
-              {data.factsNote && (
-                <span className="project-facts-label">{data.factsNote}</span>
-              )}
               <dl className={`project-facts count-${data.facts.length}`}>
                 {data.facts.map(([value, unit, label]) => (
                   <div key={label}>
@@ -130,46 +118,8 @@ export default function ProjectDetail({
               <dd>{scope}</dd>
             </div>
           </dl>
-          <p className="project-location-note">
-            <Icon name="info" size={16} />
-            <span>
-              {project.scope === "program"
-                ? "Условная точка городской программы. Она объединяет несколько объектов на территории города."
-                : "Расположение на художественной схеме ориентировочное."}
-            </span>
-          </p>
-          <details
-            className="project-source"
-            onToggle={(event) => setSourceOpen(event.currentTarget.open)}
-          >
-            <summary>
-              О данных проекта
-              <Icon
-                name="plus"
-                active={sourceOpen}
-                activeName="minus"
-                size={17}
-              />
-            </summary>
-            <p>
-              {data.source ||
-                `Перечень проектов от 19.08.2026, лист «ВЫБРАНО», строка ${project.sourceRow}. Описание раскрывает объём работ, указанный в перечне. Бюджет, сроки и текущая стадия реализации в таблице не приведены.`}
-            </p>
-            {data.image.startsWith("concept-") && (
-              <p>
-                Изображение создано для визуального раскрытия темы. Оно не
-                является утверждённым архитектурным решением проекта.
-              </p>
-            )}
-          </details>
         </div>
       </div>
-      <a
-        className="atlas-full-page-link"
-        href={siteHref(`vladivostok/projects/${project.id}`)}
-      >
-        Страница проекта <Icon name="arrow" size={18} />
-      </a>
       <footer className="atlas-detail-nav">
         <button onClick={onPrev} aria-label="Предыдущий проект">
           <Icon name="left" size={20} />

@@ -72,7 +72,7 @@ for (const r of routes) {
     if (!target.startsWith("http") && !target.startsWith("/"))
       await access(path.resolve(path.dirname(file), target));
   }
-  if (r.type === "article")
+  if (r.type === "article-redirect")
     await access(`dist/content/news/${r.path.split("/").at(-1)}.json`);
 }
 const approved = (await import("../src/selectedProjects.js")).selectedProjects;

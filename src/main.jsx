@@ -15,3 +15,5 @@ createRoot(rootElement).render(
 );
 
 import "./pages/territories.css";
+
+import "./portal/interactions.css";

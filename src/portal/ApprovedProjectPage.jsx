@@ -32,8 +32,7 @@ export default function ApprovedProjectPage({ id }) {
       </section>
       <section className="p-shell p-section">
         <figure className="p-approved-cover">
-          <img src={asset(d.image)} alt={d.imageKind + ": " + p.shortTitle} />
-          <figcaption>{d.imageKind}</figcaption>
+          <img src={asset(d.image)} alt={p.shortTitle} />
         </figure>
         <div className="p-project-detail-grid">
           <aside>
@@ -52,7 +51,7 @@ export default function ApprovedProjectPage({ id }) {
                 <dd>{p.area}</dd>
               </div>
               <div>
-                <dt>Статус материалов</dt>
+                <dt>Статус</dt>
                 <dd>{d.status}</dd>
               </div>
             </dl>
@@ -89,15 +88,6 @@ export default function ApprovedProjectPage({ id }) {
                 </ul>
               </>
             )}
-            <div className="p-source-note">
-              <p>
-                {d.source ||
-                  `Перечень проектов от 19.08.2026, лист «ВЫБРАНО», строка ${p.sourceRow}. Бюджет и сроки в исходном перечне не указаны.`}
-                {d.image.startsWith("concept-")
-                  ? " Иллюстрация раскрывает тему проекта и не является утверждённым архитектурным решением."
-                  : ""}
-              </p>
-            </div>
           </div>
         </div>
         <a className="p-back-link" href={siteHref("vladivostok", "#projects")}>

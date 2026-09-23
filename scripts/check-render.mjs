@@ -28,13 +28,26 @@ try {
   assert.ok(markup.includes("Дальнего Востока"));
   assert.ok(markup.includes("<svg"));
   assert.ok(markup.includes("p-region-card"));
+  const unwanted = /Концептуальная иллюстрация|сведения исходного портала|расположение ориентировочное|О данных проекта/i;
+  assert.ok(!unwanted.test(markup), "Homepage contains production notes");
   for(const requestedPath of ['primorye','buryatia','khabkrai','cities/ulan-ude','cities/petropavlovsk-kamchatsky','primorye/subsidy','projects','projects/733657179','news','dvkvartal','dvkvartal/750970520','about','sitemap']) {
     const page=renderToString(createElement(PortalRoute,{requestedPath}));assert.ok(page.includes('<h1'),requestedPath+' lacks a heading');assert.ok(!page.includes('Такой страницы пока нет'),requestedPath+' resolved to 404');
+    assert.ok(!unwanted.test(page), requestedPath + ' contains production notes');
   }
+  const quarters = renderToString(createElement(PortalRoute, { requestedPath: "dvkvartal" }));
+  for (const p of catalog.quarter.projects) {
+    assert.ok(quarters.includes(`id="quarter-${p.id}"`), `${p.name}: missing full block`);
+    for (const stat of p.stats.filter(s => /\d/.test(s.value))) assert.ok(quarters.includes(stat.value), `${p.name}: lost metric ${stat.label}`);
+  }
+  assert.ok(!/href="[^"]*dvkvartal\/\d/.test(quarters), "Housing still links to a subpage");
+  const news = renderToString(createElement(PortalRoute, { requestedPath: "news" }));
+  assert.ok(news.includes('aria-haspopup="dialog"'));
+  assert.ok(!news.includes('/news/tpost/'), "News still links to article pages");
   for (const entity of [...catalog.regions, ...catalog.cities]) {
     const isRegion = catalog.regions.includes(entity);
     const path = isRegion ? (entity.id === "primkrai" ? "primorye" : entity.id) : (entity.id === "vladivostok" ? "vladivostok" : `cities/${entity.id}`);
     const page = renderToString(createElement(PortalRoute, { requestedPath: path }));
+    assert.ok(!unwanted.test(page), `${path}: production notes remain`);
     for (const id of ["hero-title", "regions", "mission", "projects"]) {
       assert.ok(page.includes(`id="${id}"`), `${path}: missing approved section ${id}`);
     }

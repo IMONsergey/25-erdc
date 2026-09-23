@@ -47,7 +47,7 @@ const stories = {
     ),
     text: "Центр судостроения, производства и развития морской промышленности. Территория, чья экономика тесно связана с морем.",
     photo: "city-bolshoy-kamen.webp",
-    alt: "Морской пейзаж Приморья из макета",
+    alt: "Морской пейзаж Приморья",
     themes: [
       ["ship", "Судостроение"],
       ["factory", "Производство"],
@@ -262,13 +262,11 @@ export default function Regions({ selectedCity, onSelectCity }) {
                   </dd>
                 </div>
               </dl>
-            ) : (
+            ) : selectedCity === "vladivostok" ? (
               <div className="city-story-note">
-                {selectedCity === "vladivostok"
-                  ? "27 проектов Владивостока и острова Русский — в атласе развития."
-                  : "Подробные проекты этой территории готовятся к публикации."}
+                27 проектов Владивостока и острова Русский — в атласе развития.
               </div>
-            )}
+            ) : null}
             <a className="city-story-cta" href="#projects">
               <span>
                 {selectedCity === "vladivostok"

@@ -46,15 +46,9 @@ export default function BuryatiaProjectDetail({
         <figure className="project-cover">
           <img
             src={asset(project.image)}
-            alt={`${project.image.startsWith("concept-") ? "Концептуальная иллюстрация темы" : "Визуализация из макета"}: ${project.title}`}
+            alt={project.title}
             decoding="async"
           />
-          <figcaption>
-            <Icon name="spark" size={13} />
-            {project.image.startsWith("concept-")
-              ? "Концептуальная иллюстрация"
-              : "Визуализация из мастер-плана"}
-          </figcaption>
         </figure>
         <div className="project-body">
           <div className="project-badges">
@@ -90,26 +84,6 @@ export default function BuryatiaProjectDetail({
               <dd>{category.label}</dd>
             </div>
           </dl>
-          <p className="project-location-note">
-            <Icon name="info" size={16} />
-            <span>Расположение на художественной схеме ориентировочное.</span>
-          </p>
-          <details className="project-source">
-            <summary>
-              О данных проекта
-              <Icon name="plus" size={17} />
-            </summary>
-            <p>
-              Состав проекта — по мастер-плану Улан-Удэ. Сроки, стоимость
-              и текущая стадия требуют уточнения.
-            </p>
-            {project.image.startsWith("concept-") && (
-              <p>
-                Изображение раскрывает тему проекта и не является утверждённым
-                архитектурным решением.
-              </p>
-            )}
-          </details>
         </div>
       </div>
       <footer className="atlas-detail-nav">
