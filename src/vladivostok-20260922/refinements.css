@@ -5,7 +5,7 @@
   --page: #f0f8ff;
   --royal: #1265eb;
   --ocean-deep: #032b46;
-  --city-tile: #155c89;
+  --city-tile: #04364a;
 }
 .shell {
   width: min(var(--shell), calc(100% - var(--gutter) * 2));
@@ -125,8 +125,8 @@
 .city-card {
   height: clamp(410px, 30vw, 500px);
   border-radius: 18px;
-  border-color: #9bcffa99;
-  background: linear-gradient(145deg, #1b6b99, var(--city-tile) 45%, #104b77);
+  border-color: #91d7ed80;
+  background: var(--city-tile);
   transition:
     transform 0.65s var(--ease),
     border-color 0.5s,
@@ -147,7 +147,7 @@
   object-position: 50% 75%;
   /* Keep Figma's linework while deriving its colour from the shared sea palette. */
   mix-blend-mode: screen;
-  filter: grayscale(1) contrast(1.35) brightness(1.25);
+  filter: grayscale(1) contrast(1.35);
   transition:
     transform 1.3s var(--ease),
     opacity 0.7s;
@@ -159,11 +159,11 @@
 .city-card-shade {
   background: linear-gradient(
     180deg,
-    #145d8610,
-    #14598712 28%,
-    #104b7752 48%,
-    #104b77c7 70%,
-    #104b77 100%
+    #04364a10,
+    #04364a18 24%,
+    #032e4080 42%,
+    #032e40f2 64%,
+    #032e40 100%
   );
 }
 .city-card-light {
@@ -225,7 +225,7 @@
   padding: 28px;
   gap: 15px;
   z-index: 1;
-  background: linear-gradient(180deg, #104b7700, #104b77e8 72px, #104b77 130px);
+  background: linear-gradient(180deg, #032e4000, #032e40f2 72px, #032e40 130px);
 }
 .city-card-body > strong {
   font-size: clamp(28px, 2.35vw, 43px);

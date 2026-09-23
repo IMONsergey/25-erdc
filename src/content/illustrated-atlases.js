@@ -14,6 +14,5 @@ export const regionalScenes = {
   magadan: scene("magadan", { "magadan-city": [65,50] }),
 };
 export const cityScenes = {
-  vladivostok: { image: "atlas-vladivostok.webp", anchors: { vladivostok: [64,34] } },
   "ulan-ude": { image: "atlas-ulan-ude.webp", anchors: { "ulan-ude": [65,48] } },
 };

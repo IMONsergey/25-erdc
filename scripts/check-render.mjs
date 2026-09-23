@@ -7,6 +7,9 @@ import { createHash } from "node:crypto";
 const approved = JSON.parse(await readFile("docs/approved-vladivostok.json", "utf8"));
 const historical = JSON.parse(await readFile("docs/vladivostok-20260922-1500.json", "utf8"));
 for (const [path, entry] of Object.entries(historical.files)) {
+  if (entry.source !== "src/data.js") {
+    assert.equal(entry.sha256, entry.originalSha256, `Historical source must match the 15:00 publication: ${path}`);
+  }
   assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), entry.sha256, `Historical page changed: ${path}`);
 }
 for (const [path, hash] of Object.entries(historical.assets)) {

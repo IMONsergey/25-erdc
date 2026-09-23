@@ -141,6 +141,10 @@ function ProjectExplorer({ entity, items }) {
 export default function TerritoryPage({ region, city, materials }) {
   const [atlasCity, setAtlasCity] = useState(null);
   const showCityOnMap = city => {
+    if (city === "vladivostok") {
+      location.assign(siteHref("vladivostok", "#projects"));
+      return;
+    }
     setAtlasCity({ city });
     document.getElementById("projects")?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };

@@ -55,6 +55,19 @@ export default function RegionalAtlas({ region, focusCity }) {
   const objectPlan = meta.plans.find(p => p.id === object?.planId);
   const activeCategory = categories.find(c => c.id === category);
   const changeFilter = fn => { fn(); setSelected(null); setLimit(40); setImageIndex(0); list.current?.scrollTo({ top: 0 }); };
+  const selectPlan = id => {
+    if (meta.plans.find(p => p.id === id)?.cityId === "vladivostok") {
+      location.assign(siteHref("vladivostok", "#projects"));
+      return;
+    }
+    changeFilter(() => setPlanId(id));
+  };
+  useEffect(() => {
+    // Previously shared regional city-filter links must reach the original atlas too.
+    if (meta.plans.find(p => p.id === planId)?.cityId === "vladivostok") {
+      location.replace(siteHref("vladivostok", "#projects"));
+    }
+  }, [meta, planId]);
   const choose = useCallback(id => {
     previousFocus.current = document.activeElement;
     setSelected(id); setImageIndex(0); setCopied(false); setCopyFallback(false);
@@ -100,13 +113,13 @@ export default function RegionalAtlas({ region, focusCity }) {
   return <section id="projects" className="projects-section regional-atlas-section" aria-labelledby="projects-title" ref={section}>
     <div className="projects-overture"><div className="projects-intro shell reveal"><div><span className="section-kicker">03 / Масштаб преобразований</span><h2 className="section-title" id="projects-title">Регион меняется.<br /><span>Здесь и сейчас.</span></h2></div><div className="projects-total"><strong>{meta.count}</strong><span>{objectWord(meta.count)} развития<br />в мастер-планах региона</span></div></div></div>
     <div className={`regional-atlas-stage ${expanded ? "is-expanded" : ""} ${object ? "has-selection" : ""}`} ref={stage} role={expanded ? "dialog" : "region"} aria-modal={expanded ? true : undefined} aria-label={`Атлас проектов — ${region.name}`} style={{ "--atlas-accent": activeCategory?.color || "#79dffa" }}>
-      <RegionalMap regionId={region.id} regionName={region.name} objects={filtered} plans={meta.plans} planId={planId} selected={selected} expanded={expanded} onPlan={id => changeFilter(() => setPlanId(id))} onReady={onReady} />
+      <RegionalMap regionId={region.id} regionName={region.name} objects={filtered} plans={meta.plans} planId={planId} selected={selected} expanded={expanded} onPlan={selectPlan} onReady={onReady} />
       {(error || !mapReady) && <div className="regional-map-loading" role="status"><Icon name="globe" size={40} /><span>{error ? "Не удалось открыть карту" : "Загружаем карту региона"}</span>{error && <button onClick={() => setAttempt(attempt + 1)}>Попробовать ещё раз</button>}</div>}
       <div className="regional-map-vignette" aria-hidden="true" />
       <aside className="regional-atlas-sidebar">
         <div className="regional-sidebar-head"><span className="section-kicker">Атлас развития</span><h3>{region.name}</h3><span>{meta.count} {objectWord(meta.count)} · {meta.plans.length} {meta.plans.length === 1 ? "мастер-план" : meta.plans.length < 5 ? "мастер-плана" : "мастер-планов"}</span></div>
         <div className="regional-atlas-filters"><label className="regional-atlas-search"><Search size={19} /><input aria-label="Найти объект в регионе" placeholder="Найти объект" value={query} onChange={e => changeFilter(() => setQuery(e.target.value))} /><button aria-label="Очистить поиск" hidden={!query} onClick={() => changeFilter(() => setQuery(""))}><Icon name="close" size={18} /></button></label>
-          <div className="regional-atlas-selects"><label><span className="visually-hidden">Город на карте региона</span><select aria-label="Город на карте региона" value={planId} onChange={e => changeFilter(() => setPlanId(e.target.value))}><option value="">Все территории</option>{meta.plans.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label><span className="visually-hidden">Стадия объекта</span><select aria-label="Стадия объекта" value={stageId} onChange={e => changeFilter(() => setStageId(e.target.value))}><option value="">Все стадии</option>{Object.entries(stages).map(([key,label]) => <option key={key} value={key}>{label}</option>)}</select></label></div>
+          <div className="regional-atlas-selects"><label><span className="visually-hidden">Город на карте региона</span><select aria-label="Город на карте региона" value={planId} onChange={e => selectPlan(e.target.value)}><option value="">Все территории</option>{meta.plans.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label><span className="visually-hidden">Стадия объекта</span><select aria-label="Стадия объекта" value={stageId} onChange={e => changeFilter(() => setStageId(e.target.value))}><option value="">Все стадии</option>{Object.entries(stages).map(([key,label]) => <option key={key} value={key}>{label}</option>)}</select></label></div>
         </div>
         <div className="regional-atlas-categories" aria-label="Направления развития региона"><button className={!category ? "is-active" : ""} aria-pressed={!category} onClick={() => changeFilter(() => setCategory(""))}><Icon name="globe" size={21} /><span>Все направления</span><small>{(data?.objects || []).filter(o => !planId || o.planId === planId).length || meta.count}</small></button>{categories.filter(c => meta.categories[c.id]).map(c => { const count = data ? data.objects.filter(o => o.category === c.id && (!planId || o.planId === planId)).length : meta.categories[c.id]; return <button key={c.id} className={category === c.id ? "is-active" : ""} aria-pressed={category === c.id} disabled={!count} style={{ "--category-color": c.color }} onClick={() => changeFilter(() => setCategory(c.id))}><Icon name={c.icon} size={20} /><span>{c.title}</span><small>{count}</small></button>; })}</div>
         <div className="regional-list-heading"><span aria-live="polite">Проекты территории <b>{shown.length}</b></span>{(query || category || planId || stageId) && <button onClick={reset}>Сбросить</button>}</div>
