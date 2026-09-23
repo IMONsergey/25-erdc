@@ -1,0 +1,89 @@
+{
+  "news": [
+    {
+      "title": "Трутнев оценил расходы на реализацию мастер-планов Арктики к 2035 году",
+      "url": "http://xn--25-flcdf3dabp.xn--p1ai/news/tpost/4d989jj9g1-trutnev-otsenil-rashodi-na-realizatsiyu"
+    },
+    {
+      "title": "В Магадане торжественно открыт ключевой объект городского мастер-плана - круглогодичный лыжный стадион им. Елены Вяльбе",
+      "url": "http://xn--25-flcdf3dabp.xn--p1ai/news/tpost/6oyz6g5nc1-v-magadane-torzhestvenno-otkrit-klyuchev"
+    },
+    {
+      "title": "Арктика для людей: мастер-план Мурманской агломерации связывает благоустройство, инвестпроекты и развитие социальной инфраструктуры",
+      "url": "http://xn--25-flcdf3dabp.xn--p1ai/news/tpost/1v564pmd81-arktika-dlya-lyudei-master-plan-murmansk"
+    }
+  ],
+  "partners": [
+    "https://static.tildacdn.com/tild3866-3666-4262-b237-613634323039/Frame_1_2.jpg",
+    "https://static.tildacdn.com/tild3633-3633-4130-b833-656661343531/Frame_5.jpg",
+    "https://static.tildacdn.com/tild6662-3835-4662-a436-373131333766/Frame_4.jpg",
+    "https://static.tildacdn.com/tild3433-3335-4636-b665-633965393864/Frame_2.jpg",
+    "https://static.tildacdn.com/tild3730-6139-4561-b563-326532666463/Frame_6.jpg",
+    "https://static.tildacdn.com/tild3232-6166-4465-a533-353264646666/Frame_8.jpg",
+    "https://static.tildacdn.com/tild3466-3532-4333-a532-643866623739/Frame_10.jpg",
+    "https://static.tildacdn.com/tild3039-3535-4036-a436-646430303264/Frame_9.jpg",
+    "https://static.tildacdn.com/tild3133-3735-4530-b766-663664643236/Frame_7.jpg",
+    "https://static.tildacdn.com/tild6563-6638-4234-b365-366137643738/Frame_11.jpg",
+    "https://static.tildacdn.com/tild6439-3561-4230-a538-646130313932/Frame_13.jpg",
+    "https://static.tildacdn.com/tild6634-6266-4637-a363-303166356130/Frame_15.jpg",
+    "https://static.tildacdn.com/tild6331-6637-4238-b337-323866373530/Frame_14.jpg",
+    "https://static.tildacdn.com/tild6534-3432-4162-b639-613236613138/Frame_12.jpg"
+  ],
+  "regions": [
+    {
+      "image": "https://static.tildacdn.com/tild6561-3032-4561-b734-613831333664/image_542_1.jpg",
+      "name": "Приморский край",
+      "path": "/primkrai"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3333-3162-4034-b336-393463376637/_5_1_1.png",
+      "name": "Хабаровский край",
+      "path": "/khabkrai"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild6561-6634-4638-a563-326535363130/image_437.png",
+      "name": "Камчатский край",
+      "path": "/kamchatka"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3235-3464-4437-b932-643339393335/image_500_2.jpg",
+      "name": "Республика Бурятия",
+      "path": "/buryatia"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3937-6535-4762-b138-653839363339/image_444_1.jpg",
+      "name": "Республика Саха (Якутия)",
+      "path": "/yakutia"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3533-3731-4163-b637-383131643964/image_508_3.jpg",
+      "name": "Чукотский автономный округ",
+      "path": "/chukot"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3733-3637-4333-b430-313539303531/image_483.jpg",
+      "name": "Забайкальский край",
+      "path": "/zabaikal"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3662-3530-4861-a339-363265623435/image_472.jpg",
+      "name": "Амурская область",
+      "path": "/amurskaya"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3463-3336-4631-a438-633061326562/image_463_1.jpg",
+      "name": "Сахалинская область",
+      "path": "/sakhalin"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3838-3463-4165-b434-303031313833/shutterstock_1993554.jpg",
+      "name": "Еврейская автономная область",
+      "path": "/eao"
+    },
+    {
+      "image": "https://static.tildacdn.com/tild3738-6530-4837-a463-656538336461/image_244.jpg",
+      "name": "Магаданская область",
+      "path": "/magadan"
+    }
+  ]
+}

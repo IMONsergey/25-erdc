@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Проверка адаптивности — Владивосток</title>
+    <title>Проверка адаптивности — 25 городов</title>
     <style>
       * {
         box-sizing: border-box;
@@ -48,7 +48,13 @@
   </head>
   <body>
     <header>
-      <label for="size">Размер экрана</label
+      <label for="page">Страница</label
+      ><select id="page">
+        <option value="">Главная</option>
+        <option value="primorye/">Приморье</option>
+        <option value="buryatia/">Бурятия</option>
+        <option value="vladivostok/">Владивосток</option></select
+      ><label for="size">Размер экрана</label
       ><select id="size">
         <option value="390,844">Телефон 390 × 844</option>
         <option value="320,740">Телефон 320 × 740</option>
@@ -69,7 +75,15 @@
     <script>
       const control = document.getElementById("size"),
         frame = document.getElementById("preview");
-      frame.src = frame.dataset.root + "?qa=" + Date.now();
+      const page = document.getElementById("page");
+      const requested = new URLSearchParams(location.search).get("page");
+      if (["primorye", "buryatia", "vladivostok"].includes(requested))
+        page.value = requested + "/";
+      const navigate = () => {
+        frame.src = frame.dataset.root + page.value + "?qa=" + Date.now();
+      };
+      navigate();
+      page.addEventListener("change", navigate);
       control.addEventListener("change", () => {
         const [width, height] = control.value.split(",");
         frame.width = width;

@@ -8,6 +8,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html",
+        primorye: "primorye/index.html",
+        buryatia: "buryatia/index.html",
+        vladivostok: "vladivostok/index.html",
         mapLab: "map-lab/index.html",
         responsiveQA: "qa/index.html",
       },

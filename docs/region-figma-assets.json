@@ -1,0 +1,107 @@
+[
+  {
+    "file": "hero-primorye.webp",
+    "url": "https://www.figma.com/api/mcp/asset/0a9d11cb-e8f5-4eb0-9cd4-be16dd76d531.png",
+    "width": 2200
+  },
+  {
+    "file": "hero-buryatia.webp",
+    "url": "https://www.figma.com/api/mcp/asset/81a5dc2e-6e5d-433b-8619-b77f68a9dc52.png",
+    "width": 2200
+  },
+  {
+    "file": "hero-buryatia-foreground.webp",
+    "url": "https://www.figma.com/api/mcp/asset/739a0221-d806-4c9f-bdce-d75ce78ca8ef.png",
+    "width": 2200
+  },
+  {
+    "file": "city-nakhodka.webp",
+    "url": "https://www.figma.com/api/mcp/asset/b1a6b0e5-c928-4e9a-931d-0a5400171f25.png",
+    "width": 1200
+  },
+  {
+    "file": "city-ussuriysk.webp",
+    "url": "https://www.figma.com/api/mcp/asset/4a6746f8-f797-4d7c-905b-fb8496d0c798.png",
+    "width": 1200
+  },
+  {
+    "file": "city-arsenyev.webp",
+    "url": "https://www.figma.com/api/mcp/asset/acbec718-1c27-4a2f-a546-eaf8fb5cda25.png",
+    "width": 1200
+  },
+  {
+    "file": "region-primorye-map.webp",
+    "url": "https://www.figma.com/api/mcp/asset/1b9a8e66-6e09-4e75-8ea0-ff9f7f67e668.png",
+    "width": 1400
+  },
+  {
+    "file": "city-lineart-ulan-ude.webp",
+    "url": "https://www.figma.com/api/mcp/asset/4f1ee9d7-181b-4125-a545-30da75391fe0.png",
+    "width": 1400
+  },
+  {
+    "file": "city-lineart-severobaikalsk.webp",
+    "url": "https://www.figma.com/api/mcp/asset/99747708-a5fc-4181-82fd-db41fc5d662c.png",
+    "width": 1400
+  },
+  {
+    "file": "crest-ulan-ude.webp",
+    "url": "https://www.figma.com/api/mcp/asset/29385587-ba3d-4c86-8fb9-71ae7963bf54.png",
+    "width": 160
+  },
+  {
+    "file": "crest-severobaikalsk.webp",
+    "url": "https://www.figma.com/api/mcp/asset/bc798571-c8fb-4c27-9412-497a61a64fd4.png",
+    "width": 160
+  },
+  {
+    "file": "city-ulan-ude.webp",
+    "url": "https://www.figma.com/api/mcp/asset/054d71c5-cea3-4cf6-8574-85a4d4c070c0.png",
+    "width": 1800
+  },
+  {
+    "file": "mission-ulan-ude-map.webp",
+    "url": "https://www.figma.com/api/mcp/asset/57616446-b80f-4529-8e65-4bacae365235.png",
+    "width": 1300
+  },
+  {
+    "file": "region-urban-life.webp",
+    "url": "https://www.figma.com/api/mcp/asset/7d778b77-f4a3-40e0-9616-140613d0efb0.png",
+    "width": 1500
+  },
+  {
+    "file": "region-mobility.webp",
+    "url": "https://www.figma.com/api/mcp/asset/6f63f571-014c-41f7-a94a-867e83929de4.png",
+    "width": 1500
+  },
+  {
+    "file": "region-housing.webp",
+    "url": "https://www.figma.com/api/mcp/asset/9b0d25a5-9d52-456d-933d-9f54e4996ee5.png",
+    "width": 1500
+  },
+  {
+    "file": "region-ecology.webp",
+    "url": "https://www.figma.com/api/mcp/asset/d81b8d20-c176-4b94-9798-0099c03f2962.png",
+    "width": 1500
+  },
+  {
+    "file": "atlas-ulan-ude-source.webp",
+    "url": "https://www.figma.com/api/mcp/asset/c5201af0-568b-4531-b567-663ec402295f.png",
+    "width": 2200
+  },
+  {
+    "file": "project-batareyka.webp",
+    "url": "https://www.figma.com/api/mcp/asset/b8d5a385-f635-4e47-9b88-8b3b73838164.png",
+    "width": 1300
+  },
+  {
+    "file": "region-primorye-living.webp",
+    "url": "https://www.figma.com/api/mcp/asset/3b0c4774-2715-42a6-80fd-1ab07578e4df.png",
+    "width": 1500
+  },
+  {
+    "file": "region-primorye-economy.webp",
+    "url": "https://www.figma.com/api/mcp/asset/f3473d60-a54d-4bc3-9293-3101e52ebbe2.png",
+    "width": 1500
+  }
+]

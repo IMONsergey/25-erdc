@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import { installTypographer } from "./typograph.js";
 import "./styles.css";
 import "./refinements.css";
+import "./pages.css";
 
 const rootElement = document.getElementById("root");
 installTypographer(rootElement);

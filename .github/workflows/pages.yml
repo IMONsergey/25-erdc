@@ -70,11 +70,15 @@ jobs:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           for attempt in {1..12}; do
+            ready=true
             if curl --fail --location --silent --show-error "${PAGE_URL}" --output /tmp/page.html; then
-              grep --quiet "Агломерация Владивосток" /tmp/page.html
-              curl --fail --location --silent --show-error "${PAGE_URL}assets/hero-vladivostok.webp" --output /dev/null
-              curl --fail --location --silent --show-error "${PAGE_URL}assets/fonts/tiktok-sans-cyrillic.woff2" --output /dev/null
-              exit 0
+              grep --quiet "25 городов" /tmp/page.html || ready=false
+              for page in primorye buryatia vladivostok; do
+                curl --fail --location --silent --show-error "${PAGE_URL}${page}/" --output /dev/null || ready=false
+              done
+              curl --fail --location --silent --show-error "${PAGE_URL}assets/home-hero.webp" --output /dev/null || ready=false
+              curl --fail --location --silent --show-error "${PAGE_URL}assets/fonts/tiktok-sans-cyrillic.woff2" --output /dev/null || ready=false
+              if [[ "$ready" == true ]]; then exit 0; fi
             fi
             sleep 5
           done

@@ -1,7 +1,33 @@
 import { useEffect, useState } from "react";
 import { asset } from "../data.js";
 import Icon from "./Icon.jsx";
-export default function Header() {
+import { siteHref, currentPage } from "../site.js";
+const pageLinks = {
+  home: [
+    ["#about", "О проекте"],
+    ["#regions", "Регионы"],
+    ["#quarter", "ДВ Квартал"],
+    ["#news", "Новости"],
+  ],
+  primorye: [
+    ["#cities", "Мастер-планы"],
+    ["#potential", "Возможности"],
+    ["#changes", "Развитие"],
+  ],
+  buryatia: [
+    ["#cities", "Города"],
+    ["#mission", "Миссия"],
+    ["#directions", "Направления"],
+    ["#projects", "Проекты"],
+  ],
+  vladivostok: [
+    ["#city", "Город"],
+    ["#regions", "Территории"],
+    ["#mission", "Миссия"],
+    ["#projects", "Проекты"],
+  ],
+};
+export default function Header({ page = currentPage }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -21,7 +47,11 @@ export default function Header() {
   return (
     <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
       <div className="header-inner shell">
-        <a className="brand" href="#top" aria-label="25 городов — на главную">
+        <a
+          className="brand"
+          href={siteHref()}
+          aria-label="25 городов — на главную"
+        >
           <img
             src={asset("logo-25-cities.svg")}
             alt="25 городов"
@@ -39,19 +69,18 @@ export default function Header() {
           className={`main-nav ${menuOpen ? "is-open" : ""}`}
           aria-label="Основная навигация"
         >
-          {[
-            ["#city", "Город"],
-            ["#regions", "Территории"],
-            ["#mission", "Миссия"],
-            ["#projects", "Проекты"],
-          ].map(([href, label]) => (
+          {pageLinks[page].map(([href, label]) => (
             <a key={href} href={href} onClick={() => setMenuOpen(false)}>
               {label}
             </a>
           ))}
         </nav>
-        <a className="header-cta" href="#projects">
-          Изучить мастер-план <Icon name="arrow" hoverName="right" size={20} />
+        <a
+          className="header-cta"
+          href={page === "home" ? "#regions" : siteHref("", "#regions")}
+        >
+          {page === "home" ? "Выбрать регион" : "Все регионы"}{" "}
+          <Icon name="arrow" hoverName="right" size={20} />
         </a>
         <button
           className={`menu-button ${menuOpen ? "is-open" : ""}`}

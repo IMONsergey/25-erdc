@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { asset } from "../data.js";
 import Icon from "./Icon.jsx";
+import { siteHref } from "../site.js";
 
 export default function Hero() {
   const hero = useRef(null);
@@ -36,7 +37,7 @@ export default function Hero() {
       </div>
       <div className="hero-shade" aria-hidden="true" />
       <div className="hero-topline shell">
-        <span>Приморский край</span>
+        <a href={siteHref("primorye")}>Приморский край</a>
         <span>Мастер-план · 2050</span>
       </div>
       <div className="hero-heading">

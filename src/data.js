@@ -1,6 +1,5 @@
-const assetBase = document.baseURI.includes("/map-lab/") ? "../assets/" : `${import.meta.env.BASE_URL}assets/`;
-
-export const asset = (name) => new URL(`${assetBase}${name}`, document.baseURI).href;
+import { siteRoot } from "./site.js";
+export const asset = (name) => new URL(`assets/${name}`, siteRoot).href;
 
 export const cities = [
   {
@@ -9,7 +8,8 @@ export const cities = [
     crest: "crest-vladivostok.webp",
     photo: "city-vladivostok.webp",
     alt: "Побережье Владивостока",
-    description: "Морской, административный, научный, образовательный и туристический центр.",
+    description:
+      "Морской, административный, научный, образовательный и туристический центр.",
   },
   {
     id: "artem",
@@ -25,23 +25,71 @@ export const cities = [
     crest: "crest-bolshoy-kamen.webp",
     photo: "city-bolshoy-kamen.webp",
     alt: "Побережье Большого Камня",
-    description: "Центр судостроения, производства и развития морской промышленности.",
+    description:
+      "Центр судостроения, производства и развития морской промышленности.",
   },
 ];
 
 export const categories = [
-  { id: "housing", label: "Жильё и деловая застройка", icon: "icon-category-housing.svg" },
-  { id: "social", label: "Социальная инфраструктура", icon: "icon-category-social.svg" },
-  { id: "transport", label: "Транспорт и мобильность", icon: "icon-category-transport.svg" },
-  { id: "engineering", label: "Инженерная инфраструктура", icon: "icon-category-engineering.svg" },
-  { id: "ecology", label: "Рекреация и экология", icon: "icon-category-ecology.svg" },
+  {
+    id: "housing",
+    label: "Жильё и деловая застройка",
+    icon: "icon-category-housing.svg",
+  },
+  {
+    id: "social",
+    label: "Социальная инфраструктура",
+    icon: "icon-category-social.svg",
+  },
+  {
+    id: "transport",
+    label: "Транспорт и мобильность",
+    icon: "icon-category-transport.svg",
+  },
+  {
+    id: "engineering",
+    label: "Инженерная инфраструктура",
+    icon: "icon-category-engineering.svg",
+  },
+  {
+    id: "ecology",
+    label: "Рекреация и экология",
+    icon: "icon-category-ecology.svg",
+  },
   { id: "tourism", label: "Туризм", icon: "icon-category-tourism.svg" },
 ];
 
 export const projects = [
-  { id: "kungasny", title: "КРТ в районе мыса Кунгасного", short: "Морской деловой центр на месте нефтебазы.", image: "project-kungasny.webp", complete: true },
-  { id: "kaluzina", title: "КРТ мыс Калузина", short: "Новый район с жилой и деловой застройкой, намывом территории и выходом к морю.", image: "project-kaluzina.webp" },
-  { id: "firsova", title: "КРТ мыс Фирсова", short: "Морской деловой центр на месте нефтебазы.", image: "project-firsova.webp" },
-  { id: "ulyss", title: "КРТ бухта Улисс", short: "Развитие прибрежных территорий и парковая зона вдоль бухты.", image: "project-ulyss.webp" },
-  { id: "neftebaza", title: "ЦДР Нефтебаза", short: "Преобразование территории в многофункциональный деловой район.", image: "project-neftebaza.webp" },
+  {
+    id: "kungasny",
+    title: "КРТ в районе мыса Кунгасного",
+    short: "Морской деловой центр на месте нефтебазы.",
+    image: "project-kungasny.webp",
+    complete: true,
+  },
+  {
+    id: "kaluzina",
+    title: "КРТ мыс Калузина",
+    short:
+      "Новый район с жилой и деловой застройкой, намывом территории и выходом к морю.",
+    image: "project-kaluzina.webp",
+  },
+  {
+    id: "firsova",
+    title: "КРТ мыс Фирсова",
+    short: "Морской деловой центр на месте нефтебазы.",
+    image: "project-firsova.webp",
+  },
+  {
+    id: "ulyss",
+    title: "КРТ бухта Улисс",
+    short: "Развитие прибрежных территорий и парковая зона вдоль бухты.",
+    image: "project-ulyss.webp",
+  },
+  {
+    id: "neftebaza",
+    title: "ЦДР Нефтебаза",
+    short: "Преобразование территории в многофункциональный деловой район.",
+    image: "project-neftebaza.webp",
+  },
 ];
