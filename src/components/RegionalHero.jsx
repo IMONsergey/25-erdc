@@ -57,7 +57,7 @@ export default function RegionalHero({ region }) {
             <Icon name="diagonal" hoverName="down" size={27} />
           </span>
           <span>
-            Открыть
+            Открыть{" "}
             <br />
             мастер-планы
           </span>
@@ -67,7 +67,7 @@ export default function RegionalHero({ region }) {
             <div key={label}>
               <span>{label}</span>
               <strong>
-                {value}
+                <span className="hero-stat-value">{value}</span>
                 <small>{unit}</small>
               </strong>
             </div>

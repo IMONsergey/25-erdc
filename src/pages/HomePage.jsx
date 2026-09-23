@@ -229,7 +229,7 @@ export default function HomePage() {
                   <Icon name="diagonal" hoverName="down" size={28} />
                 </span>
                 <span>
-                  Выбрать
+                  Выбрать{" "}
                   <br />
                   свой регион
                 </span>
