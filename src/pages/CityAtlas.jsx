@@ -38,7 +38,7 @@ export default function CityAtlas({city,items}) {
   const next=step=>choose(shown[(selectedIndex+step+shown.length)%shown.length].id);
   return <section id="projects" className="projects-section city-atlas-section" aria-labelledby="projects-title">
     <div className="projects-overture"><div className="projects-intro shell reveal"><div><span className="section-kicker">03 / Масштаб преобразований</span><h2 className="section-title" id="projects-title">Город меняется.<br/><span>Здесь и сейчас.</span></h2></div><div className="projects-total"><strong>{items.length}</strong><span>{projectWord(items.length)}<br/>{" "}развития территории</span></div></div></div>
-    <div ref={stage} className={`regional-atlas-stage city-atlas-stage ${expanded?"is-expanded":""} ${project?"has-selection":""}`} role={expanded?"dialog":"region"} aria-modal={expanded?true:undefined} aria-label={`Атлас проектов — ${city.name}`} style={{"--accent":active.color,"--atlas-accent":active.color}}>
+    <div ref={stage} className={`regional-atlas-stage city-atlas-stage ${directions.length > 8 ? "has-many-directions" : ""} ${expanded?"is-expanded":""} ${project?"has-selection":""}`} role={expanded?"dialog":"region"} aria-modal={expanded?true:undefined} aria-label={`Атлас проектов — ${city.name}`} style={{"--accent":active.color,"--atlas-accent":active.color}}>
       <CityAtlasMap city={{...city,regionName:regionById[city.region].name}} directions={directions} active={active.id} selected={selected} expanded={expanded} onChoose={explore} onReady={onReady}/>
       <div className="regional-map-vignette" aria-hidden="true"/>
       <aside className="regional-atlas-sidebar">

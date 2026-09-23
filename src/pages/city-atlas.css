@@ -50,3 +50,8 @@
  .city-atlas-stage.is-expanded .regional-atlas-categories button { font-size:11px; min-height:44px; padding:7px; gap:6px; }
  .city-atlas-stage.is-expanded .regional-sidebar-head { padding:20px 20px 12px; }
 }
+@media (max-width:899px) {
+ .city-atlas-stage.has-many-directions,.city-atlas-stage.has-many-directions.is-expanded { padding-top:560px; }
+ .city-atlas-stage.has-many-directions .regional-map,.city-atlas-stage.has-many-directions .regional-map-vignette { height:560px; }
+ .city-atlas-stage.has-many-directions .regional-atlas-invitation { top:410px; }
+}
