@@ -85,7 +85,7 @@ export default function RegionalAtlas({ region, focusCity }) {
   }, [selected, expanded]);
   useEffect(() => {
     if (!object || expanded) return;
-    detail.current?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "nearest" });
+    detail.current?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: matchMedia("(max-width: 899px)").matches ? "start" : "nearest" });
   }, [object, expanded]);
   useEffect(() => {
     if (!data) return;

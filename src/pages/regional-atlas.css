@@ -81,7 +81,7 @@
 .regional-map-toolbar button:disabled { opacity: .5; }
 .regional-map-count { font-size: 11px; color: #d5edf6; background: #073b557f; border-radius: 30px; padding: 12px 15px; margin-right: 8px; backdrop-filter: blur(12px); }
 .regional-object-card { position: absolute; right: var(--atlas-edge); top: 92px; bottom: 78px; width: clamp(370px,31vw,500px); z-index: 5; display: flex; flex-direction: column; background: #f7fcff; border: 1px solid #fff8; color: #183e52; border-radius: 20px; box-shadow: 0 20px 80px #001a3b66; overflow: hidden; animation: regional-card-enter .3s ease both; }
-.regional-object-card { scroll-margin-top: 100px; scroll-margin-bottom: 28px; }
+.regional-object-card { scroll-margin-top: 12px; scroll-margin-bottom: 20px; }
 .regional-object-top { display: flex; align-items: center; justify-content: space-between; min-height: 54px; padding: 8px 16px 8px 24px; background: #fff; gap: 12px; }
 .regional-object-top > span { display: flex; align-items: center; gap: 9px; font-size: 12px; line-height: 1.3; }
 .regional-object-top button { display: grid; place-items: center; width: 35px; height: 35px; border-radius: 50%; flex: none; color: #40718c; background: #edf5fa; }
@@ -190,7 +190,7 @@
   .regional-atlas-invitation > div > span { font-size: 12px; }
   .regional-atlas-invitation button { margin-top: 8px; padding-block: 9px; }
   .regional-atlas-stage.is-expanded .regional-atlas-invitation { top: calc(min(56dvh,480px) - 165px); }
-  .regional-object-card { width: calc(100% - var(--gutter) * 2); max-height: min(760px, calc(100svh - 104px)); }
+  .regional-object-card { width: calc(100% - var(--gutter) * 2); max-height: min(760px, calc(100svh - 128px)); }
 }
 @media (max-width: 600px) {
   .regional-atlas-invitation { top: 260px; }
