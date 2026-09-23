@@ -3,7 +3,7 @@ import Map from "ol/Map.js";
 import View from "ol/View.js";
 import TileLayer from "ol/layer/Tile.js";
 import VectorLayer from "ol/layer/Vector.js";
-import XYZ from "ol/source/XYZ.js";
+import OSM from "ol/source/OSM.js";
 import VectorSource from "ol/source/Vector.js";
 import Cluster from "ol/source/Cluster.js";
 import Feature from "ol/Feature.js";
@@ -134,12 +134,7 @@ export default function PortalMap() {
     source.current = vs;
     selectionSource.current = ss;
     const cluster = new Cluster({ distance: 40, source: vs });
-    const tiles = new XYZ({
-      url: "https://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-      crossOrigin: "anonymous",
-      attributions:
-        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
-    });
+    const tiles = new OSM();
     let failures = 0;
     tiles.on("tileloaderror", () => {
       failures++;
@@ -403,14 +398,7 @@ export default function PortalMap() {
             >
               OpenStreetMap
             </a>{" "}
-            ©{" "}
-            <a
-              href="https://carto.com/attributions"
-              target="_blank"
-              rel="noreferrer"
-            >
-              CARTO
-            </a>
+            contributors
           </div>
           {object && (
             <section

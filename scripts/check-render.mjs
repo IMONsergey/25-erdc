@@ -65,6 +65,11 @@ try {
     }
     assert.ok(page.includes(entity.name), `${path}: wrong territory`);
     assert.ok(!page.includes('p-page-hero'), `${path}: generic portal hero returned`);
+    if (isRegion) {
+      assert.ok(page.includes('regional-atlas-stage'), `${path}: interactive regional atlas missing`);
+      assert.ok(page.includes('Город на карте региона'), `${path}: city filtering missing`);
+      assert.ok(page.includes('Объекты на карте'), `${path}: territory-to-map navigation missing`);
+    }
     if (entity.id === "vladivostok") {
       assert.equal((page.match(/class="atlas-marker /g) || []).length, 27);
       assert.ok(page.includes("hero-page12.webp"));

@@ -1,6 +1,11 @@
 # Vladivostok restored at the requested historical cutoff
 
 The requested cutoff is 22 September 2026, 15:00 Moscow (12:00 UTC).
+
+Later on 23 September, the user approved this restoration and requested the
+subsequently approved blue city-card palette. Only `refinements.css` now uses the
+exact `4d0d45b` version. The integrity manifest records this palette exception;
+see `regional-atlases-20260923.md` for the regional-map work and verification.
 GitHub Actions run 35724312094 published source commit
 `5203d67dd8ac8da6520f3f80ecfdb091e2418b53` successfully at 11:57:29 UTC.
 The next publication, source `4d0d45b`, did not finish until 12:03:37 UTC.

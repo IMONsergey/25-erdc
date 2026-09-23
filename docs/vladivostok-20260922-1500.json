@@ -4,7 +4,7 @@
   "deployedAt": "2026-09-22T14:57:29+03:00",
   "deploymentRun": 35724312094,
   "route": "vladivostok/",
-  "notes": "Complete application and styles from the last successful publication before 15:00 Moscow. Only asset URL resolution and HTML entry paths adapt the original root page to /vladivostok/. No portal CSS or shared portal layout is loaded.",
+  "notes": "Complete application and styles from the last successful publication before 15:00 Moscow. Only asset URL resolution and HTML entry paths adapt the original root page to /vladivostok/. No portal CSS or shared portal layout is loaded. September 23: at user request, restore the later approved blue city-card palette from 4d0d45b; other historical content remains intact.",
   "files": {
     "src/vladivostok-20260922/App.jsx": {
       "source": "src/App.jsx",
@@ -74,7 +74,8 @@
     "src/vladivostok-20260922/refinements.css": {
       "source": "src/refinements.css",
       "originalSha256": "17d8e71c9c1551439310cbdc0053cee5c991b06ce0e75cbda5e6f88d8c1914c6",
-      "sha256": "17d8e71c9c1551439310cbdc0053cee5c991b06ce0e75cbda5e6f88d8c1914c6"
+      "sha256": "87ffb844b22417898b237b018937e35e1c0d14cac0fe40c780b435081f905d9d",
+      "approvedPaletteRevision": "4d0d45b0dffd846defb1337bf76ef863859a026d"
     },
     "src/vladivostok-20260922/selectedProjects.js": {
       "source": "src/selectedProjects.js",

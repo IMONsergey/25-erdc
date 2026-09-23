@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "type": "module",
   "scripts": {
-    "prepare:assets": "node scripts/prepare-portal.mjs && node scripts/prepare-public.mjs",
+    "prepare:assets": "node scripts/prepare-portal.mjs && node scripts/prepare-regional-atlas.mjs && node scripts/prepare-public.mjs",
     "predev": "npm run prepare:assets",
     "dev": "vite",
     "prebuild": "npm run prepare:assets",

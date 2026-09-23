@@ -180,6 +180,7 @@ function DocError() {
 }
 function Header() {
   const vladivostok = legacyVladivostok || ["vladivostok", "cities/vladivostok"].includes(currentPath);
+  const regionalMap = regions.some(r => regionPath(r) === currentPath);
   useEffect(() => {
     const shortcut = e => {
       if (e.key === "/" && !e.metaKey && !e.ctrlKey && !document.querySelector("dialog[open]") && !["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName) && !e.target.isContentEditable) { e.preventDefault(); setSearch(true); setOpen(false); }
@@ -291,9 +292,9 @@ function Header() {
           <a href={siteHref("dvkvartal")}>ДВ Квартал</a>
           <a href={siteHref("news")}>Новости</a>
         </nav>
-        <a className="p-header-map" href={vladivostok ? "#projects" : siteHref("map")}>
+        <a className="p-header-map" href={vladivostok || regionalMap ? "#projects" : siteHref("map")}>
           <MapIcon size={17} />
-          {vladivostok ? "Атлас Владивостока" : "Карта проектов"}
+          {vladivostok ? "Атлас Владивостока" : regionalMap ? "Карта региона" : "Карта проектов"}
         </a>
         <button
           ref={searchTrigger}

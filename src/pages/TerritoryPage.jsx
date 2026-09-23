@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "../components/Icon.jsx";
 import Motion from "../components/Motion.jsx";
+import RegionalAtlas from "./RegionalAtlas.jsx";
 import { siteHref } from "../site.js";
 import { cities, regions, projects, cityById, regionById, projectById, media, regionPath, cityPath, programNames } from "../portal/data.js";
 
@@ -76,7 +77,7 @@ function TerritoryHero({ entity, region, isRegion, count }) {
     </div>
   </section>;
 }
-function Territories({ members, initial, isRegion }) {
+function Territories({ members, initial, isRegion, onShowMap }) {
   const [selected, setSelected] = useState(initial || members[0].id);
   const [view, setView] = useState("about");
   const city = cityById[selected];
@@ -98,7 +99,7 @@ function Territories({ members, initial, isRegion }) {
         <Photo className="city-detail-image" src={city.image} alt={city.name} key={city.image} /><div className="city-detail-shade" />
         <div className="city-story-top"><span><Icon name="pin" size={18} />{city.name}</span><div className="city-story-tabs" aria-label="Сведения о территории"><button aria-pressed={view === "about"} onClick={() => setView("about")}>О городе</button><button aria-pressed={view === "directions"} onClick={() => setView("directions")}>Направления</button></div></div>
         <div className="city-story-content" key={`${selected}-${view}`} aria-live="polite"><span className="section-kicker">Мастер-план развития</span><h3>{city.mission}</h3>{view === "about" ? <p>{about}</p> : <div className="city-themes">{directions.map(t => <span key={t}><Icon name="housing" size={20} />{t}</span>)}</div>}</div>
-        <div className="city-story-bottom"><Metrics className="territory-story-metrics" items={city.stats} /><a className="city-story-cta" href={city.id === initial && !isRegion ? "#projects" : siteHref(cityPath(city))}><span>{city.id === initial && !isRegion ? "К проектам города" : "Открыть мастер-план"}</span><Icon name="arrow" hoverName="right" size={25} /></a></div>
+        <div className="city-story-bottom"><Metrics className="territory-story-metrics" items={city.stats} />{onShowMap && <button className="territory-map-link" onClick={() => onShowMap(city.id)}><Icon name="pin" size={20} />Объекты на карте</button>}<a className="city-story-cta" href={city.id === initial && !isRegion ? "#projects" : siteHref(cityPath(city))}><span>{city.id === initial && !isRegion ? "К проектам города" : "Открыть мастер-план"}</span><Icon name="arrow" hoverName="right" size={25} /></a></div>
       </article>
     </div>
   </section>;
@@ -138,6 +139,11 @@ function ProjectExplorer({ entity, items }) {
   </section>;
 }
 export default function TerritoryPage({ region, city, materials }) {
+  const [atlasCity, setAtlasCity] = useState(null);
+  const showCityOnMap = city => {
+    setAtlasCity({ city });
+    document.getElementById("projects")?.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  };
   const isRegion = !city;
   const r = region || regionById[city.region];
   const entity = city || r;
@@ -145,9 +151,9 @@ export default function TerritoryPage({ region, city, materials }) {
   const items = isRegion ? projects.filter(p => p.region === r.id) : city.projects.map(id => projectById[id]);
   const next = regions[(regions.findIndex(item => item.id===r.id)+1)%regions.length];
   return <div className="territory-template">
-    <div className="ocean-zone"><TerritoryHero entity={entity} region={r} isRegion={isRegion} count={isRegion ? members.length : items.length} /><Territories members={members} initial={city?.id} isRegion={isRegion} /></div>
+    <div className="ocean-zone"><TerritoryHero entity={entity} region={r} isRegion={isRegion} count={isRegion ? members.length : items.length} /><Territories members={members} initial={city?.id} isRegion={isRegion} onShowMap={isRegion ? showCityOnMap : undefined} /></div>
     <Mission entity={entity} region={r} isRegion={isRegion} items={items} />
-    <ProjectExplorer entity={entity} items={items} />
+    {isRegion ? <RegionalAtlas region={r} focusCity={atlasCity} /> : <ProjectExplorer entity={entity} items={items} />}
     {materials && <section className="territory-materials shell" id="materials"><details><summary><span><span className="section-kicker">Материалы мастер-плана</span><strong>Схемы и визуализации</strong></span><Icon name="plus" size={30} /></summary><div className="portal territory-materials-content">{materials}</div></details></section>}
     <section className="region-next"><div className="shell"><span className="section-kicker">Продолжить путешествие</span><a href={siteHref(regionPath(isRegion ? next : r))}><span>{isRegion ? next.name : r.name}</span><Icon name="arrow" hoverName="right" size={60} /></a><span>{isRegion ? "Следующий регион" : "Все города региона"}</span></div></section>
     <Motion />

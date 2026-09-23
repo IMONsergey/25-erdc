@@ -18,6 +18,29 @@ assert.equal(c.regions.length, 11);
 assert.equal(c.cities.length, 23);
 assert.equal(news.length, 165);
 assert.equal(c.quarter.projects.length, 7);
+const atlasIndex = JSON.parse(await readFile("src/content/atlas-regions.json", "utf8"));
+const atlasIds = new Set();
+for (const region of c.regions) {
+  const atlas = JSON.parse(await readFile(`dist/content/atlas/${region.id}.json`, "utf8"));
+  assert.equal(atlas.region, region.id);
+  assert.equal(atlas.objects.length, atlasIndex[region.id].count);
+  const plans = new Set(atlas.plans.map(p => p.id));
+  for (const plan of atlas.plans) {
+    for (const cityId of plan.cityIds) assert.ok(region.cities.includes(cityId), `${region.id}: wrong city's map`);
+  }
+  for (const object of atlas.objects) {
+    assert.ok(plans.has(object.planId));
+    assert.ok(!atlasIds.has(object.id), `Object assigned to multiple regions: ${object.id}`);
+    atlasIds.add(object.id);
+    if (object.coordinates) {
+      assert.ok(object.coordinates.length === 2 && object.coordinates.every(Number.isFinite));
+      assert.ok(object.coordinates[0] >= -180 && object.coordinates[0] <= 180 && object.coordinates[1] >= -85 && object.coordinates[1] <= 85, "Invalid geographic coordinate");
+    }
+    if (object.projectId) assert.ok(c.projects.some(p => p.id === object.projectId && p.region === region.id));
+  }
+}
+assert.equal(atlasIds.size, 1753, "Regional atlas records lost");
+await access("dist/content/atlas/land.json");
 const yards = c.projects.filter(
   (p) => p.region === "primkrai" && p.title === "1000 Дворов",
 );
