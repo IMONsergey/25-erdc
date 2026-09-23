@@ -53,7 +53,16 @@
         <option value="">Главная</option>
         <option value="primorye/">Приморье</option>
         <option value="buryatia/">Бурятия</option>
-        <option value="vladivostok/">Владивосток</option></select
+        <option value="vladivostok/">Владивосток</option>
+        <option value="regions/">Все регионы</option>
+        <option value="khabkrai/">Хабаровский край</option>
+        <option value="cities/ulan-ude/">Улан-Удэ</option>
+        <option value="primorye/subsidy/">Субсидия</option>
+        <option value="projects/">Проекты</option>
+        <option value="news/">Новости</option>
+        <option value="dvkvartal/">ДВ Квартал</option>
+        <option value="map/">Карта</option>
+        <option value="about/">О проекте</option></select
       ><label for="size">Размер экрана</label
       ><select id="size">
         <option value="390,844">Телефон 390 × 844</option>
@@ -77,7 +86,7 @@
         frame = document.getElementById("preview");
       const page = document.getElementById("page");
       const requested = new URLSearchParams(location.search).get("page");
-      if (["primorye", "buryatia", "vladivostok"].includes(requested))
+      if ([...page.options].some((o) => o.value === requested + "/"))
         page.value = requested + "/";
       const navigate = () => {
         frame.src = frame.dataset.root + page.value + "?qa=" + Date.now();

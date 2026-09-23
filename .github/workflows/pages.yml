@@ -48,6 +48,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Cache original portal imagery
+        uses: actions/cache@v4
+        with:
+          path: assets/source
+          key: portal-media-${{ hashFiles('src/content/media.json') }}
+          restore-keys: portal-media-
+
+      - name: Preserve original portal imagery
+        run: |
+          python -m pip install Pillow
+          python scripts/fetch-portal-assets.py
+
       - name: Build React site
         run: npm run build
 
@@ -73,7 +85,7 @@ jobs:
             ready=true
             if curl --fail --location --silent --show-error "${PAGE_URL}" --output /tmp/page.html; then
               grep --quiet "25 городов" /tmp/page.html || ready=false
-              for page in primorye buryatia vladivostok; do
+              for page in primorye buryatia vladivostok khabkrai kamchatka yakutia chukot zabaikal amurskaya sakhalin eao magadan regions projects news dvkvartal map cities/ulan-ude; do
                 curl --fail --location --silent --show-error "${PAGE_URL}${page}/" --output /dev/null || ready=false
               done
               curl --fail --location --silent --show-error "${PAGE_URL}assets/home-hero.webp" --output /dev/null || ready=false
