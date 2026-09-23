@@ -1,0 +1,21 @@
+/* One outer content grid, using the restored Vladivostok page as the reference. */
+:root {
+  --shell: 1720px;
+  --gutter: clamp(20px, 2.5vw, 48px);
+}
+.shell,
+.p-shell {
+  width: min(var(--shell), calc(100% - var(--gutter) * 2));
+  max-width: var(--shell);
+  margin-inline: auto;
+}
+.p-header {
+  padding-inline: max(var(--gutter), calc((100% - var(--shell)) / 2));
+}
+.p-city-subnav .p-shell {
+  width: min(var(--shell), calc(100% - var(--gutter) * 2));
+  padding-inline: 0;
+}
+@media (max-width: 700px) {
+  :root { --gutter: 20px; }
+}

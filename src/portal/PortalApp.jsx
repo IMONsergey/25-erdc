@@ -29,7 +29,6 @@ import { asset } from "../data.js";
 import { selectedProjects } from "../selectedProjects.js";
 import { NewsProvider, NewsLink } from "./NewsModal.jsx";
 import { useQueryState, ShareButton, BackToTop } from "./interactions.jsx";
-import VladivostokPage from "../pages/VladivostokPage.jsx";
 import TerritoryPage from "../pages/TerritoryPage.jsx";
 import {
   regions,
@@ -1770,6 +1769,12 @@ function NotFound() {
     </>
   );
 }
+function HistoricalVladivostok() {
+  useEffect(() => {
+    location.replace(siteHref("vladivostok", location.search + location.hash));
+  }, []);
+  return <a href={siteHref("vladivostok", location.search + location.hash)}>Агломерация Владивосток</a>;
+}
 export function PortalRoute({requestedPath=currentPath}={}) {
   let path = requestedPath;
   const aliases = {
@@ -1788,7 +1793,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   path = aliases[path] || path;
   const [first, second, third] = path.split("/");
   const region = regions.find((r) => regionPath(r) === first || r.id === first);
-  if (!path) return legacyVladivostok ? <VladivostokPage /> : <Home />;
+  if (!path) return legacyVladivostok ? <HistoricalVladivostok /> : <Home />;
   if (path === "regions") return <RegionsPage />;
   if (path === "about") return <AboutPage />;
   if (path === "sitemap") return <Sitemap />;
@@ -1810,7 +1815,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
         <ApprovedProjectPage id={third} />
       </Suspense>
     );
-  if (path === "vladivostok" || path === "cities/vladivostok") return <VladivostokPage />;
+  if (path === "vladivostok" || path === "cities/vladivostok") return <HistoricalVladivostok />;
   if (first === "cities" && cityById[second])
     return <TerritoryPage city={cityById[second]} materials={<CityMaterials city={cityById[second]} />} />;
   if (region) {

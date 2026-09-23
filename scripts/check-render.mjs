@@ -5,6 +5,14 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 const approved = JSON.parse(await readFile("docs/approved-vladivostok.json", "utf8"));
+const historical = JSON.parse(await readFile("docs/vladivostok-20260922-1500.json", "utf8"));
+for (const [path, entry] of Object.entries(historical.files)) {
+  assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), entry.sha256, `Historical page changed: ${path}`);
+}
+for (const [path, hash] of Object.entries(historical.assets)) {
+  assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), hash, `Historical asset changed: ${path}`);
+}
+assert.equal(createHash("sha256").update(await readFile("vladivostok/index.html")).digest("hex"), historical.entrySha256);
 for (const [path, hash] of Object.entries(approved.sha256)) {
   assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), hash, `Approved Vladivostok file changed: ${path}`);
 }
@@ -23,6 +31,7 @@ try {
   const { default: App, PortalRoute } = await server.ssrLoadModule(
     "/src/portal/PortalApp.jsx",
   );
+  const { default: HistoricalVladivostok } = await server.ssrLoadModule("/src/vladivostok-20260922/App.jsx");
   const markup = renderToString(createElement(App));
   assert.ok(markup.includes("Новый облик"));
   assert.ok(markup.includes("Дальнего Востока"));
@@ -46,8 +55,11 @@ try {
   for (const entity of [...catalog.regions, ...catalog.cities]) {
     const isRegion = catalog.regions.includes(entity);
     const path = isRegion ? (entity.id === "primkrai" ? "primorye" : entity.id) : (entity.id === "vladivostok" ? "vladivostok" : `cities/${entity.id}`);
-    const page = renderToString(createElement(PortalRoute, { requestedPath: path }));
-    assert.ok(!unwanted.test(page), `${path}: production notes remain`);
+    const page = renderToString(entity.id === "vladivostok"
+      ? createElement(HistoricalVladivostok)
+      : createElement(PortalRoute, { requestedPath: path }));
+    // Vladivostok is now an exact historical restore, including its original copy.
+    if (entity.id !== "vladivostok") assert.ok(!unwanted.test(page), `${path}: production notes remain`);
     for (const id of ["hero-title", "regions", "mission", "projects"]) {
       assert.ok(page.includes(`id="${id}"`), `${path}: missing approved section ${id}`);
     }
@@ -57,11 +69,13 @@ try {
       assert.equal((page.match(/class="atlas-marker /g) || []).length, 27);
       assert.ok(page.includes("hero-page12.webp"));
       assert.ok(!page.includes("source-projects"));
+      assert.ok(page.includes("Изучить мастер-план"));
+      assert.ok(page.includes('class="site-footer"'));
     } else {
       assert.ok(!page.includes('atlas-vladivostok.webp'), `${path}: foreign atlas`);
     }
   }
-  console.log("Approved content hashes and all 34 region/city layouts passed.");
+  console.log("Complete historical Vladivostok (17 sources, 78 assets) and all 34 region/city layouts passed.");
   console.log(
     "Server render passed: home, shared navigation, region cards, project and news cards, icons and footer.",
   );

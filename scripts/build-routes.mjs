@@ -84,6 +84,9 @@ const esc = (s) =>
     .replaceAll('"', "&quot;");
 const base = "https://imonsergey.github.io/25-erdc/";
 for (const r of routes) {
+  // This entry is the complete historical application, built separately by Vite.
+  // Replacing it with the portal template loses its original CSS and page shell.
+  if (r.path === "vladivostok") continue;
   const file = r.path.endsWith(".html")
     ? `dist/${r.path}`
     : `dist/${r.path ? r.path + "/" : ""}index.html`;
@@ -121,6 +124,10 @@ for (const r of routes) {
       `<div id="root"></div><noscript><main><h1>${esc(r.title)}</h1><p>Для работы карты и фильтров включите JavaScript.</p><a href="${prefix}">Главная</a> · <a href="${prefix}regions/">Регионы</a> · <a href="${prefix}projects/">Проекты</a> · <a href="${prefix}news/">Новости</a></main></noscript>`,
     );
   if (r.redirect) h = h.replace("</head>", `<meta http-equiv="refresh" content="0;url=${esc(canonical)}" /></head>`);
+  if (r.canonical === "vladivostok") {
+    const target = `${prefix}vladivostok/`;
+    h = `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Агломерация Владивосток — 25 городов</title><link rel="canonical" href="${canonical}"><script>location.replace(${JSON.stringify(target)} + location.search + location.hash)</script><noscript><meta http-equiv="refresh" content="0;url=${target}"></noscript></head><body><a href="${target}">Агломерация Владивосток</a></body></html>`;
+  }
   await mkdir(file.slice(0, file.lastIndexOf("/")), { recursive: true });
   await writeFile(file, h);
 }

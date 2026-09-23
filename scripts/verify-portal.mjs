@@ -77,6 +77,16 @@ for (const r of routes) {
 }
 const approved = (await import("../src/selectedProjects.js")).selectedProjects;
 assert.equal(approved.length, 27, "Approved Vladivostok atlas changed");
+const historicalHtml = await readFile("dist/vladivostok/index.html", "utf8");
+assert.ok(historicalHtml.includes("Агломерация Владивосток — 25 городов"));
+const historicalStyles = [...historicalHtml.matchAll(/href="([^"]+\.css)"/g)];
+assert.ok(historicalStyles.length, "Historical page stylesheet missing");
+for (const [, href] of historicalStyles) {
+  const css = await readFile(path.resolve("dist/vladivostok", href), "utf8");
+  assert.ok(!css.includes(".p-shell"), "Portal CSS leaked into the historical page");
+  assert.ok(!css.includes(".territory-template"), "Generic territory CSS leaked into the historical page");
+}
+assert.ok(historicalHtml.includes("vladivostok-"), "Build routes replaced the dedicated historical entry");
 console.log(
   `Verified ${routes.length} routes, ${c.projects.length} source projects, 27 approved atlas projects, ${news.length} complete articles and ${Object.keys(media).length} local source images.`,
 );

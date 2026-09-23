@@ -1,19 +1,13 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./portal/PortalApp.jsx";
-import "./styles.css";
-import "./refinements.css";
-import "./pages.css";
-import "./portal/portal.css";
-
-const rootElement = document.getElementById("root");
-
-createRoot(rootElement).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
-
-import "./pages/territories.css";
-
-import "./portal/interactions.css";
+// Keep old shared links on the exact historical application before loading portal CSS.
+const path = location.pathname;
+const oldRootLink = new URLSearchParams(location.search).get("v")?.startsWith("20260922");
+const cityAlias = /\/cities\/vladivostok\/(?:index\.html)?$/.test(path);
+if (cityAlias || (oldRootLink && !/\/vladivostok\//.test(path))) {
+  const base = import.meta.env.DEV ? "/" : document.querySelector('meta[name="app-base"]')?.content || "./";
+  const target = new URL("vladivostok/", new URL(base, document.baseURI));
+  target.search = location.search;
+  target.hash = location.hash;
+  location.replace(target.href);
+} else {
+  import("./portal-entry.jsx");
+}

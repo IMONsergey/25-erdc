@@ -1,0 +1,176 @@
+{
+  "revision": "5203d67dd8ac8da6520f3f80ecfdb091e2418b53",
+  "requestedMoscowTime": "2026-09-22T15:00:00+03:00",
+  "deployedAt": "2026-09-22T14:57:29+03:00",
+  "deploymentRun": 35724312094,
+  "route": "vladivostok/",
+  "notes": "Complete application and styles from the last successful publication before 15:00 Moscow. Only asset URL resolution and HTML entry paths adapt the original root page to /vladivostok/. No portal CSS or shared portal layout is loaded.",
+  "files": {
+    "src/vladivostok-20260922/App.jsx": {
+      "source": "src/App.jsx",
+      "originalSha256": "15f8b1bb413f35210d9757827065efa57cd8c8b32098f693813e056f40656de3",
+      "sha256": "15f8b1bb413f35210d9757827065efa57cd8c8b32098f693813e056f40656de3"
+    },
+    "src/vladivostok-20260922/atlasCamera.js": {
+      "source": "src/atlasCamera.js",
+      "originalSha256": "5ba186484c7c7b6fdbb1c5f7a1fe740618b82380443ee86ce078a610137ffbc7",
+      "sha256": "5ba186484c7c7b6fdbb1c5f7a1fe740618b82380443ee86ce078a610137ffbc7"
+    },
+    "src/vladivostok-20260922/components/Header.jsx": {
+      "source": "src/components/Header.jsx",
+      "originalSha256": "cc0a2dcd5672c8eb9ee1f75fb13b217a1d51a3c7d5f2992dbd9f95d47230e83b",
+      "sha256": "cc0a2dcd5672c8eb9ee1f75fb13b217a1d51a3c7d5f2992dbd9f95d47230e83b"
+    },
+    "src/vladivostok-20260922/components/Hero.jsx": {
+      "source": "src/components/Hero.jsx",
+      "originalSha256": "4d0e49d6ecf9d0b0c0730029265db2a3d60979b1868dc6bbc878949a61793e30",
+      "sha256": "4d0e49d6ecf9d0b0c0730029265db2a3d60979b1868dc6bbc878949a61793e30"
+    },
+    "src/vladivostok-20260922/components/Icon.jsx": {
+      "source": "src/components/Icon.jsx",
+      "originalSha256": "28cc13f8dd66e39b86d80c560ba991eab90db37ff18a015fdce2f5b51e823e23",
+      "sha256": "28cc13f8dd66e39b86d80c560ba991eab90db37ff18a015fdce2f5b51e823e23"
+    },
+    "src/vladivostok-20260922/components/Mission.jsx": {
+      "source": "src/components/Mission.jsx",
+      "originalSha256": "718c9e7e75ed0fd4ef7730f34888d56901fce9f1200d22ba4c6b2677b90acfa5",
+      "sha256": "718c9e7e75ed0fd4ef7730f34888d56901fce9f1200d22ba4c6b2677b90acfa5"
+    },
+    "src/vladivostok-20260922/components/Motion.jsx": {
+      "source": "src/components/Motion.jsx",
+      "originalSha256": "dc1e6e2890aeb8e7ad98c172cc07836399ed083727b264b1b0d73688fe523039",
+      "sha256": "dc1e6e2890aeb8e7ad98c172cc07836399ed083727b264b1b0d73688fe523039"
+    },
+    "src/vladivostok-20260922/components/ProjectDetail.jsx": {
+      "source": "src/components/ProjectDetail.jsx",
+      "originalSha256": "19bba18491c1c2b507628dc85978f40dd30c67adaba4b1a820c2230edee29340",
+      "sha256": "19bba18491c1c2b507628dc85978f40dd30c67adaba4b1a820c2230edee29340"
+    },
+    "src/vladivostok-20260922/components/Projects.jsx": {
+      "source": "src/components/Projects.jsx",
+      "originalSha256": "52ff950b92824509ecb176c514cc0d4f61ea7f9c83ecef5246f8e63b3dd4002e",
+      "sha256": "52ff950b92824509ecb176c514cc0d4f61ea7f9c83ecef5246f8e63b3dd4002e"
+    },
+    "src/vladivostok-20260922/components/Regions.jsx": {
+      "source": "src/components/Regions.jsx",
+      "originalSha256": "eef63aec1be617a8f45a4d336360d9b0e9a501205887f77e4a172a10ee1f6e75",
+      "sha256": "eef63aec1be617a8f45a4d336360d9b0e9a501205887f77e4a172a10ee1f6e75"
+    },
+    "src/vladivostok-20260922/data.js": {
+      "source": "src/data.js",
+      "originalSha256": "cf7dd029995ae50e6ecbd7d9fa256c3a8438bccd8bfc15ce8a1992e2e5736f12",
+      "sha256": "fe5e94c60a41960dc89d6174ffa201c0b341ad1348679aca9e8a8b3873b8f66f"
+    },
+    "src/vladivostok-20260922/main.jsx": {
+      "source": "src/main.jsx",
+      "originalSha256": "be7fa5b96cef1a9140bce81d728b1b3fa8806dcd8404e632df83b5fd2d22255d",
+      "sha256": "be7fa5b96cef1a9140bce81d728b1b3fa8806dcd8404e632df83b5fd2d22255d"
+    },
+    "src/vladivostok-20260922/projectDetails.js": {
+      "source": "src/projectDetails.js",
+      "originalSha256": "7af0e01709610a62711ede6e767d6f8ec5c79e82eb47ef9d5633ecd9d7fe7b79",
+      "sha256": "7af0e01709610a62711ede6e767d6f8ec5c79e82eb47ef9d5633ecd9d7fe7b79"
+    },
+    "src/vladivostok-20260922/refinements.css": {
+      "source": "src/refinements.css",
+      "originalSha256": "17d8e71c9c1551439310cbdc0053cee5c991b06ce0e75cbda5e6f88d8c1914c6",
+      "sha256": "17d8e71c9c1551439310cbdc0053cee5c991b06ce0e75cbda5e6f88d8c1914c6"
+    },
+    "src/vladivostok-20260922/selectedProjects.js": {
+      "source": "src/selectedProjects.js",
+      "originalSha256": "4e1939ab617fa881eff31827503335f9cfe32b46cafc33bd433356964747f47f",
+      "sha256": "4e1939ab617fa881eff31827503335f9cfe32b46cafc33bd433356964747f47f"
+    },
+    "src/vladivostok-20260922/styles.css": {
+      "source": "src/styles.css",
+      "originalSha256": "e3833a8727e78a7fad4b0a865f0a777224737fba6252de416e1ea5fb64e10c05",
+      "sha256": "e3833a8727e78a7fad4b0a865f0a777224737fba6252de416e1ea5fb64e10c05"
+    },
+    "src/vladivostok-20260922/typograph.js": {
+      "source": "src/typograph.js",
+      "originalSha256": "fc8c36f2996a8ff1ace851d63a50b8d262c93ebf783fb41eb8cdb0688b159f99",
+      "sha256": "fc8c36f2996a8ff1ace851d63a50b8d262c93ebf783fb41eb8cdb0688b159f99"
+    }
+  },
+  "assets": {
+    "assets/.webp-v2": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "assets/atlas-vladivostok.webp": "996e68568bb44eb0887aacbc57fd034f5f1a6229f21e2de9e6bb09bf47fb127d",
+    "assets/background-mask.svg": "335bd7d05d9a76d2185c41a7b55c99b33b859b99f5fee340e9d330c297d32824",
+    "assets/city-artem.webp": "2f0dcc8da012a4a1dba768e3b83c5dfb66302d60559d211f88b7136419e17c4e",
+    "assets/city-bolshoy-kamen.webp": "25053447558e70ca387c2a291a702f3f5fd42184d012014e03c67d9f828e3cff",
+    "assets/city-lineart-artem.webp": "d3f5c76b11c3826953c43867d3042a3c52ecf27bd6d7b8c8834945f5630f9d02",
+    "assets/city-lineart-bolshoy-kamen.webp": "dce1e3e849fea0881b7d8a077b6a4a0f98763d16e1256eed00312205d5b2bbf1",
+    "assets/city-lineart-vladivostok.webp": "36942369d3a8a20fbe5c04f884fd647b8195ecb6dcf50cd8e17278765c726665",
+    "assets/city-vladivostok.webp": "fbe01537d977c89bebeb7d109ef00bfd695cf503bfc74028fb031b91473af1e4",
+    "assets/concept-beach.webp": "c5be9c13dc036a901f74b097c22837c10e9f7f0328bf2d5d3d897b8c666b5617",
+    "assets/concept-bridge.webp": "7f57c35b9f4968692e73bf2180b86346f7d7ba9434db566c047cc0492ab5838f",
+    "assets/concept-citysport.webp": "8d51811752af1c00c68991f68bb3f0e27e56e0c582da8ae14c5c14dac256b3ed",
+    "assets/concept-cycling.webp": "ce2231f39fa7692158b3fe01b3fb079c2a16b26f5de4e8715eac7dc46b2e8f85",
+    "assets/concept-energy.webp": "9a9b1e741f96126bd48b97899ee0cea285446e2329016cf22c12ead56beaa5a0",
+    "assets/concept-health.webp": "a385ee2c204412939e5b21de291960e075e4f0635731f64a6d41356117f3138a",
+    "assets/concept-heat.webp": "85fcb94bca862e30934891c084f140d3e1734f8e656c7608b43380bf8e86d25f",
+    "assets/concept-heritage.webp": "6b014bcd018de38060a4cbd3a18b74f4e49261d13f3ed2199d44476926961f80",
+    "assets/concept-heritagefort.webp": "11e8804653c1dcff75931003c8b94f9ab84e189436409a532b74e550a62665b4",
+    "assets/concept-innovation.webp": "82239d9ef37ea9575104f06b329c7453982f00aea08d3650e76d64d33c5a8b47",
+    "assets/concept-logistics.webp": "0abba6773fff7de3c0fe5fbf0858329926f9084fd96c86895b6d1732ad2173a4",
+    "assets/concept-mobility.webp": "ba916cb98e00d807d364e920a7fe6134491785be5a9d547d1e99264bb936ebff",
+    "assets/concept-park.webp": "62e9f28b48d34a1c514f2fd17510071c58891705528492b09b3c3955d6a3639b",
+    "assets/concept-pier.webp": "f8ac55e12dc13776d92fb60d025ae3e3b61571ef6db70c40feda84de730cc815",
+    "assets/concept-recycling.webp": "0bd6115ca043a2ef2f6bc61ae498b19c38f700db00057bbcd112c1b12c1eedc1",
+    "assets/concept-river.webp": "d6682497a32c63b5b3b7aadd791cde5105c00ce6984cf3216dc36bdef7cc31e6",
+    "assets/concept-sport.webp": "729f024d4911f251cfef050a99765012a3b77ae99ab95fb1932ee48bed28a561",
+    "assets/concept-square.webp": "3ce962e32fb2e275d0a34ac5b80a71248d241ce664e35dfb62193a2078755ae7",
+    "assets/concept-water.webp": "d7fd89d01622a89aa150eb8ad8423f701d9fa264714a84c2acb15fdc3b5fb081",
+    "assets/concept-waterfront.webp": "69bbbe17cb0b17268adde9fccb82b2d1d4175ebe0d2fdb3b35e72b953b1a320d",
+    "assets/crest-artem.webp": "c08dc3169c0fe710ae6d2b7283d33fc970d981e325d1e08826f8491bec7c7544",
+    "assets/crest-bolshoy-kamen.webp": "eb80234a49e3aa74df25c0721979b57ac6fe734177e1a7bb5d6a0927b2fd6214",
+    "assets/crest-vladivostok.webp": "bedfdaceb14858298673ed3e72525be1371273b603b355f60f572a12151549d6",
+    "assets/detail-vladivostok.webp": "f85661486f535eff65955fb73ecedfce2b219cddc725396faa43da00382d1f1d",
+    "assets/divider.svg": "d32b4d8aa2e7904cbaa40c9ca05ac219e4a3e7d69489917abd4fd23db61f73c9",
+    "assets/favicon-25.png": "acb20ae824cf8ecd7bcafd11cd90d3ff001bc37b2c979f2bdda0813c41b7831c",
+    "assets/fonts/tiktok-sans-cyrillic.woff2": "e3deeb3a2584c527e14debf8f2f49f9ab0259bcb5eb28448823d7a5d341f776e",
+    "assets/fonts/tiktok-sans-latin.woff2": "20e09f0a631bccb3e848f6f5f18a7fcb09df5a4f7576cc4dc22aa1dad51d9f4a",
+    "assets/hero-mask.svg": "e178b92db70bc481bac5b37d539546fca616c1e74d671eec09d763e66a42b388",
+    "assets/hero-page12.webp": "eb0e2c67e74e006ee117e594570bf35aa998036492f7d0e06ed05a8f615927d8",
+    "assets/hero-vladivostok.webp": "db87592bc90787fccba75003716dc68ec32d15fe962b475f216b08d77e952ed2",
+    "assets/icon-airport.svg": "84a5c7da998ccafd4310bbed1ccffb38c658a23324be73ebc7f11cb6714bfe50",
+    "assets/icon-category-ecology.svg": "987e1e309e2d58c5cf565fb266e290a485958cafdc09737e0a21b4d9bf3ef567",
+    "assets/icon-category-engineering.svg": "29987a7538f1b532ed72a2055fda621076d03c02795be18168628c2b8104c924",
+    "assets/icon-category-health.svg": "0aef49b17f4b33c5314dea16663ae19eccff112fbb290bc6fcc6a66fa730ce33",
+    "assets/icon-category-housing.svg": "958d009215fd820eb994ea34d4580ffe6d920c408e9f759a499a78220df56ba8",
+    "assets/icon-category-social.svg": "c058d715b3cacb07fbd95d28ff71bb2ce7f913a21e2c3e59c580f9c04d137813",
+    "assets/icon-category-sport.svg": "e9402ad597b65732c8e10741d655871540d9f0101305ba4df0b9cda16d740ff4",
+    "assets/icon-category-tourism.svg": "05a350b17a314f4d2755b639e2a2bfdade5acbfb879d08bcc54dc5e738b465a4",
+    "assets/icon-category-transport.svg": "319a5b4331ebb9ee5e7375799ae814a3e803a6afbac01356c275657eebea8cff",
+    "assets/icon-close.svg": "6ed7a942d7bc3b2721e913a6b40c3a8b76f5d2f6a374c008cba469558d5a942b",
+    "assets/icon-global.svg": "eaf36a5a5ffbbf689c58e8cc5f7d17c735e8b9fb17378b5dccc9542475ea255b",
+    "assets/icon-highway.svg": "feb2ea9428f67b368c5f19e17eca1d2cc56e5f090f53003a6613344481a22bf6",
+    "assets/icon-map-drag.svg": "5af76a9289e1e055668996895591387e9ba829d620f693c830d711707d876d38",
+    "assets/icon-mission-city.svg": "7b3d95cd74692400f9b818f0290ab88edd7a11933b2791b0fd22857991c39e67",
+    "assets/icon-mission-globe.svg": "872c87f6a6309f05d8e29bcc8e87f0ee28455a5a071a31095c274c64d90ba665",
+    "assets/icon-mission-industry.svg": "4bbf032a841937c3a81c7566c10fffcd68e402f2f29a7908bc7865b7730666b3",
+    "assets/icon-plus.svg": "bd268960d4712e353bd177195c771f310fabbae0bbc93b4e7b3d896a78809695",
+    "assets/icon-population.svg": "6cb0e183f3194df953b5187c97db0b3f6e3b622063fb144ad08063965a716186",
+    "assets/icon-quality.svg": "7b773c72bcda4c3dfc459d51385d13f7bf7b896b9455bcd5c6469f00fb2eb7b0",
+    "assets/icon-rail.svg": "7353273169185b8e235400e77db52ea1c3bef7ca375eae1127341797fc2d6f4a",
+    "assets/icon-scroll.svg": "a2973ff5d36438b8a9e6dd930d7b7b406e33ad18f553b49aa855263563307fe3",
+    "assets/icon-select-city.svg": "7380f999a3fed201742d5bd06e6a08340aa98635e894bad9ac7af1bda0847079",
+    "assets/logo-25-cities.svg": "657ea1cf841aef6836e7ad0b4e8c66fd99013d364d2a7f5c6736486dd9733784",
+    "assets/map-hint.svg": "c1e2e7d81eb8ca7d11f08fc223d207233e8fad4185ba62b383e3fbded619c730",
+    "assets/mission-atr-port-v1.webp": "8d05537e52633d983d3fef9a60b7cc7bbcdfb7ad395e282b06a8343f90db4f1d",
+    "assets/mission-city.webp": "a6d38c883474704c6c97fab1e3d18e6b9270cd9c5cac0748294d024668eae986",
+    "assets/mission-map.webp": "4a2fcc447542f746dbb4df3aea114ea7083e042178bc85d5eb87796c726a091a",
+    "assets/preloader-vector.svg": "0cfad838c5adbe573c8ab34172b0ae92e11859768ad9753536d1fa868a9b45be",
+    "assets/project-firsova.webp": "2c592b8e068b7774dc15db66ab64ae4a4adcb595bb8ade2adb18f2a9328fed23",
+    "assets/project-kaluzina.webp": "e12124c6805e62ca2c57cb0980eca61cc8e2405ae1a8af0746951aca4e541be4",
+    "assets/project-kungasny-page12.webp": "2f10e6da513e1fe07a420fd4fb6d5d85614013e953c69e5262adba1afc301634",
+    "assets/project-kungasny.webp": "30d4d06df6b72971159d5fafb940e5e8168681dc2c3919eba7c339e970a02755",
+    "assets/project-marker.webp": "6673f165b28315fae7704c5ebb66504c431ddd96c24d0fd36a7611ebb0a886e9",
+    "assets/project-neftebaza.webp": "874547b1d8d31fa7850d746834b04da44215005fd24ab7801d022eb07285a3d8",
+    "assets/project-ulyss.webp": "f5d2b5379b8c784916b0f2396f9c5a64e3df8a812387a04208614d592f035aba",
+    "assets/projects-map.webp": "59d3d9262908bbbdab6bf7dfe38e1586eed51c6f3f6482bf1d24e41b15c778aa",
+    "assets/radio-empty.svg": "c161dd2669ba70dcb74461e73e814e8da7ec8dfb280abc1efd7cfbc8a4790ede",
+    "assets/radio-selected.svg": "350fca1c08719aa645372c99e9e0667a0f0d4374c9ca6889208cc461ef1be500"
+  },
+  "entrySha256": "af29e89ae018afbfa90e5373368485225a963e8d6ac4a371e3843b54ea476d4f"
+}
