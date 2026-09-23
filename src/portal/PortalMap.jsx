@@ -25,6 +25,11 @@ import {
 } from "./icons.jsx";
 import { isupSnapshot } from "../map-lab/isupSnapshot.js";
 import { siteHref } from "../site.js";
+import { cityById, cityPath } from "./data.js";
+import { useQueryState, ShareButton } from "./interactions.jsx";
+import atlasRegions from "../content/atlas-regions.json";
+const planCity = Object.fromEntries(Object.values(atlasRegions).flatMap(r=>r.plans.map(p=>[p.id,p.cityId])));
+const canLocate = o => o.id !== "89c29557-7303-44ae-acef-a9b3e0412455";
 const stageNames = {
   planned: "Запланировано",
   prep: "Подготовка",
@@ -76,11 +81,11 @@ function markStyle(feature) {
   return styles.get(key);
 }
 export default function PortalMap() {
-  const [plan, setPlan] = useState(""),
-    [industry, setIndustry] = useState(""),
-    [stage, setStage] = useState(""),
-    [query, setQuery] = useState(""),
-    [selected, setSelected] = useState(null),
+  const [plan, setPlan] = useQueryState("plan"),
+    [industry, setIndustry] = useQueryState("industry"),
+    [stage, setStage] = useQueryState("stage"),
+    [query, setQuery] = useQueryState("q");
+  const [selected, setSelected] = useState(null),
     [tab, setTab] = useState("map"),
     [limit, setLimit] = useState(45),
     [mapReady, setMapReady] = useState(false),
@@ -106,6 +111,8 @@ export default function PortalMap() {
   );
   const object = valid.find((o) => o.id === selected);
   const plans = isupSnapshot.plans;
+  const activeCity = cityById[planCity[object?.planId || plan]];
+  const masterplanHref = activeCity ? siteHref(cityPath(activeCity), "#projects") : null;
   const stages = [...new Set(valid.map((o) => o.stageId))].filter(Boolean);
   const reset = () => {
     setPlan("");
@@ -120,7 +127,7 @@ export default function PortalMap() {
   const choose = useCallback((id) => {
     setSelected(id);
     const obj = valid.find((o) => o.id === id);
-    if (obj) {
+    if (obj && canLocate(obj)) {
       map.current?.getView().animate({
         center: fromLonLat(obj.coordinates),
         zoom: Math.max(map.current.getView().getZoom(), 13),
@@ -194,7 +201,7 @@ export default function PortalMap() {
     if (!mapReady) return;
     source.current.clear();
     source.current.addFeatures(
-      filtered.map(
+      filtered.filter(canLocate).map(
         (o) =>
           new Feature({
             geometry: new Point(fromLonLat(o.coordinates)),
@@ -217,7 +224,7 @@ export default function PortalMap() {
   useEffect(() => {
     if (!selectionSource.current) return;
     selectionSource.current.clear();
-    if (object)
+    if (object && canLocate(object))
       selectionSource.current.addFeature(
         new Feature({
           geometry: new Point(fromLonLat(object.coordinates)),
@@ -233,8 +240,8 @@ export default function PortalMap() {
           <h1>Карта проектов</h1>
         </div>
         <p>Объекты мастер-планов Дальнего Востока</p>
-        <a href={siteHref("projects")}>
-          Каталог проектов
+        <a href={masterplanHref || siteHref("projects")}>
+          {activeCity ? `Мастер-план: ${activeCity.name}` : "Каталог проектов"}
           <ArrowUpRight size={18} />
         </a>
       </div>
@@ -438,6 +445,8 @@ export default function PortalMap() {
                   </div>
                 )}
               </dl>
+              {masterplanHref && <a className="p-map-plan-link" href={masterplanHref}>Открыть мастер-план<ArrowUpRight size={19}/></a>}
+              <ShareButton label="Поделиться подборкой" />
             </section>
           )}
         </div>

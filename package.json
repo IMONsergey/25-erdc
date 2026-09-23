@@ -8,7 +8,7 @@
     "predev": "npm run prepare:assets",
     "dev": "vite",
     "prebuild": "npm run prepare:assets",
-    "build": "node scripts/check-render.mjs && vite build && node scripts/build-routes.mjs && node scripts/verify-portal.mjs",
+    "build": "node scripts/check-region-lock.mjs && node scripts/check-render.mjs && vite build && node scripts/build-routes.mjs && node scripts/verify-portal.mjs",
     "preview": "vite preview",
     "check:render": "node scripts/check-render.mjs"
   },

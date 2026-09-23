@@ -1,5 +1,58 @@
 import { createElement, forwardRef } from "react";
-import * as nodes from "lucide";
+import {
+  ArrowUpRight as ArrowUpRightNode,
+  ArrowRight as ArrowRightNode,
+  ArrowLeft as ArrowLeftNode,
+  ArrowDown as ArrowDownNode,
+  Search as SearchNode,
+  Menu as MenuNode,
+  X as XNode,
+  Plus as PlusNode,
+  Minus as MinusNode,
+  MapPin as MapPinNode,
+  Map as MapNode,
+  Grid2X2 as Grid2X2Node,
+  Building2 as Building2Node,
+  Trees as TreesNode,
+  School as SchoolNode,
+  ChevronDown as ChevronDownNode,
+  ExternalLink as ExternalLinkNode,
+  SlidersHorizontal as SlidersHorizontalNode,
+  Copy as CopyNode,
+  Check as CheckNode,
+  ZoomIn as ZoomInNode,
+  ChevronLeft as ChevronLeftNode,
+  ChevronRight as ChevronRightNode,
+  RotateCcw as RotateCcwNode,
+  List as ListNode
+} from "lucide";
+const nodes = {
+  ArrowUpRight: ArrowUpRightNode,
+  ArrowRight: ArrowRightNode,
+  ArrowLeft: ArrowLeftNode,
+  ArrowDown: ArrowDownNode,
+  Search: SearchNode,
+  Menu: MenuNode,
+  X: XNode,
+  Plus: PlusNode,
+  Minus: MinusNode,
+  MapPin: MapPinNode,
+  Map: MapNode,
+  Grid2X2: Grid2X2Node,
+  Building2: Building2Node,
+  Trees: TreesNode,
+  School: SchoolNode,
+  ChevronDown: ChevronDownNode,
+  ExternalLink: ExternalLinkNode,
+  SlidersHorizontal: SlidersHorizontalNode,
+  Copy: CopyNode,
+  Check: CheckNode,
+  ZoomIn: ZoomInNode,
+  ChevronLeft: ChevronLeftNode,
+  ChevronRight: ChevronRightNode,
+  RotateCcw: RotateCcwNode,
+  List: ListNode
+};
 // The existing dependency is the framework-neutral Lucide icon-node package.
 // Adapt the official nodes to React without adding a second icon library.
 function icon(name) {

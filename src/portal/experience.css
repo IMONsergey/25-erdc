@@ -1,0 +1,106 @@
+/* General portal improvements. No region, directory or approved atlas selectors. */
+.p-masterplan-finder { display:flex; align-items:center; justify-content:space-between; gap:32px; padding-block:32px; border-bottom:1px solid var(--p-line); }
+.p-finder-copy { display:flex; align-items:center; gap:18px; }
+.p-finder-copy > svg { color:var(--p-blue); flex:none; }
+.p-finder-copy h2 { font-size:23px; letter-spacing:-.025em; }
+.p-finder-copy p { font-size:13px; color:var(--p-muted); margin-top:6px; }
+.p-masterplan-finder form { display:flex; gap:12px; align-items:stretch; }
+.p-masterplan-finder select { min-width:250px; }
+.p-masterplan-finder .p-button { white-space:nowrap; font-size:13px; min-width:160px; }
+.p-masterplan-finder .p-button:disabled { background:#dae5ed !important; color:#536c7d; cursor:default; transform:none; }
+.p-project-catalog,.p-news-catalog-section { padding-top:54px; }
+.p-project-catalog .p-catalog-filters { grid-template-columns:1.25fr 1fr 1fr; }
+.p-news-catalog-section .p-catalog-filters { grid-template-columns:1.4fr 1.2fr .7fr 1fr; }
+.p-catalog-filters .p-search-field { min-height:55px; }
+.p-catalog-filters .p-search-field button { display:grid; place-items:center; min-width:30px; height:32px; color:var(--p-muted); }
+.p-catalog-programs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:26px; }
+.p-catalog-programs button { border:1px solid var(--p-line); border-radius:24px; padding:11px 17px; color:var(--p-muted); background:#fff; font-size:13px; }
+.p-catalog-programs button[aria-pressed="true"] { color:#fff; background:var(--p-ink); border-color:var(--p-ink); }
+.p-catalog-summary { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:18px; margin:0 0 26px; }
+.p-catalog-summary .p-results-count { margin:0; gap:16px; }
+.p-catalog-actions { display:flex; align-items:center; gap:20px; }
+.p-catalog-actions .p-text-link { font-size:13px; gap:8px; }
+.p-view-toggle { display:flex; border:1px solid var(--p-line); padding:4px; gap:4px; border-radius:8px; background:white; }
+.p-view-toggle button { display:grid; place-items:center; width:36px; height:36px; border-radius:4px; color:var(--p-muted); }
+.p-view-toggle button[aria-pressed="true"] { background:#e4eff5; color:var(--p-ink); }
+.p-project-catalog .p-project-noimage { height:85px; }
+.p-project-catalog .p-project-noimage > span { font-size:40px; }
+.p-project-list-view { display:grid; border-top:1px solid var(--p-line); }
+.p-project-list-row { display:grid; grid-template-columns:44px minmax(0,1fr) 200px 20px; align-items:center; gap:24px; padding:23px 12px; border-bottom:1px solid var(--p-line); transition:background .2s; }
+.p-project-list-row:hover { background:#e7eff4; }
+.p-project-list-row > span:first-child { font-size:12px; color:var(--p-muted); }
+.p-project-list-row h3 { font-size:19px; line-height:1.35; font-weight:500; }
+.p-project-list-row small { display:block; font-size:12px; color:var(--p-muted); margin-top:8px; }
+.p-project-list-row > span:nth-last-child(2) { font-size:13px; color:var(--p-muted); text-align:right; }
+.p-catalog-chips { display:flex; flex-wrap:wrap; gap:8px; margin:-6px 0 25px; }
+.p-catalog-chips button { display:flex; align-items:center; gap:9px; font-size:12px; padding:8px 12px; border-radius:25px; background:#e6eef5; color:var(--p-ink); }
+.p-project-atlas-link { margin:26px 0 12px; display:flex; gap:12px; align-items:center; padding:17px 18px; border-radius:9px; background:#e3eff6; color:var(--p-ink); font-size:14px; line-height:1.4; }
+.p-news-catalog-section .p-news-card h3 { font-size:clamp(18px,1.55vw,24px); line-height:1.3; }
+.p-quarter-compare-selects { display:grid; grid-template-columns:1fr 1fr; gap:20px; padding:24px; border-bottom:1px solid var(--p-line); }
+.p-quarter-comparison.p-quarter-comparison-pair table { min-width:0; table-layout:fixed; }
+.p-quarter-comparison-pair th:first-child { width:30%; }
+.p-quarter-comparison-pair td { font-size:15px; }
+.p-quarter-jump { display:none; }
+.p-project-journey { margin:72px 0; }
+.p-project-journey > h2 { margin:20px 0 28px; font-size:clamp(30px,3.5vw,52px); }
+.p-journey-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.p-journey-tabs button { display:flex; align-items:center; gap:14px; min-height:82px; padding:22px; border:1px solid var(--p-line); border-radius:10px; font-size:17px; background:white; text-align:left; }
+.p-journey-tabs button > span { color:var(--p-muted); font-size:12px; margin-right:auto; }
+.p-journey-tabs button[aria-selected="true"] { background:var(--p-ink); color:white; border-color:var(--p-ink); }
+.p-journey-tabs button[aria-selected="true"] > span { color:#b2d9ea; }
+.p-journey-panel { display:flex; align-items:flex-end; gap:36px; padding:36px; margin-top:16px; border-radius:12px; background:#e5eef4; }
+.p-journey-panel h3 { font-size:28px; line-height:1.2; margin-bottom:15px; }
+.p-journey-panel p { font-size:17px; line-height:1.65; max-width:760px; color:var(--p-muted); }
+.p-journey-panel > a { white-space:nowrap; margin-left:auto; }
+.p-map-plan-link { display:flex; align-items:center; gap:10px; margin-top:18px; padding-top:14px; border-top:1px solid var(--p-line); font-size:14px; color:var(--p-blue); }
+@media (max-width:1100px) {
+ .p-masterplan-finder { align-items:flex-start; }
+ .p-finder-copy h2 { font-size:20px; }
+ .p-masterplan-finder form { min-width:48%; }
+ .p-masterplan-finder select { min-width:0; }
+ .p-masterplan-finder form > label { flex:1; }
+ .p-news-catalog-section .p-catalog-filters { grid-template-columns:1fr 1fr; }
+ .p-project-list-row { grid-template-columns:32px minmax(0,1fr) 150px 20px; gap:16px; }
+ .p-journey-tabs button { font-size:15px; padding:18px; }
+}
+@media (max-width:760px) {
+ .p-masterplan-finder { flex-direction:column; gap:20px; padding-block:27px; }
+ .p-masterplan-finder form { width:100%; }
+ .p-masterplan-finder .p-button { min-width:0; padding:15px; }
+ .p-project-catalog,.p-news-catalog-section { padding-top:32px; }
+ .p-project-catalog .p-catalog-filters { grid-template-columns:1fr 1fr; gap:14px; }
+ .p-project-catalog .p-catalog-filters .p-search-field,.p-news-catalog-section .p-catalog-filters .p-search-field { grid-column:1/-1; }
+ .p-news-catalog-section .p-catalog-filters > label:nth-child(2) { grid-column:1/-1; }
+ .p-catalog-programs { flex-wrap:nowrap; overflow-x:auto; margin-inline:calc(-1*var(--gutter)); padding-inline:var(--gutter); padding-bottom:6px; scrollbar-width:thin; }
+ .p-catalog-programs button { flex:none; font-size:12px; }
+ .p-catalog-summary { gap:12px; }
+ .p-catalog-actions { width:100%; justify-content:space-between; }
+ .p-project-list-row { grid-template-columns:23px minmax(0,1fr) 16px; gap:12px; padding:20px 0; }
+ .p-project-list-row h3 { font-size:16px; }
+ .p-project-list-row > span:nth-last-child(2) { display:none; }
+ .p-project-catalog .p-project-grid { gap:20px; }
+ .p-project-catalog .p-project-body { padding:22px; }
+ .p-quarter-jump { display:flex; position:sticky; top:74px; z-index:15; margin-bottom:22px; background:#f3f6f9; padding:10px 0; box-shadow:0 8px 12px #f3f6f9; }
+ .p-quarter-jump > label { width:100%; }
+ .p-quarter-jump select { width:100%; }
+ .p-quarter-layout .p-quarter-nav { display:none; }
+ .p-quarter-compare-selects { padding:18px; gap:16px; grid-template-columns:1fr; }
+ .p-quarter-comparison-pair table { font-size:11px; }
+ .p-quarter-comparison-pair th,.p-quarter-comparison-pair td { padding:13px 9px; overflow-wrap:anywhere; }
+ .p-quarter-comparison-pair td { font-size:12px; }
+ .p-quarter-comparison-pair th:first-child { position:static; width:32%; }
+ .p-project-journey { margin:48px 0; }
+ .p-journey-tabs { gap:7px; }
+ .p-journey-tabs button { flex-direction:column; padding:16px 6px; font-size:12px; gap:9px; }
+ .p-journey-tabs button > span { margin:0; }
+ .p-journey-panel { padding:24px; flex-direction:column; align-items:flex-start; gap:23px; }
+ .p-journey-panel h3 { font-size:24px; }
+ .p-journey-panel p { font-size:15px; }
+ .p-journey-panel > a { margin-left:0; }
+}
+@media (max-width:380px) {
+ .p-masterplan-finder form { flex-direction:column; }
+ .p-project-catalog .p-catalog-filters { grid-template-columns:1fr; }
+ .p-quarter-comparison-pair td { font-size:11px; }
+}
+@media (prefers-reduced-motion:reduce) { .p-project-list-row { transition:none; } }

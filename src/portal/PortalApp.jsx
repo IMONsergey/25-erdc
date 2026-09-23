@@ -12,6 +12,7 @@ import {
   MapPin,
   Map as MapIcon,
   Grid2X2,
+  List,
   Building2,
   Trees,
   School,
@@ -29,6 +30,8 @@ import { asset } from "../data.js";
 import { selectedProjects } from "../selectedProjects.js";
 import { NewsProvider, NewsLink } from "./NewsModal.jsx";
 import { useQueryState, ShareButton, BackToTop } from "./interactions.jsx";
+import { MasterplanFinder, ProjectJourney } from "./Experience.jsx";
+import { filterNews } from "./news-filter.js";
 import TerritoryPage from "../pages/TerritoryPage.jsx";
 import VladivostokPage from "../pages/VladivostokPage.jsx";
 import {
@@ -182,6 +185,7 @@ function DocError() {
 function Header() {
   const vladivostok = legacyVladivostok || ["vladivostok", "cities/vladivostok"].includes(currentPath);
   const regionalMap = regions.some(r => regionPath(r) === currentPath);
+  const cityMap = currentPath.startsWith("cities/");
   useEffect(() => {
     const shortcut = e => {
       if (e.key === "/" && !e.metaKey && !e.ctrlKey && !document.querySelector("dialog[open]") && !["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName) && !e.target.isContentEditable) { e.preventDefault(); setSearch(true); setOpen(false); }
@@ -293,9 +297,9 @@ function Header() {
           <a href={siteHref("dvkvartal")}>ДВ Квартал</a>
           <a href={siteHref("news")}>Новости</a>
         </nav>
-        <a className="p-header-map" href={vladivostok || regionalMap ? "#projects" : siteHref("map")}>
+        <a className="p-header-map" href={vladivostok || regionalMap || cityMap ? "#projects" : siteHref("map")}>
           <MapIcon size={17} />
-          {vladivostok ? "Атлас Владивостока" : regionalMap ? "Карта региона" : "Карта проектов"}
+          {vladivostok ? "Атлас Владивостока" : regionalMap ? "Карта региона" : cityMap ? "Карта мастер-плана" : "Карта проектов"}
         </a>
         <button
           ref={searchTrigger}
@@ -561,10 +565,11 @@ function ProjectCard({ project: p, index = 0 }) {
     </a>
   );
 }
-function NewsCard({ post: n, featured = false }) {
+function NewsCard({ post: n, featured = false, collection }) {
   return (
     <NewsLink
       post={n}
+      collection={collection}
       className={`p-news-card ${featured ? "p-news-featured" : ""}`}
     >
       <div className="p-news-image">
@@ -649,6 +654,7 @@ function Home() {
         </div>
       </section>
       <nav className="p-home-jumps" aria-label="Разделы главной страницы">{[["about","О проекте"],["regions","Регионы"],["projects","Проекты"],["quarter","ДВ Квартал"],["news","Новости"]].map(([id,label]) => <a href={`#${id}`} key={id}>{label}<ArrowDown size={14} /></a>)}</nav>
+      <MasterplanFinder />
       <section className="p-home-intro p-shell" id="about">
         <div className="p-intro-side">
           <Eyebrow number="01">О проекте</Eyebrow>
@@ -1174,110 +1180,30 @@ function Empty({ onReset }) {
   );
 }
 function ProjectsPage() {
-  const [query, setQ] = useQueryState("q"), [region, setR] = useQueryState("region"), [program, setP] = useQueryState("program"), [pageValue, setPage] = useQueryState("page", "1");
-
-  const filtered = useMemo(
-    () =>
-      projects.filter(
-        (p) =>
-          (!region || p.region === region) &&
-          (!program || p.program === program) &&
-          normalize(
-            p.title + " " + (cityById[p.city]?.name || p.place),
-          ).includes(normalize(query)),
-      ),
-    [query, region, program],
-  );
-
-  const page = Math.min(Math.max(1, Math.ceil(filtered.length / 18)), Math.max(1, Number.parseInt(pageValue, 10) || 1));
-  const reset = () => {
-    setQ("");
-    setR("");
-    setP(""); setPage(1);
-  };
-  return (
-    <>
-      <PageHero
-        title={
-          <>
-            Проекты,
-            <br />
-            <em>которые меняют города.</em>
-          </>
-        }
-        eyebrow="Каталог развития"
-        crumbs={[["Все проекты"]]}
-        compact
-      />
-      <section className="p-shell p-section" id="project-results">
-        <div className="p-catalog-filters">
-          <label className="p-search-field">
-            <Search size={20} />
-            <input
-              value={query}
-              onChange={(e) => { setQ(e.target.value); setPage(1); }}
-              placeholder="Название проекта или город"
-              aria-label="Поиск проектов"
-            />
-          </label>
-          <label className="p-select-field">
-            Регион
-            <select value={region} onChange={(e) => { setR(e.target.value); setPage(1); }}>
-              <option value="">Все регионы</option>
-              {regions.map((r) => (
-                <option value={r.id} key={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="p-select-field">
-            Программа
-            <select value={program} onChange={(e) => { setP(e.target.value); setPage(1); }}>
-              <option value="">Все программы</option>
-              {Object.entries(programNames).map(([id, n]) => (
-                <option value={id} key={id}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="p-results-count" aria-live="polite">
-          Найдено: {filtered.length}
-          <button onClick={reset} disabled={!query && !region && !program}>
-            Сбросить фильтры
-            <X size={16} />
-          </button>
-        </div>
-        {filtered.length ? (
-          <>
-            <div className="p-project-grid">
-              {filtered.slice((page - 1) * 18, page * 18).map((p, i) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  index={(page - 1) * 18 + i}
-                />
-              ))}
-            </div>
-            <Pagination
-              page={page}
-              count={Math.ceil(filtered.length / 18)}
-              onChange={(p) => {
-                setPage(p);
-                document
-                  .getElementById("project-results")
-                  .scrollIntoView({ behavior: "instant" });
-              }}
-            />
-          </>
-        ) : (
-          <Empty onReset={reset} />
-        )}
-      </section>
-    </>
-  );
+  const [query,setQ]=useQueryState("q"),[region,setR]=useQueryState("region"),[city,setCity]=useQueryState("city"),[program,setP]=useQueryState("program"),[pageValue,setPage]=useQueryState("page","1"),[view,setView]=useQueryState("view","cards");
+  const filtered=useMemo(()=>projects.filter(p=>(!region||p.region===region)&&(!city||p.city===city)&&(!program||p.program===program)&&normalize(p.title+" "+(cityById[p.city]?.name||p.place)).includes(normalize(query.trim()))).sort((a,b)=>Number(b.program==="masterplan")-Number(a.program==="masterplan")||Number(Boolean(b.images.length))-Number(Boolean(a.images.length))),[query,region,city,program]);
+  const page=Math.min(Math.max(1,Math.ceil(filtered.length/18)),Math.max(1,Number.parseInt(pageValue,10)||1));
+  const change=(setter,value)=>{setter(value);setPage(1);};
+  const reset=()=>{setQ("");setR("");setCity("");setP("");setPage(1);};
+  const cityOptions=cities.filter(c=>!region||c.region===region);
+  const chips=[[query,()=>change(setQ,"")],[regionById[region]?.name,()=>{change(setR,"");setCity("");}],[cityById[city]?.name,()=>change(setCity,"")]].filter(([label])=>label);
+  return <>
+    <PageHero title={<>Проекты,<br/><em>которые меняют города.</em></>} eyebrow="Каталог развития" crumbs={[["Все проекты"]]} compact/>
+    <section className="p-shell p-section p-project-catalog" id="project-results">
+      <div className="p-catalog-filters">
+        <label className="p-search-field"><Search size={20}/><input value={query} onChange={e=>change(setQ,e.target.value)} placeholder="Название проекта или город" aria-label="Поиск проектов"/>{query&&<button aria-label="Очистить поиск проектов" onClick={()=>change(setQ,"")}><X size={18}/></button>}</label>
+        <label className="p-select-field">Регион<select value={region} onChange={e=>{change(setR,e.target.value);setCity("");}}><option value="">Все регионы</option>{regions.map(r=><option value={r.id} key={r.id}>{r.name}</option>)}</select></label>
+        <label className="p-select-field">Город<select value={city} onChange={e=>{change(setCity,e.target.value);}}><option value="">Все города</option>{cityOptions.map(c=><option value={c.id} key={c.id}>{c.name}</option>)}</select></label>
+      </div>
+      <div className="p-catalog-programs" aria-label="Программы развития">{[["","Все программы"],...Object.entries(programNames)].map(([id,label])=><button key={id} aria-pressed={program===id} onClick={()=>change(setP,id)}>{label}</button>)}</div>
+      {chips.length>0&&<div className="p-catalog-chips" aria-label="Выбранные фильтры">{chips.map(([label,remove])=><button key={label} onClick={remove} aria-label={`Убрать фильтр: ${label}`}>{label}<X size={14}/></button>)}</div>}
+      <div className="p-catalog-summary"><div className="p-results-count" aria-live="polite"><span>Найдено: {filtered.length}</span><button onClick={reset} disabled={!query&&!region&&!city&&!program}>Сбросить<X size={16}/></button></div><div className="p-catalog-actions">{cityById[city]&&<a className="p-text-link" href={siteHref(cityPath(cityById[city]),"#projects")}><MapIcon size={18}/>Карта мастер-плана<Arrow size={18}/></a>}<div className="p-view-toggle" aria-label="Вид каталога"><button aria-label="Показать карточками" aria-pressed={view!=="list"} onClick={()=>setView("cards")}><Grid2X2 size={19}/></button><button aria-label="Показать списком" aria-pressed={view==="list"} onClick={()=>setView("list")}><List size={20}/></button></div></div></div>
+      {filtered.length?<>
+        {view==="list"?<div className="p-project-list-view">{filtered.slice((page-1)*18,page*18).map((p,i)=><a className="p-project-list-row" key={p.id} href={siteHref(`projects/${p.id}`)}><span>{fmt((page-1)*18+i+1)}</span><div><h3>{p.title}</h3><small>{cityById[p.city]?.name||p.place||regionShort[p.region]}</small></div><span>{programNames[p.program]}</span><Arrow size={20}/></a>)}</div>:<div className="p-project-grid">{filtered.slice((page-1)*18,page*18).map((p,i)=><ProjectCard key={p.id} project={p} index={(page-1)*18+i}/>)}</div>}
+        <Pagination page={page} count={Math.ceil(filtered.length/18)} onChange={n=>{setPage(n);document.getElementById("project-results").scrollIntoView({behavior:"instant"});}}/>
+      </>:<Empty onReset={reset}/>}
+    </section>
+  </>;
 }
 function Pagination({ page, count, onChange }) {
   if (count < 2) return null;
@@ -1376,6 +1302,7 @@ function ProjectPage({ project: p }) {
                 </div>
               )}
             </dl>
+            {c && <a className="p-project-atlas-link" href={siteHref(cityPath(c), c.id === "vladivostok" || p.program !== "masterplan" ? "#projects" : `?project=${p.id}#projects`)}><MapIcon size={21}/>На карте мастер-плана<Arrow size={18}/></a>}
             <ShareButton />
           </aside>
           <div className="p-project-description">
@@ -1415,6 +1342,7 @@ function ProjectPage({ project: p }) {
                 (x) =>
                   x.id !== p.id && x.region === p.region && x.images.length,
               )
+              .sort((a,b) => Number(b.city === p.city) - Number(a.city === p.city))
               .slice(0, 3)
               .map((x) => (
                 <ProjectCard project={x} key={x.id} />
@@ -1426,93 +1354,24 @@ function ProjectPage({ project: p }) {
   );
 }
 function NewsPage() {
-  const [q, setQ] = useQueryState("q"), [sort, setSort] = useQueryState("sort", "newest"), [year, setYear] = useQueryState("year"), [pageValue, setPage] = useQueryState("page", "1");
-
-  const filtered = news.filter(
-    (n) =>
-      (!year || n.date.startsWith(year)) &&
-      normalize(n.title + " " + n.excerpt).includes(normalize(q)),
-  ).sort((a, b) => sort === "oldest" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date));
-
-  const page = Math.min(Math.max(1, Math.ceil(filtered.length / 12)), Math.max(1, Number.parseInt(pageValue, 10) || 1));
-  const reset = () => {
-    setQ("");
-    setSort("newest");
-    setYear(""); setPage(1);
-  };
-  return (
-    <>
-      <PageHero
-        title={
-          <>
-            Перемены.
-            <br />
-            <em>День за днём.</em>
-          </>
-        }
-        eyebrow="Новости проекта"
-        crumbs={[["Новости"]]}
-        compact
-      />
-      <section className="p-shell p-section" id="news-results">
-        <div className="p-catalog-filters">
-          <label className="p-search-field">
-            <Search size={20} />
-            <input
-              aria-label="Поиск новостей"
-              placeholder="Поиск по новостям"
-              value={q}
-              onChange={(e) => { setQ(e.target.value); setPage(1); }}
-            />
-          </label>
-          <label className="p-select-field">
-            Порядок
-            <select value={sort} onChange={(e) => { setSort(e.target.value); setPage(1); }}>
-              <option value="newest">Сначала новые</option>
-              <option value="oldest">Сначала ранние</option>
-            </select>
-          </label>
-          <label className="p-select-field">
-            Год
-            <select value={year} onChange={(e) => { setYear(e.target.value); setPage(1); }}>
-              <option value="">За всё время</option>
-              {[...new Set(news.map((n) => n.date.slice(0, 4)))].map((y) => (
-                <option key={y}>{y}</option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="p-results-count" aria-live="polite">
-          {filtered.length} публикаций
-          <button onClick={reset} disabled={!q && sort === "newest" && !year}>
-            Сбросить фильтры
-            <X size={16} />
-          </button>
-        </div>
-        {filtered.length ? (
-          <>
-            <div className="p-news-grid p-news-catalog">
-              {filtered.slice((page - 1) * 12, page * 12).map((n) => (
-                <NewsCard post={n} key={n.id} />
-              ))}
-            </div>
-            <Pagination
-              page={page}
-              count={Math.ceil(filtered.length / 12)}
-              onChange={(p) => {
-                setPage(p);
-                document
-                  .getElementById("news-results")
-                  .scrollIntoView({ behavior: "instant" });
-              }}
-            />
-          </>
-        ) : (
-          <Empty onReset={reset} />
-        )}
-      </section>
-    </>
-  );
+  const [q,setQ]=useQueryState("q"),[sort,setSort]=useQueryState("sort","newest"),[year,setYear]=useQueryState("year"),[territory,setTerritory]=useQueryState("news-region"),[pageValue,setPage]=useQueryState("page","1");
+  const filtered=filterNews(news,{query:q,sort,year,territory});
+  const page=Math.min(Math.max(1,Math.ceil(filtered.length/12)),Math.max(1,Number.parseInt(pageValue,10)||1));
+  const change=(setter,value)=>{setter(value);setPage(1);};
+  const reset=()=>{setQ("");setSort("newest");setYear("");setTerritory("");setPage(1);};
+  return <>
+    <PageHero title={<>Перемены.<br/><em>День за днём.</em></>} eyebrow="Новости проекта" crumbs={[["Новости"]]} compact/>
+    <section className="p-shell p-section p-news-catalog-section" id="news-results">
+      <div className="p-catalog-filters">
+        <label className="p-search-field"><Search size={20}/><input aria-label="Поиск новостей" placeholder="Поиск по новостям" value={q} onChange={e=>change(setQ,e.target.value)}/>{q&&<button aria-label="Очистить поиск новостей" onClick={()=>change(setQ,"")}><X size={18}/></button>}</label>
+        <label className="p-select-field">Территория<select value={territory} onChange={e=>change(setTerritory,e.target.value)}><option value="">Все территории</option>{regions.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}</select></label>
+        <label className="p-select-field">Год<select value={year} onChange={e=>change(setYear,e.target.value)}><option value="">За всё время</option>{[...new Set(news.map(n=>n.date.slice(0,4)))].map(y=><option key={y}>{y}</option>)}</select></label>
+        <label className="p-select-field">Порядок<select value={sort} onChange={e=>change(setSort,e.target.value)}><option value="newest">Сначала новые</option><option value="oldest">Сначала ранние</option></select></label>
+      </div>
+      <div className="p-results-count" aria-live="polite"><span>{filtered.length} публикаций</span><button onClick={reset} disabled={!q&&sort==="newest"&&!year&&!territory}>Сбросить фильтры<X size={16}/></button></div>
+      {filtered.length?<><div className="p-news-grid p-news-catalog">{filtered.slice((page-1)*12,page*12).map(n=><NewsCard post={n} key={n.id} collection={filtered.map(p=>p.id)}/>)}</div><Pagination page={page} count={Math.ceil(filtered.length/12)} onChange={p=>{setPage(p);document.getElementById("news-results").scrollIntoView({behavior:"instant"});}}/></>:<Empty onReset={reset}/>}
+    </section>
+  </>;
 }
 function LegacyArticle({ post }) {
   useEffect(() => { location.replace(siteHref("news", `?news=${encodeURIComponent(post.id)}`)); }, [post.id]);
@@ -1525,6 +1384,8 @@ const quarterFacts = p => [
   ...p.stats.map(s => ({ ...s, value: /\d/.test(s.value) ? s.value : "—" })),
 ];
 function QuarterPage({ initialProject }) {
+  const [compareFirst,setCompareFirst]=useState(quarter.projects[0].id),[compareSecond,setCompareSecond]=useState(quarter.projects[1].id);
+  const compared=[compareFirst,compareSecond].map(id=>quarter.projects.find(p=>p.id===id));
   const [active, setActive] = useState(initialProject || quarter.projects[0].id);
   const [compare, setCompare] = useState(false);
   useEffect(() => {
@@ -1551,12 +1412,12 @@ function QuarterPage({ initialProject }) {
         <p>Жильё, социальная инфраструктура и сроки реализации.</p>
         <button className="p-text-link" aria-expanded={compare} aria-controls="quarter-comparison" onClick={() => setCompare(!compare)}>{compare ? "Закрыть сравнение" : "Сравнить проекты"}{compare ? <X size={19} /> : <Grid2X2 size={19} />}</button>
       </div>
-      {compare && <div id="quarter-comparison" className="p-quarter-comparison" tabIndex={0} role="region" aria-label="Сравнение проектов ДВ квартала">
-        <table><caption>Показатели семи проектов</caption><thead><tr><th scope="col">Показатель</th>{quarter.projects.map(p => <th scope="col" key={p.id}><a href={`#quarter-${p.id}`}>{p.name}<ArrowDown size={14} /></a><small>{quarterRegion(p.region)}</small></th>)}</tr></thead>
-          <tbody><tr><th scope="row">Стадия</th>{quarter.projects.map(p => <td key={p.id}>{p.status}</td>)}</tr>{quarterFacts(quarter.projects[0]).map((s,i) => <tr key={s.label}><th scope="row">{s.label}</th>{quarter.projects.map(p => <td key={p.id}>{quarterFacts(p)[i].value}</td>)}</tr>)}</tbody>
-        </table>
+      {compare && <div id="quarter-comparison" className="p-quarter-comparison p-quarter-comparison-pair" role="region" aria-label="Сравнение проектов ДВ квартала">
+        <div className="p-quarter-compare-selects"><label className="p-select-field">Первый проект<select value={compareFirst} onChange={e=>setCompareFirst(e.target.value)}>{quarter.projects.map(p=><option value={p.id} key={p.id} disabled={p.id===compareSecond}>{p.name}</option>)}</select></label><label className="p-select-field">Второй проект<select value={compareSecond} onChange={e=>setCompareSecond(e.target.value)}>{quarter.projects.map(p=><option value={p.id} key={p.id} disabled={p.id===compareFirst}>{p.name}</option>)}</select></label></div>
+        <table><caption>Сравнение проектов</caption><thead><tr><th scope="col">Показатель</th>{compared.map(p=><th scope="col" key={p.id}><a href={`#quarter-${p.id}`}>{p.name}<ArrowDown size={14}/></a><small>{quarterRegion(p.region)}</small></th>)}</tr></thead><tbody><tr><th scope="row">Стадия</th>{compared.map(p=><td key={p.id}>{p.status}</td>)}</tr>{quarterFacts(compared[0]).map(s=><tr key={s.label}><th scope="row">{s.label}</th>{compared.map(p=><td key={p.id}>{quarterFacts(p).find(f=>f.label===s.label)?.value||"—"}</td>)}</tr>)}</tbody></table>
       </div>}
       <div className="p-quarter-layout">
+        <div className="p-quarter-jump"><label className="p-select-field"><span className="visually-hidden">Перейти к кварталу</span><select aria-label="Перейти к кварталу" value={active} onChange={e=>{setActive(e.target.value);history.replaceState(history.state,"",`#quarter-${e.target.value}`);document.getElementById(`quarter-${e.target.value}`)?.scrollIntoView({behavior:"instant"});}}>{quarter.projects.map(p=><option key={p.id} value={p.id}>{p.name} · {quarterRegion(p.region)}</option>)}</select></label></div>
         <nav className="p-quarter-nav" aria-label="Проекты ДВ квартала">
           {quarter.projects.map((p,i) => <a key={p.id} href={`#quarter-${p.id}`} aria-current={active === p.id ? "location" : undefined} onClick={() => setActive(p.id)}><span>{fmt(i+1)}</span><div><strong>{p.name}</strong><small>{quarterRegion(p.region)}</small></div><ArrowDown size={16} /></a>)}
         </nav>
@@ -1603,8 +1464,7 @@ function AboutPage() {
         }
         eyebrow="О проекте «25 городов»"
         crumbs={[["О проекте"]]}
-      >
-      </PageHero>
+      ><a className="p-button p-button-light" href="#masterplan-finder">Найти свой город<ArrowDown size={20}/></a></PageHero>
       <section className="p-shell p-section p-about-body">
         <Eyebrow>Стратегические мастер-планы</Eyebrow>
         <h2>
@@ -1633,6 +1493,7 @@ function AboutPage() {
             дальневосточников —<br />в центре преобразований
           </h3>
         </div>
+        <ProjectJourney />
         <SectionHead title="Новые слова или новые смыслы?">
           Мастер-план и генеральный план
         </SectionHead>
@@ -1649,6 +1510,7 @@ function AboutPage() {
           ))}
         </div>
       </section>
+      <MasterplanFinder />
       <Partners />
     </>
   );

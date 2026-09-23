@@ -19,3 +19,5 @@ import "./pages/territories.css";
 import "./portal/interactions.css";
 
 import "./layout.css";
+
+import "./portal/experience.css";

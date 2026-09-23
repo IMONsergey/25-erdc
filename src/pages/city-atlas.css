@@ -1,0 +1,52 @@
+/* All additions are scoped: the approved regional and Vladivostok pages stay intact. */
+.city-atlas-map-directions { position:absolute; z-index:2; top:20%; left:max(420px,37%); right:var(--atlas-edge); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:30px 22px; }
+.city-atlas-map-directions button { display:flex; flex-direction:column; align-items:center; gap:12px; color:#fff; background:none; padding:8px; border-radius:14px; text-align:center; transition:background .2s,transform .2s; }
+.city-atlas-map-directions button:hover,.city-atlas-map-directions button:focus-visible { background:#03394ebf; transform:translateY(-4px); }
+.city-atlas-direction-orb { position:relative; display:grid; place-items:center; width:56px; height:56px; border-radius:50%; border:1px solid #ffffffa0; color:#073b50; background:var(--direction-color); box-shadow:0 0 0 7px #07394e30,0 10px 30px #002b4990; }
+.city-atlas-direction-orb small { position:absolute; top:-7px; right:-9px; display:grid; place-items:center; min-width:24px; height:24px; padding:0 5px; border-radius:15px; color:#eafaff; background:#06374c; border:1px solid #aee6fb60; font-size:11px; }
+.city-atlas-map-directions strong { font-size:13px; font-weight:450; line-height:1.35; text-shadow:0 2px 6px #001f35,0 1px 12px #001f35; }
+.city-atlas-map-directions .is-active .city-atlas-direction-orb { box-shadow:0 0 0 8px #b2eaff40,0 10px 30px #002b4990; }
+.city-atlas-stage.has-selection .city-atlas-map-directions { opacity:0; pointer-events:none; visibility:hidden; }
+.city-atlas-section .regional-object-image { flex:none; }
+.city-atlas-section .p-share-control { display:block; }
+.city-atlas-section .p-share-control button { width:100%; }
+.city-atlas-section button:focus-visible,.city-atlas-section a:focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+@media (max-width:1249px) and (min-width:900px) {
+ .city-atlas-map-directions { left:340px; gap:24px 10px; }
+ .city-atlas-map-directions strong { font-size:12px; }
+}
+@media (max-width:899px) {
+ .city-atlas-map-directions { top:88px; left:var(--gutter); right:var(--gutter); grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px 4px; }
+ .city-atlas-map-directions button { padding:4px; gap:8px; }
+ .city-atlas-direction-orb { width:38px; height:38px; }
+ .city-atlas-direction-orb .morph-icon { width:18px; height:18px; }
+ .city-atlas-map-directions strong { font-size:10px; }
+ .city-atlas-stage .regional-atlas-invitation { top:340px; }
+ .city-atlas-stage { padding-top:500px; }
+ .city-atlas-stage .regional-map,.city-atlas-stage .regional-map-vignette { height:500px; }
+ .city-atlas-stage.is-expanded { padding-top:500px; }
+ .city-atlas-stage.is-expanded .regional-map,.city-atlas-stage.is-expanded .regional-map-vignette { height:500px; }
+ .city-atlas-stage.is-expanded .regional-atlas-invitation { top:340px; }
+ .city-atlas-stage .regional-atlas-categories { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .city-atlas-stage .regional-atlas-categories button { font-size:12px; gap:7px; padding-inline:9px; }
+}
+@media (max-width:380px) {
+ .city-atlas-map-directions { grid-template-columns:repeat(3,minmax(0,1fr)); gap:15px 4px; }
+ .city-atlas-stage .regional-atlas-invitation,.city-atlas-stage.is-expanded .regional-atlas-invitation { top:365px; }
+ .city-atlas-stage .regional-atlas-categories button { font-size:11px; }
+}
+@media (prefers-reduced-motion:reduce) { .city-atlas-map-directions button { transition:none; } }
+@media (max-width:700px) {
+ .territory-template.city-masterplan-page .hero-explore { display:flex; width:100%; gap:14px; font-size:14px; }
+ .territory-template.city-masterplan-page .hero-explore br { display:none; }
+ .territory-template.city-masterplan-page .hero-explore .round-arrow { width:44px; height:44px; }
+ .territory-template.city-masterplan-page .hero-bottom { gap:20px; }
+}
+@media (max-width:700px) {
+ .city-atlas-section .projects-overture .projects-intro { min-height:0; padding-top:44px; padding-bottom:40px; }
+}
+@media (min-width:900px) and (max-height:800px) {
+ .city-atlas-stage.is-expanded .regional-atlas-categories { grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; padding-bottom:12px; }
+ .city-atlas-stage.is-expanded .regional-atlas-categories button { font-size:11px; min-height:44px; padding:7px; gap:6px; }
+ .city-atlas-stage.is-expanded .regional-sidebar-head { padding:20px 20px 12px; }
+}

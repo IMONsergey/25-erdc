@@ -83,6 +83,12 @@ try {
       assert.ok(page.includes('regional-atlas-invitation'), `${path}: approved atlas exploration flow missing`);
       assert.ok(page.includes('Поиск и фильтры проектов'), `${path}: project search missing`);
     }
+    if (!isRegion && entity.id !== "vladivostok") {
+      assert.ok(page.includes('city-atlas-stage'), `${path}: city atlas missing`);
+      assert.ok(page.includes('Направления на панораме'), `${path}: image interactions missing`);
+      assert.ok(page.includes('Найти проект города'), `${path}: search missing`);
+      assert.ok(!page.includes('territory-explorer'), `${path}: old flat project list returned`);
+    }
     if (entity.id === "vladivostok") {
       assert.equal((page.match(/class="atlas-marker /g) || []).length, 27);
       assert.ok(page.includes("hero-page12.webp"));
