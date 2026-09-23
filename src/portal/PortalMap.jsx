@@ -22,7 +22,7 @@ import {
   MapPin,
   List,
   Map as MapIcon,
-} from "lucide";
+} from "./icons.jsx";
 import { isupSnapshot } from "../map-lab/isupSnapshot.js";
 import { siteHref } from "../site.js";
 const stageNames = {
@@ -121,13 +121,11 @@ export default function PortalMap() {
     setSelected(id);
     const obj = valid.find((o) => o.id === id);
     if (obj) {
-      map.current
-        ?.getView()
-        .animate({
-          center: fromLonLat(obj.coordinates),
-          zoom: Math.max(map.current.getView().getZoom(), 13),
-          duration: 400,
-        });
+      map.current?.getView().animate({
+        center: fromLonLat(obj.coordinates),
+        zoom: Math.max(map.current.getView().getZoom(), 13),
+        duration: 400,
+      });
     }
   }, []);
   useEffect(() => {
@@ -215,13 +213,11 @@ export default function PortalMap() {
   useEffect(() => {
     if (!mapReady) return;
     const p = plans.find((p) => p.id === plan);
-    map.current
-      .getView()
-      .animate({
-        center: fromLonLat(p?.center || [139, 56]),
-        zoom: p ? 10.5 : 3.8,
-        duration: 400,
-      });
+    map.current.getView().animate({
+      center: fromLonLat(p?.center || [139, 56]),
+      zoom: p ? 10.5 : 3.8,
+      duration: 400,
+    });
   }, [plan, mapReady]);
   useEffect(() => {
     if (!selectionSource.current) return;
@@ -370,12 +366,10 @@ export default function PortalMap() {
             <button
               aria-label="Приблизить карту"
               onClick={() =>
-                map.current
-                  ?.getView()
-                  .animate({
-                    zoom: map.current.getView().getZoom() + 1,
-                    duration: 250,
-                  })
+                map.current?.getView().animate({
+                  zoom: map.current.getView().getZoom() + 1,
+                  duration: 250,
+                })
               }
             >
               <Plus size={21} />
@@ -383,12 +377,10 @@ export default function PortalMap() {
             <button
               aria-label="Отдалить карту"
               onClick={() =>
-                map.current
-                  ?.getView()
-                  .animate({
-                    zoom: map.current.getView().getZoom() - 1,
-                    duration: 250,
-                  })
+                map.current?.getView().animate({
+                  zoom: map.current.getView().getZoom() - 1,
+                  duration: 250,
+                })
               }
             >
               <Minus size={21} />

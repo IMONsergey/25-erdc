@@ -23,7 +23,7 @@ import {
   ZoomIn,
   ChevronLeft,
   ChevronRight,
-} from "lucide";
+} from "./icons.jsx";
 import { siteHref, currentPath, siteRoot } from "../site.js";
 import { asset } from "../data.js";
 import {
@@ -45,6 +45,7 @@ import {
   regionMood,
 } from "./data.js";
 const Atlas = lazy(() => import("../components/Projects.jsx"));
+const ApprovedProjectPage = lazy(() => import("./ApprovedProjectPage.jsx"));
 const PortalMap = lazy(() => import("./PortalMap.jsx"));
 const fmt = (n) => String(n).padStart(2, "0");
 const Arrow = ({ size = 22, ...p }) => (
@@ -192,6 +193,9 @@ function Header() {
     [scroll, setScroll] = useState(window.scrollY > 20);
   const dialog = useRef(null);
   const trigger = useRef(null);
+  const searchTrigger = useRef(null);
+  const restoreFocus = () =>
+    (search ? searchTrigger : trigger).current?.focus();
   useEffect(() => {
     const fn = () => setScroll(window.scrollY > 20);
     window.addEventListener("scroll", fn, { passive: true });
@@ -205,7 +209,7 @@ function Header() {
       if (e.key === "Escape") {
         setOpen(false);
         setSearch(false);
-        trigger.current?.focus();
+        restoreFocus();
       }
       if (e.key === "Tab") {
         const nodes = [
@@ -290,6 +294,7 @@ function Header() {
           Карта проектов
         </a>
         <button
+          ref={searchTrigger}
           aria-label="Поиск по сайту"
           className="p-icon-button"
           onClick={() => {
@@ -334,7 +339,7 @@ function Header() {
               onClick={() => {
                 setOpen(false);
                 setSearch(false);
-                trigger.current?.focus();
+                restoreFocus();
               }}
             >
               <X size={30} />
@@ -430,7 +435,7 @@ function Footer() {
           <p>
             Дальний Восток.
             <br />
-            <span>Ближе, чем кажется.</span>
+            <span>Новый облик городов.</span>
           </p>
           <a href="#top" aria-label="Наверх" className="p-top-button">
             <Arrow size={34} />
@@ -732,9 +737,9 @@ function Home() {
         <div className="p-editorial-copy">
           <Eyebrow>В центре — человек</Eyebrow>
           <h2>
-            Не просто планы.
+            Комфортная среда.
             <br />
-            <em>Среда для жизни.</em>
+            <em>Возможности для жизни.</em>
           </h2>
           <p>
             Реализация мастер-планов позволит улучшить условия жизни более чем 4
@@ -1115,7 +1120,7 @@ function CityPage({ city: c }) {
         )}
       </section>
       {c.id === "vladivostok" ? (
-        <div className="p-legacy-atlas" id="projects">
+        <div className="p-legacy-atlas">
           <Suspense fallback={<Loading />}>
             <Atlas />
           </Suspense>
@@ -2204,8 +2209,8 @@ function NotFound() {
     </>
   );
 }
-function Route() {
-  let path = currentPath;
+export function PortalRoute({requestedPath=currentPath}={}) {
+  let path = requestedPath;
   const aliases = {
     primkrai: "primorye",
     "page144867266.html": "primorye",
@@ -2234,6 +2239,16 @@ function Route() {
     const n = news.find((n) => n.id === third);
     return n ? <ArticlePage post={n} /> : <NotFound />;
   }
+  if (
+    first === "vladivostok" &&
+    second === "projects" &&
+    /^project-\d{2}$/.test(third || "")
+  )
+    return (
+      <Suspense fallback={<Loading />}>
+        <ApprovedProjectPage id={third} />
+      </Suspense>
+    );
   if (path === "vladivostok") return <CityPage city={cityById.vladivostok} />;
   if (first === "cities" && cityById[second])
     return <CityPage city={cityById[second]} />;
@@ -2276,7 +2291,7 @@ export default function PortalApp() {
       <div id="top" />
       <Header />
       <main id="content">
-        <Route />
+        <PortalRoute />
       </main>
       <Footer />
     </>

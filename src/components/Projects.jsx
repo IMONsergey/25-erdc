@@ -6,9 +6,14 @@ import ProjectDetail from "./ProjectDetail.jsx";
 import { getAtlasCamera } from "../atlasCamera.js";
 const padded = (n) => String(n).padStart(2, "0");
 export default function Projects() {
-  const [categoryId, setCategoryId] = useState("housing");
-  const [projectId, setProjectId] = useState(null);
-  const [focused, setFocused] = useState(false);
+  const requestedProject = selectedProjects.find(
+    (p) => p.id === new URLSearchParams(location.search).get("project"),
+  );
+  const [categoryId, setCategoryId] = useState(
+    requestedProject?.category || "housing",
+  );
+  const [projectId, setProjectId] = useState(requestedProject?.id || null);
+  const [focused, setFocused] = useState(Boolean(requestedProject));
   const [expanded, setExpanded] = useState(false);
   const panel = useRef(null);
   const section = useRef(null);
@@ -94,6 +99,12 @@ export default function Projects() {
       window.removeEventListener("keydown", key);
     };
   }, [expanded]);
+  useEffect(() => {
+    if (location.hash === "#projects")
+      document
+        .getElementById("projects")
+        ?.scrollIntoView({ behavior: "instant" });
+  }, []);
   const index = project ? projects.indexOf(project) : -1;
   const next = () => chooseProject(projects[(index + 1) % projects.length].id);
   const prev = () =>

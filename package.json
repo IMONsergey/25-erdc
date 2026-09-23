@@ -8,8 +8,9 @@
     "predev": "npm run prepare:assets",
     "dev": "vite",
     "prebuild": "npm run prepare:assets",
-    "build": "vite build && node scripts/build-routes.mjs && node scripts/verify-portal.mjs",
-    "preview": "vite preview"
+    "build": "node scripts/check-render.mjs && vite build && node scripts/build-routes.mjs && node scripts/verify-portal.mjs",
+    "preview": "vite preview",
+    "check:render": "node scripts/check-render.mjs"
   },
   "dependencies": {
     "lucide": "1.47.0",

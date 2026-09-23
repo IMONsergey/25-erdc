@@ -2,6 +2,7 @@ import { useState } from "react";
 import { asset } from "../data.js";
 import { projectDetails } from "../projectDetails.js";
 import Icon from "./Icon.jsx";
+import { siteHref } from "../site.js";
 const padded = (n) => String(n).padStart(2, "0");
 export default function ProjectDetail({
   project,
@@ -163,6 +164,12 @@ export default function ProjectDetail({
           </details>
         </div>
       </div>
+      <a
+        className="atlas-full-page-link"
+        href={siteHref(`vladivostok/projects/${project.id}`)}
+      >
+        Страница проекта <Icon name="arrow" size={18} />
+      </a>
       <footer className="atlas-detail-nav">
         <button onClick={onPrev} aria-label="Предыдущий проект">
           <Icon name="left" size={20} />

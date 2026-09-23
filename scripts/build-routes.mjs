@@ -46,6 +46,13 @@ for (const n of news)
     description: n.excerpt,
     type: "article",
   });
+const approved = (await import("../src/selectedProjects.js")).selectedProjects;
+for (const p of approved)
+  routes.push({
+    path: `vladivostok/projects/${p.id}`,
+    title: p.title,
+    type: "approved-project",
+  });
 const aliases = {
   primkrai: "primorye",
   "page144867266.html": "primorye",

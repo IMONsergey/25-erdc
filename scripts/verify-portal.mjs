@@ -18,6 +18,32 @@ assert.equal(c.regions.length, 11);
 assert.equal(c.cities.length, 23);
 assert.equal(news.length, 165);
 assert.equal(c.quarter.projects.length, 7);
+const yards = c.projects.filter(
+  (p) => p.region === "primkrai" && p.title === "1000 Дворов",
+);
+assert.deepEqual(
+  Object.fromEntries(
+    yards.map((p) => [
+      p.place,
+      p.stats.find((s) => s.label === "Отремонтированных дворов").value,
+    ]),
+  ),
+  {
+    "г. Артем": "3 двора",
+    "г. Владивосток": "16 дворов",
+    "г. Находка": "4 двора",
+    "г. Уссурийск": "5 дворов",
+  },
+  "Yard funding must remain attached to the correct city",
+);
+for (const p of c.projects) {
+  const labels = p.stats.map((s) => s.label);
+  assert.equal(
+    labels.length,
+    new Set(labels).size,
+    "Duplicate metric fields: " + p.id,
+  );
+}
 const ids = new Set(c.projects.map((p) => p.id));
 for (const city of c.cities) {
   assert.ok(city.image && city.mission, city.id);

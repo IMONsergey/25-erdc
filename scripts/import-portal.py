@@ -52,7 +52,7 @@ def compact(bs):
  for b in bs:
   if b['type'] in ['215','363','270','131','890','450','360','886','395']:continue
   if not any([b['title'],b['texts'],b['images'],b['items'],b['stats']]):continue
-  sig=json.dumps({k:v for k,v in b.items() if k not in ['id']},ensure_ascii=False)
+  sig=b['id']  # Repeated place/status headings carry context; only duplicate record IDs are redundant.
   if sig in seen:continue
   seen.add(sig);out.append(b)
  return out
@@ -72,7 +72,7 @@ def projects_from(bs,region,city='',program='masterplan'):
    out.append(current)
   elif tp=='1050' and current:current['stats'].extend(b['stats'])
   elif tp=='1050' and program!='masterplan' and place:
-   current={'id':b['id'].replace('rec',''),'title':category or 'Благоустройство территории','texts':[],'images':[],'stats':b['stats'],'region':region,'city':city,'place':place,'category':category,'status':status,'program':program,'section':section,'sourceRecord':b['id']};out.append(current)
+   current={'id':b['id'].replace('rec',''),'title':category or 'Благоустройство территории','texts':[],'images':[],'stats':list(b['stats']),'region':region,'city':city,'place':place,'category':category,'status':status,'program':program,'section':section,'sourceRecord':b['id']};out.append(current)
   elif tp=='513':
    current=None
    for it in b['items']:
@@ -89,7 +89,7 @@ def projects_from(bs,region,city='',program='masterplan'):
   key=(p['title'],p['place'])
   if not p['title']:continue
   if key in dedup:
-   dedup[key]['images']=uniq(dedup[key]['images']+p['images']);continue
+   dedup[key]['images']=uniq(dedup[key]['images']+p['images']);dedup[key]['texts']=uniq(dedup[key]['texts']+p['texts']);dedup[key]['stats']=[dict(v) for v in {json.dumps(v,ensure_ascii=False):v for v in dedup[key]['stats']+p['stats']}.values()];continue
   dedup[key]=p
  return list(dedup.values())
 
