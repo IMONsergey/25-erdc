@@ -50,10 +50,10 @@ export default function RegionalMap({ regionId, regionName, objects, plans, plan
     <div className="regional-illustration-scene" style={size.width ? { width: camera.width, height: camera.height, transform: `translate3d(${camera.x}px,${camera.y}px,0) scale(${camera.scale})`, "--pin-scale": 1/camera.scale } : undefined}>
       <img key={scene.image} ref={image} className="regional-illustration-image" src={asset(scene.image)} alt={`Панорама ${activePlan?.name || regionName}`} loading="lazy" draggable="false" onLoad={() => setLoadedImage(scene.image)} onError={() => setFailed(true)} />
       <div className="regional-territory-markers" aria-label="Выбрать территорию на панораме">
-        {plans.filter(p => scene.anchors[p.cityId]).map(p => <button key={p.id} className={`regional-territory-pin ${activePlan?.id === p.id ? "is-active" : ""} ${camera.x + scene.anchors[p.cityId][0] / 100 * camera.width * camera.scale > size.width - 245 ? "is-label-left" : ""}`} style={{left:`${scene.anchors[p.cityId][0]}%`,top:`${scene.anchors[p.cityId][1]}%`}} aria-label={`Показать проекты: ${p.name}`} aria-pressed={activePlan?.id === p.id} onClick={() => onPlan(p.id)}><span className="regional-pin-dot"/><span className="regional-pin-label"><strong>{p.name}</strong><span>Проекты территории <b>{counts[p.id] || 0}</b></span></span></button>)}
+        {plans.filter(p => scene.anchors[p.cityId]).map(p => <button key={p.id} className={`regional-territory-pin ${activePlan?.id === p.id ? "is-active" : ""} ${camera.x + scene.anchors[p.cityId][0] / 100 * camera.width * camera.scale > size.width - 245 ? "is-label-left" : ""}`} style={{left:`${scene.anchors[p.cityId][0]}%`,top:`${scene.anchors[p.cityId][1]}%`}} aria-label={`Показать проекты: ${p.name}`} aria-pressed={activePlan?.id === p.id} onClick={() => onPlan(p.id)}><span className="regional-pin-dot">{String(counts[p.id] || 0).padStart(2,"0")}</span><span className="regional-pin-label"><strong>{p.name}</strong></span></button>)}
       </div>
     </div>
     {failed && <div className="regional-art-error" role="status">Не удалось загрузить панораму<button onClick={() => { setFailed(false); image.current.src=asset(scene.image); }}>Повторить</button></div>}
-    <div className="regional-scene-caption"><span>{activePlan ? "Мастер-план территории" : "Горизонт региона"}</span><strong>{activePlan?.name || regionName}</strong></div>
+
   </div>;
 }

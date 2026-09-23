@@ -1,21 +1,10 @@
-import { useState } from "react";
-import Hero from "../components/Hero.jsx";
-import Regions from "../components/Regions.jsx";
-import Mission from "../components/Mission.jsx";
-import Projects from "../components/Projects.jsx";
-import Motion from "../components/Motion.jsx";
+import { useEffect } from "react";
+import { siteHref } from "../site.js";
 
-// The approved page is composed from its original, unchanged blocks.
-// Portal typography and resets must not cascade into this page.
+// Always open the isolated approved application at its canonical URL.
+// Never compose another Vladivostok page with the shared portal stylesheet.
 export default function VladivostokPage() {
-  const [selectedCity, setSelectedCity] = useState("vladivostok");
-  return <>
-    <div className="ocean-zone">
-      <Hero />
-      <Regions selectedCity={selectedCity} onSelectCity={setSelectedCity} />
-    </div>
-    <Mission />
-    <Projects />
-    <Motion />
-  </>;
+  const target = siteHref("vladivostok", location.search + location.hash);
+  useEffect(() => { location.replace(target); }, [target]);
+  return <a href={target}>Владивостокская агломерация</a>;
 }

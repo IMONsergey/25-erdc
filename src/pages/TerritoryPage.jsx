@@ -32,6 +32,13 @@ const pictures = {
   "ulan-ude": "city-lineart-ulan-ude-v2.webp",
   severobaykalsk: "city-lineart-severobaikalsk-v2.webp",
 };
+const crests = {
+  vladivostok: "crest-vladivostok.webp",
+  artem: "crest-artem.webp",
+  "bolshoy-kamen": "crest-bolshoy-kamen.webp",
+  "ulan-ude": "crest-ulan-ude.webp",
+  severobaykalsk: "crest-severobaikalsk.webp",
+};
 const heroPicture = (entity) => ({primkrai:"hero-primorye.webp", buryatia:"hero-buryatia.webp"}[entity.id] || entity.image);
 const projectGroup = (p) => p.category || (p.program === "masterplan" ? (p.section || "Мастер-план") : programNames[p.program]);
 function Photo({ src, alt = "", priority = false, ...props }) {
@@ -91,7 +98,7 @@ function Territories({ members, initial, isRegion, onShowMap }) {
         {members.map((c, i) => <button key={c.id} className={`city-card ${selected === c.id ? "is-selected is-emphasized" : ""}`} aria-pressed={selected === c.id} aria-controls="city-detail" onClick={() => {setSelected(c.id);setView("about");}}>
           <Photo className={`city-photo ${pictures[c.id] ? "city-illustration" : "territory-city-photo"}`} src={pictures[c.id] || c.image} alt={c.name} />
           <span className="city-card-shade" /><span className="city-card-light" />
-          <span className="city-card-top"><span className="city-number">{padded(i + 1)}</span></span>
+          <span className="city-card-top"><span className="city-number">{padded(i + 1)}</span>{crests[c.id] && <span className={`city-crest ${c.id === "bolshoy-kamen" ? "has-wide-source" : ""}`}><Photo src={crests[c.id]} alt="" /></span>}</span>
           <span className="city-card-body"><span className="city-type">Мастер-план развития</span><strong>{c.name}</strong><span className="city-card-description">{c.mission}</span><span className="city-card-link"><span>{selected === c.id ? "Выбранная территория" : "Исследовать город"}</span><span className="city-card-arrow"><Icon name="arrow" active={selected === c.id} activeName="check" size={23} /></span></span></span>
         </button>)}
       </div>

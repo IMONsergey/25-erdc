@@ -46,6 +46,11 @@ try {
     const page=renderToString(createElement(PortalRoute,{requestedPath}));assert.ok(page.includes('<h1'),requestedPath+' lacks a heading');assert.ok(!page.includes('Такой страницы пока нет'),requestedPath+' resolved to 404');
     assert.ok(!unwanted.test(page), requestedPath + ' contains production notes');
   }
+  for (const path of ["vladivostok", "cities/vladivostok"]) {
+    const page = renderToString(createElement(PortalRoute, { requestedPath: path }));
+    assert.ok(page.includes('href="http://localhost/vladivostok/"'), `${path}: not the canonical agglomeration`);
+    assert.ok(!page.includes("territory-template"), `${path}: duplicate template returned`);
+  }
   const quarters = renderToString(createElement(PortalRoute, { requestedPath: "dvkvartal" }));
   for (const p of catalog.quarter.projects) {
     assert.ok(quarters.includes(`id="quarter-${p.id}"`), `${p.name}: missing full block`);
@@ -75,6 +80,8 @@ try {
       assert.ok(!page.includes('OpenStreetMap'), `${path}: tiled map replaced the approved illustration`);
       assert.ok(page.includes('Город на карте региона'), `${path}: city filtering missing`);
       assert.ok(page.includes('Объекты на карте'), `${path}: territory-to-map navigation missing`);
+      assert.ok(page.includes('regional-atlas-invitation'), `${path}: approved atlas exploration flow missing`);
+      assert.ok(page.includes('Поиск и фильтры проектов'), `${path}: project search missing`);
     }
     if (entity.id === "vladivostok") {
       assert.equal((page.match(/class="atlas-marker /g) || []).length, 27);

@@ -104,6 +104,9 @@ const approved = (await import("../src/selectedProjects.js")).selectedProjects;
 assert.equal(approved.length, 27, "Approved Vladivostok atlas changed");
 const historicalHtml = await readFile("dist/vladivostok/index.html", "utf8");
 assert.ok(historicalHtml.includes("Агломерация Владивосток — 25 городов"));
+assert.ok(historicalHtml.includes('rel="canonical" href="https://imonsergey.github.io/25-erdc/vladivostok/"'), "Approved page must be the canonical agglomeration page");
+const cityAlias = await readFile("dist/cities/vladivostok/index.html", "utf8");
+assert.ok(cityAlias.includes("location.replace") && cityAlias.includes("../../vladivostok/"), "City alias must open the approved agglomeration");
 const historicalStyles = [...historicalHtml.matchAll(/href="([^"]+\.css)"/g)];
 assert.ok(historicalStyles.length, "Historical page stylesheet missing");
 for (const [, href] of historicalStyles) {

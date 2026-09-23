@@ -1,6 +1,7 @@
 /* All adaptations are limited to new territories. The approved Vladivostok
    blocks continue to use their original styles without portal resets. */
 .approved-territory-page { overflow: clip; }
+.territory-template { --city-tile: #04364a; }
 .territory-template .territory-hero { min-height: 880px; height: min(1050px, 100svh); }
 .territory-template .hero-heading { top: 28%; transform: none; padding-inline: var(--gutter); }
 .territory-template .hero-heading h1 { font-size: clamp(70px, 8vw, 144px); font-weight: 450; line-height: .99; letter-spacing: -.055em; text-transform: none; max-width: 1500px; margin-inline: auto; text-wrap: balance; overflow-wrap: anywhere; }
@@ -18,11 +19,13 @@
 .territory-template .territory-count-1 .city-card { height: 370px; }
 .territory-template .territory-count-1 .city-photo { object-position: 75% 50%; height: 100%; width: 70%; left: auto; right: 0; }
 .territory-template .territory-count-1 .city-card-body { width: min(65%, 720px); }
-.territory-template .city-card { min-width: 0; height: 490px; text-align: left; }
+.territory-template .city-card { min-width: 0; height: clamp(410px, 30vw, 500px); text-align: left; background: var(--city-tile); border-color: #91d7ed80; }
+.territory-template .city-card .city-illustration { filter: grayscale(1) contrast(1.35); }
+.territory-template .city-card-body { background: linear-gradient(180deg,#032e4000,#032e40f2 72px,#032e40 130px); }
 .territory-template .city-card-body > strong { font-size: clamp(28px, 2.65vw, 44px); overflow-wrap: anywhere; }
 .territory-template .city-card-description { font-size: 14px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .territory-template .city-card .territory-city-photo { mix-blend-mode: normal; filter: saturate(.75); opacity: .9; object-position: center; }
-.territory-template .city-card-shade { background: linear-gradient(180deg, #104b7700 15%, #104b7750 42%, #104b77 72%); }
+.territory-template .city-card-shade { background: linear-gradient(180deg,#04364a10,#04364a18 24%,#032e4080 42%,#032e40f2 64%,#032e40 100%); }
 .territory-template .city-story { height: auto; min-height: 660px; }
 .territory-template .city-story-content { max-width: 890px; }
 .territory-template .city-story-content h3 { font-size: clamp(33px, 3.7vw, 64px); overflow-wrap: anywhere; }
