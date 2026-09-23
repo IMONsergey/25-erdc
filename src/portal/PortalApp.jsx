@@ -26,6 +26,8 @@ import {
 } from "./icons.jsx";
 import { siteHref, currentPath, siteRoot } from "../site.js";
 import { asset } from "../data.js";
+import VladivostokPage from "../pages/VladivostokPage.jsx";
+import TerritoryPage from "../pages/TerritoryPage.jsx";
 import {
   regions,
   cities,
@@ -44,7 +46,6 @@ import {
   regionShort,
   regionMood,
 } from "./data.js";
-const Atlas = lazy(() => import("../components/Projects.jsx"));
 const ApprovedProjectPage = lazy(() => import("./ApprovedProjectPage.jsx"));
 const PortalMap = lazy(() => import("./PortalMap.jsx"));
 const fmt = (n) => String(n).padStart(2, "0");
@@ -908,139 +909,6 @@ function RegionsPage() {
     </>
   );
 }
-function RegionPage({ region: r }) {
-  const cs = r.cities.map((id) => cityById[id]);
-  const ps = projects.filter((p) => p.region === r.id);
-  const regionalNews = news
-    .filter((n) =>
-      n.tags.some(
-        (t) =>
-          normalize(r.name).includes(normalize(t)) ||
-          normalize(t).includes(normalize(regionShort[r.id])),
-      ),
-    )
-    .slice(0, 3);
-  return (
-    <>
-      <PageHero
-        image={r.image}
-        title={r.name}
-        eyebrow={regionMood[r.id]}
-        crumbs={[["Регионы", "regions"], [r.name]]}
-      >
-        <a className="p-hero-inline-link" href="#cities">
-          Открыть мастер-планы
-          <ArrowDown size={24} />
-        </a>
-      </PageHero>
-      <div className="p-region-stats">
-        <div className="p-shell">
-          <Stats
-            items={[
-              ...r.stats,
-              {
-                value: String(cs.length),
-                label: "мастер-планов городов и агломераций",
-              },
-            ]}
-          />
-        </div>
-      </div>
-      <section className="p-section p-shell" id="cities">
-        <SectionHead number="01" title="Города и агломерации">
-          Мастер-планы региона
-        </SectionHead>
-        <div
-          className={`p-city-grid ${cs.length === 1 ? "p-city-grid-single" : ""}`}
-        >
-          {cs.map((c, i) => (
-            <CityCard city={c} index={i} key={c.id} />
-          ))}
-        </div>
-      </section>
-      <section className="p-program-section">
-        <div className="p-shell">
-          <SectionHead
-            number="02"
-            title={
-              <>
-                Перемены
-                <br />
-                <em>в масштабе региона.</em>
-              </>
-            }
-          >
-            Программы развития
-          </SectionHead>
-          <div className="p-program-grid">
-            {Object.entries(r.programs).map(([id, p], i) => (
-              <a
-                href={siteHref(`${regionPath(r)}/${id}`)}
-                className="p-program-card"
-                key={id}
-              >
-                <span className="p-program-icon">
-                  {id === "subsidy" ? (
-                    <Building2 size={35} />
-                  ) : (
-                    <Trees size={35} />
-                  )}
-                </span>
-                <div>
-                  <Eyebrow>
-                    {fmt(i + 1)} / {p.projects.length} объектов
-                  </Eyebrow>
-                  <h3>
-                    {id === "subsidy"
-                      ? "Президентская субсидия"
-                      : "Конкурс благоустройства"}
-                  </h3>
-                  <p>
-                    {id === "subsidy"
-                      ? "Школы, больницы, спортивные и культурные объекты."
-                      : "Парки, набережные и новые общественные пространства."}
-                  </p>
-                </div>
-                <Arrow size={30} />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="p-section p-shell">
-        <SectionHead
-          number="03"
-          title="Проекты региона"
-          href={siteHref("projects", `?region=${r.id}`)}
-          label={`Все ${ps.length} проектов`}
-        >
-          Качество повседневной жизни
-        </SectionHead>
-        <div className="p-project-grid">
-          {ps
-            .filter((p) => p.images.length)
-            .slice(0, 3)
-            .map((p, i) => (
-              <ProjectCard key={p.id} project={p} index={i} />
-            ))}
-        </div>
-      </section>
-      {regionalNews.length > 0 && (
-        <section className="p-section p-shell">
-          <SectionHead title="Новости региона" href={siteHref("news")}>
-            События
-          </SectionHead>
-          <div className="p-news-grid">
-            {regionalNews.map((n) => (
-              <NewsCard post={n} key={n.id} />
-            ))}
-          </div>
-        </section>
-      )}
-      <NextRegion region={r} />
-    </>
-  );
-}
 function NextRegion({ region: r }) {
   const next = regions[r.index % regions.length];
   return (
@@ -1055,143 +923,6 @@ function NextRegion({ region: r }) {
         </span>
       </div>
     </a>
-  );
-}
-function CityPage({ city: c }) {
-  const r = regionById[c.region];
-  const ps = c.projects.map((id) => projectById[id]);
-  const primary = ps.filter((p) => !p.section.includes("Другие"));
-  const other = ps.filter((p) => p.section.includes("Другие"));
-  const [all, setAll] = useState(false);
-  return (
-    <>
-      <PageHero
-        image={c.image}
-        title={c.name}
-        eyebrow="Мастер-план развития"
-        crumbs={[[r.name, regionPath(r)], [c.name]]}
-      >
-        <a className="p-hero-inline-link" href="#projects">
-          Проекты города
-          <ArrowDown size={24} />
-        </a>
-      </PageHero>
-      <div className="p-region-stats">
-        <div className="p-shell">
-          <Stats
-            items={[
-              ...c.stats,
-              {
-                value: String(c.id === "vladivostok" ? 27 : c.projects.length),
-                label:
-                  c.id === "vladivostok"
-                    ? "проектов в согласованном атласе"
-                    : "проектов в мастер-плане",
-              },
-            ]}
-          />
-        </div>
-      </div>
-      <div className="p-city-subnav">
-        <div className="p-shell">
-          <a href="#mission">Миссия города</a>
-          <a href="#projects">Ключевые проекты</a>
-          <a href="#materials">Материалы и визуализации</a>
-          <a href={siteHref(regionPath(r))}>
-            Все города региона <Arrow size={16} />
-          </a>
-        </div>
-      </div>
-      <section className="p-city-mission p-shell p-section" id="mission">
-        <Eyebrow number="01">Миссия города</Eyebrow>
-        <h2>{c.mission}</h2>
-        <div className="p-city-about">
-          {c.about.map((t, i) => (
-            <p key={i} className={!all ? "p-line-clamp" : ""}>
-              {t}
-            </p>
-          ))}
-        </div>
-        {c.about.some((t) => t.length > 800) && (
-          <button className="p-text-link" onClick={() => setAll(!all)}>
-            {all ? "Свернуть" : "Читать о городе полностью"}
-            {all ? <Minus size={20} /> : <Plus size={20} />}
-          </button>
-        )}
-      </section>
-      {c.id === "vladivostok" ? (
-        <div className="p-legacy-atlas">
-          <Suspense fallback={<Loading />}>
-            <Atlas />
-          </Suspense>
-        </div>
-      ) : null}
-      <section
-        className="p-city-projects p-section"
-        id={c.id === "vladivostok" ? "source-projects" : "projects"}
-      >
-        <div className="p-shell">
-          <SectionHead
-            number="02"
-            title={
-              c.id === "vladivostok"
-                ? "Проекты исходного мастер-плана"
-                : "Ключевые проекты"
-            }
-          >
-            Развитие города
-          </SectionHead>
-          <div className="p-project-grid">
-            {primary.map((p, i) => (
-              <ProjectCard key={p.id} project={p} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-      {other.length > 0 && (
-        <section className="p-shell p-section">
-          <SectionHead number="03" title="Другие проекты">
-            Мастер-план в деталях
-          </SectionHead>
-          <ProjectRows items={other} />
-        </section>
-      )}
-      <section className="p-shell p-section" id="materials">
-        <SectionHead number="04" title="Материалы мастер-плана">
-          Схемы и визуализации
-        </SectionHead>
-        <CityMaterials city={c} />
-        {c.id === "ulan-ude" && (
-          <a className="p-map-band" href={siteHref("materials/ulan-ude")}>
-            <Building2 size={30} />
-            <div>
-              <h3>Обновлённая концепция Улан-Удэ</h3>
-              <p>Дополнительные описания, направления развития и схемы</p>
-            </div>
-            <Arrow />
-          </a>
-        )}
-        <SourceNote url={`${r.source}#${c.sourceRecord}`} />
-      </section>
-      <section className="p-related-cities p-section">
-        <div className="p-shell">
-          <SectionHead title="Ещё в регионе" href={siteHref(regionPath(r))}>
-            {r.name}
-          </SectionHead>
-          <div className="p-city-grid">
-            {r.cities
-              .filter((id) => id !== c.id)
-              .slice(0, 2)
-              .map((id) => (
-                <CityCard key={id} city={cityById[id]} />
-              ))}
-          </div>
-          {r.cities.length === 1 && (
-            <LinkButton href={siteHref("regions")}>Все регионы</LinkButton>
-          )}
-        </div>
-      </section>
-    </>
   );
 }
 function ProjectRows({ items }) {
@@ -2249,13 +1980,13 @@ export function PortalRoute({requestedPath=currentPath}={}) {
         <ApprovedProjectPage id={third} />
       </Suspense>
     );
-  if (path === "vladivostok") return <CityPage city={cityById.vladivostok} />;
+  if (path === "vladivostok" || path === "cities/vladivostok") return <VladivostokPage />;
   if (first === "cities" && cityById[second])
-    return <CityPage city={cityById[second]} />;
+    return <TerritoryPage city={cityById[second]} materials={<CityMaterials city={cityById[second]} />} />;
   if (region) {
     if (second && region.programs[second])
       return <ProgramPage region={region} program={second} />;
-    if (!second) return <RegionPage region={region} />;
+    if (!second) return <TerritoryPage region={region} />;
   }
   if (path === "dvkvartal") return <QuarterPage />;
   if (first === "dvkvartal") {
@@ -2272,8 +2003,9 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   return <NotFound />;
 }
 export default function PortalApp() {
+  const isTerritory = currentPath === "cities/vladivostok" || cities.some(c => cityPath(c) === currentPath) || regions.some(r => [r.id, regionPath(r)].includes(currentPath)) || ["page144867266.html", "page152744266.html"].includes(currentPath);
   useEffect(() => {
-    document.body.classList.add("portal");
+    document.body.classList.toggle("portal", !isTerritory);
     if (location.hash) {
       requestAnimationFrame(() =>
         document
@@ -2289,11 +2021,11 @@ export default function PortalApp() {
         Перейти к содержанию
       </a>
       <div id="top" />
-      <Header />
-      <main id="content">
+      <div className="portal portal-navigation"><Header /></div>
+      <main id="content" className={isTerritory ? "approved-territory-page" : undefined}>
         <PortalRoute />
       </main>
-      <Footer />
+      <div className="portal portal-navigation"><Footer /></div>
     </>
   );
 }

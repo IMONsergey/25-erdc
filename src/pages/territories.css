@@ -1,0 +1,156 @@
+/* All adaptations are limited to new territories. The approved Vladivostok
+   blocks continue to use their original styles without portal resets. */
+.approved-territory-page { overflow: clip; }
+.territory-template .territory-hero { min-height: 880px; height: min(1050px, 100svh); }
+.territory-template .hero-heading { top: 28%; transform: none; padding-inline: var(--gutter); }
+.territory-template .hero-heading h1 { font-size: clamp(70px, 8vw, 144px); font-weight: 450; line-height: .99; letter-spacing: -.055em; text-transform: none; max-width: 1500px; margin-inline: auto; text-wrap: balance; overflow-wrap: anywhere; }
+.territory-template .territory-hero-long .hero-heading h1 { font-size: clamp(65px, 6.8vw, 112px); }
+.territory-template .hero-subtitle { max-width: 800px; margin: 28px auto 0; font-size: 18px; line-height: 1.5; text-wrap: balance; }
+.territory-template .hero-stats { max-width: 760px; flex: 1; }
+.territory-template .hero-stats > div { min-width: 0; flex: 1; }
+.territory-template .hero-stats > div > span { display: block; min-height: 34px; font-size: 12px; line-height: 1.4; }
+.territory-template .hero-stats strong { font-size: clamp(32px, 3.2vw, 53px); white-space: nowrap; }
+.territory-template .hero-stats strong small { display: block; margin: 8px 0 0; font-size: 13px; }
+.territory-template .hero-bottom { gap: 32px; }
+.territory-template .territory-city-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.territory-template .territory-count-1, .territory-template .territory-count-2, .territory-template .territory-count-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.territory-template .territory-count-1 { grid-template-columns: minmax(0, 1fr); }
+.territory-template .territory-count-1 .city-card { height: 370px; }
+.territory-template .territory-count-1 .city-photo { object-position: 75% 50%; height: 100%; width: 70%; left: auto; right: 0; }
+.territory-template .territory-count-1 .city-card-body { width: min(65%, 720px); }
+.territory-template .city-card { min-width: 0; height: 490px; text-align: left; }
+.territory-template .city-card-body > strong { font-size: clamp(28px, 2.65vw, 44px); overflow-wrap: anywhere; }
+.territory-template .city-card-description { font-size: 14px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.territory-template .city-card .territory-city-photo { mix-blend-mode: normal; filter: saturate(.75); opacity: .9; object-position: center; }
+.territory-template .city-card-shade { background: linear-gradient(180deg, #104b7700 15%, #104b7750 42%, #104b77 72%); }
+.territory-template .city-story { height: auto; min-height: 660px; }
+.territory-template .city-story-content { max-width: 890px; }
+.territory-template .city-story-content h3 { font-size: clamp(33px, 3.7vw, 64px); overflow-wrap: anywhere; }
+.territory-template .city-story-content > p { max-width: 640px; }
+.territory-template .city-story .city-detail-shade { background: linear-gradient(90deg,#002e4bf5,#044063bc 55%,#15446738),linear-gradient(0deg,#063752bb,transparent); }
+.territory-template .city-themes > span { font-size: 14px; }
+.territory-story-metrics { display: flex; gap: 40px; }
+.territory-story-metrics > div { max-width: 235px; }
+.territory-story-metrics > div > span { display: block; font-size: 12px; line-height: 1.4; color: #d6eaf4; margin-bottom: 15px; }
+.territory-story-metrics strong { display: block; font-size: 38px; line-height: 1.1; font-weight: 500; }
+.territory-story-metrics small { display: block; font-size: 13px; font-weight: 400; margin-top: 7px; }
+.territory-template .mission-copy h2 { overflow-wrap: anywhere; }
+.territory-template .mission-principle p { font-size: 16px; }
+.territory-template .mission-principle h3 a { line-height: 1.3; }
+.territory-template .territory-strategy-tabs { grid-template-columns: repeat(auto-fit, minmax(86px, 1fr)); }
+.territory-template .territory-strategy-tabs strong { font-size: 13px; overflow-wrap: anywhere; }
+.territory-template .strategy-description { font-size: 16px; }
+.territory-about-more { border-top: 1px solid #adcde4; margin-top: 22px; font-size: 16px; line-height: 1.7; color: #4c6a80; }
+.territory-about-more summary { display:flex; align-items: center; justify-content: space-between; padding: 22px 0; cursor: pointer; color: var(--ink); }
+.territory-about-more p + p { margin-top: 18px; }
+.territory-inline-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid currentColor; padding-block: 13px; font-size: 15px; }
+.territory-template .strategy-body > .territory-inline-link { margin-top: 12px; color: #1265eb; }
+.territory-explorer { display: grid; grid-template-columns: 350px minmax(0,1fr); background: #063c59; color: white; min-height: 840px; }
+.territory-explorer .atlas-sidebar { position: static; width: auto; height: 920px; max-height: none; z-index: auto; padding-bottom: 0; border-radius: 0; background: #07334f; display: flex; flex-direction: column; }
+.territory-explorer .atlas-sidebar-head h3 { overflow-wrap: anywhere; }
+.territory-explorer .atlas-categories { flex: none; max-height: 310px; overflow-y: auto; }
+.territory-explorer .atlas-project-list { flex: 1; min-height: 210px; max-height: none; overscroll-behavior-y: contain; }
+.territory-explorer .atlas-project { min-height: 76px; }
+.territory-explorer .atlas-project > span:nth-child(2) { font-size: 14px; line-height: 1.45; }
+.territory-project { min-width: 0; display: flex; flex-direction: column; background: #eef7fd; color: var(--ink); }
+.territory-project-visual { height: 470px; position: relative; background: #0e5274; }
+.territory-project-visual > img { height: 100%; width: 100%; object-fit: cover; }
+.territory-gallery-controls, .territory-photo-label { position: absolute; bottom: 22px; right: 28px; background: #052f4ddd; color: white; padding: 7px; border: 1px solid #ffffff50; border-radius: 35px; display: flex; align-items: center; gap: 20px; font-size: 13px; backdrop-filter: blur(12px); }
+.territory-photo-label { border-radius: 5px; font-size: 12px; padding: 10px 16px; }
+.territory-gallery-controls button, .territory-project-nav button { display: grid; place-items: center; height: 42px; width: 42px; background: transparent; border-radius: 50%; }
+.territory-gallery-controls button:hover { background: #ffffff24; }
+.territory-project-copy { padding: 36px 46px; flex: 1; }
+.territory-project-copy > .section-kicker { color: #3376b4; }
+.territory-project-copy h3 { font-size: clamp(28px, 2.4vw, 43px); font-weight: 450; line-height: 1.1; letter-spacing: -.035em; margin: 18px 0; }
+.territory-project-copy > p { font-size: 16px; line-height: 1.6; color: #4c6a80; max-width: 880px; }
+.territory-project-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; margin: 28px 0; }
+.territory-project-stats dt { font-size: 13px; color: #4c6a80; line-height: 1.45; }
+.territory-project-stats dd { margin: 9px 0 0; font-size: clamp(21px, 2vw, 30px); letter-spacing: -.03em; line-height: 1.25; }
+.territory-project-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 30px; }
+.territory-project-nav { display: flex; align-items: center; gap: 10px; font-size: 12px; white-space: nowrap; }
+.territory-project-nav button { border: 1px solid #aac9dc; }
+.territory-project-nav button:hover { background: #d9ecf9; }
+.territory-project-nav button:disabled { opacity: .35; }
+.territory-template .region-next a { font-size: clamp(35px, 5vw, 84px); overflow-wrap: anywhere; }
+@media(min-width:1800px) { .territory-explorer { grid-template-columns: minmax(350px,calc((100vw - 1720px)/2 + 350px)) minmax(0,1fr); } .territory-explorer .atlas-sidebar { padding-left: max(0px,calc((100vw - 1720px)/2)); } }
+@media(max-width:1100px) {
+  .territory-template .hero-bottom { flex-wrap: wrap; bottom: 70px; }
+  .territory-template .hero-stats { max-width: none; }
+  .territory-template .hero-explore { display: none; }
+  .territory-template .scroll-cue { display: none; }
+  .territory-template .territory-city-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .territory-template .territory-count-1 { grid-template-columns: minmax(0,1fr); }
+  .territory-explorer { grid-template-columns: 300px minmax(0,1fr); }
+  .territory-project-copy { padding: 28px; }
+  .territory-project-visual { height: 370px; }
+  .territory-project-stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .territory-project-bottom { flex-wrap: wrap; }
+  .territory-template .mission-layout { gap: 35px; }
+}
+@media(max-width:760px) {
+  .territory-template .territory-hero { min-height: 790px; height: auto; padding: 155px 0 70px; display: flex; flex-direction: column; }
+  .territory-template .hero-topline { top: 106px; gap: 15px; font-size: 12px; }
+  .territory-template .hero-topline > span { display: none; }
+  .territory-template .hero-heading { position: relative; top: auto; left: auto; width: 100%; margin-top: 32px; }
+  .territory-template .hero-heading h1 { font-size: clamp(40px,9.7vw,72px); line-height: 1.02; }
+  .territory-template .territory-hero-long .hero-heading h1 { font-size: clamp(36px,8.2vw,62px); }
+  .territory-template .hero-subtitle { font-size: 15px; line-height: 1.6; margin-top: 22px; }
+  .territory-template .hero-bottom { position: relative; inset: auto; transform: none; margin: 38px auto 0; width: calc(100% - var(--gutter) * 2); }
+  .territory-template .hero-stats { width: 100%; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); padding: 22px 14px; gap: 14px; }
+  .territory-template .hero-stats > div { padding: 0; border: none; }
+  .territory-template .hero-stats > div > span { font-size: 11px; min-height: 46px; }
+  .territory-template .hero-stats strong { font-size: clamp(22px,5.5vw,38px); }
+  .territory-template .hero-stats strong small { font-size: 11px; white-space: normal; }
+  .territory-template .region-section { padding-top: 48px; }
+  .territory-template .section-aside { display: none; }
+  .territory-template .territory-city-grid { display: grid; grid-auto-flow: column; grid-auto-columns: min(84vw,350px); grid-template-columns: none; gap: 16px; overflow-x: auto; padding: 7px 2px 25px; scroll-snap-type: x mandatory; margin-top: 30px; }
+  .territory-template .territory-city-grid .city-card { width: auto; height: 430px; scroll-snap-align: start; }
+  .territory-template .territory-count-1 { grid-auto-columns: 100%; }
+  .territory-template .territory-count-1 .city-card-body { width: 100%; }
+  .territory-template .territory-count-1 .city-photo { width: 100%; height: 70%; }
+  .territory-template .city-card-body > strong { font-size: 29px; }
+  .territory-template .city-card-description { font-size: 14px; }
+  .territory-template .city-story { min-height: 640px; }
+  .territory-template .city-story-content h3 { font-size: clamp(29px,7.7vw,48px); }
+  .territory-template .city-story-content > p { font-size: 15px; }
+  .territory-template .city-story-top { flex-wrap: wrap; }
+  .territory-template .city-story-bottom { flex-direction: column; align-items: stretch; }
+  .territory-story-metrics { gap: 20px; }
+  .territory-story-metrics > div { flex: 1; }
+  .territory-story-metrics > div > span { min-height: 34px; font-size: 11px; }
+  .territory-story-metrics strong { font-size: 32px; }
+  .territory-template .city-story-cta { align-self: flex-start; font-size: 14px; }
+  .territory-template .mission-layout { grid-template-columns: 1fr; }
+  .territory-template .mission-copy h2 { font-size: 35px; }
+  .territory-template .mission-principle { grid-template-columns: 48px minmax(0,1fr); gap: 16px; }
+  .territory-template .mission-principle p { font-size: 15px; }
+  .territory-template .mission-emblem { height: 45px; width: 45px; }
+  .territory-template .strategy-body { padding: 23px; }
+  .territory-explorer { grid-template-columns: 1fr; }
+  .territory-explorer .atlas-sidebar { height: auto; max-height: none; }
+  .territory-explorer .atlas-categories { max-height: 220px; }
+  .territory-explorer .atlas-project-list { max-height: 230px; min-height: 100px; flex: auto; }
+  .territory-project-visual { height: 280px; }
+  .territory-project-copy { padding: 27px var(--gutter) 38px; }
+  .territory-project-copy h3 { font-size: 29px; }
+  .territory-project-stats { gap: 20px; }
+  .territory-project-stats dd { font-size: 24px; }
+  .territory-gallery-controls { right: 16px; bottom: 16px; }
+  .territory-template .region-next a { font-size: 36px; gap: 24px; }
+}
+@media(prefers-reduced-motion:reduce) { .territory-template * { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+.territory-materials { padding-block: 60px; }
+.territory-materials > details { border-block: 1px solid #b9d0e1; }
+.territory-materials summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 34px 0; cursor: pointer; }
+.territory-materials summary strong { display: block; font-size: clamp(25px,3vw,44px); line-height: 1.15; margin-top: 14px; font-weight: 450; letter-spacing: -.035em; }
+.territory-materials-content { padding-block: 15px 35px; background: var(--page); }
+.territory-materials-content .p-content { padding: 0; }
+.territory-template .hero-stats { align-items: stretch; }
+.territory-template .hero-stats > div { display: flex; flex-direction: column; }
+.territory-template .hero-stats > div > span { flex: 1; margin-bottom: 16px; min-height: 0; }
+@media(max-width:760px) {
+  .territory-template .hero-stats > div > span { min-height: 31px; }
+  .territory-template .hero-stats strong { font-size: clamp(20px,5.3vw,36px); }
+}
+@media(max-width:760px) { .territory-template .hero-heading { right: auto; } }
+.territory-template .hero-stats strong small { min-height: 1.3em; line-height: 1.3; }

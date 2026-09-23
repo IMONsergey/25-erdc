@@ -1,0 +1,17 @@
+{
+  "reference": "Approved blue city page, 22 September 2026; original blocks preserved from 3d7bd04 (tree identical to df499f2).",
+  "sha256": {
+    "src/components/Hero.jsx": "444f361cacc61b7578e33b4256ebabec8b0d3bc64a03f732f8ed6b0381bea64d",
+    "src/components/Regions.jsx": "eef63aec1be617a8f45a4d336360d9b0e9a501205887f77e4a172a10ee1f6e75",
+    "src/components/Mission.jsx": "718c9e7e75ed0fd4ef7730f34888d56901fce9f1200d22ba4c6b2677b90acfa5",
+    "src/components/Projects.jsx": "db7db9de01019298ba14a05914429d40cfa8fe93e6cdada33fea9453145e878e",
+    "src/components/ProjectDetail.jsx": "c2a664fe6b5de27cf75edf70d764d054c13df39be784d61463386697007e5b83",
+    "src/components/Motion.jsx": "dc1e6e2890aeb8e7ad98c172cc07836399ed083727b264b1b0d73688fe523039",
+    "src/styles.css": "e3833a8727e78a7fad4b0a865f0a777224737fba6252de416e1ea5fb64e10c05",
+    "src/refinements.css": "87ffb844b22417898b237b018937e35e1c0d14cac0fe40c780b435081f905d9d",
+    "src/pages.css": "f24795af02667a41d6e27d53570c2196fe17fc495f0b3bbe0caac1d949ef1a1a",
+    "src/selectedProjects.js": "4e1939ab617fa881eff31827503335f9cfe32b46cafc33bd433356964747f47f",
+    "src/projectDetails.js": "7af0e01709610a62711ede6e767d6f8ec5c79e82eb47ef9d5633ecd9d7fe7b79",
+    "src/atlasCamera.js": "5ba186484c7c7b6fdbb1c5f7a1fe740618b82380443ee86ce078a610137ffbc7"
+  }
+}

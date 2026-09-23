@@ -13,3 +13,5 @@ createRoot(rootElement).render(
     <App />
   </StrictMode>,
 );
+
+import "./pages/territories.css";
