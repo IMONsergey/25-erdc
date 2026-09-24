@@ -1,3 +1,6 @@
+import UnifiedFooter from '../editorial/UnifiedFooter.jsx';
+import {EditorialHome,EditorialRegions} from '../editorial/EditorialPages.jsx';
+import EditorialMotion from '../editorial/Motion.jsx';
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from "react";
 import {
   ArrowUpRight,
@@ -436,70 +439,7 @@ function Header() {
     </>
   );
 }
-function Footer() {
-  return (
-    <footer className="p-footer">
-      <div className="p-shell">
-        <div className="p-footer-title">
-          <p>
-            Дальний Восток.
-            <br />
-            <span>Новый облик городов.</span>
-          </p>
-          <a href="#top" aria-label="Наверх" className="p-top-button">
-            <Arrow size={34} />
-          </a>
-        </div>
-        <div className="p-footer-grid">
-          <div>
-            <a href={siteHref()}>
-              <img
-                src={asset("logo-25-cities.svg")}
-                alt="25 городов"
-                width="166"
-              />
-            </a>
-            <p>
-              Мастер-планы развития городов
-              <br />
-              Дальнего Востока
-            </p>
-            <a className="p-footer-phone" href="tel:88007075558">
-              8 (800) 707-55-58
-            </a>
-          </div>
-          <nav aria-label="Разделы в подвале">
-            <h2>Проект</h2>
-            {[
-              ["about", "О проекте"],
-              ["regions", "Регионы"],
-              ["projects", "Все проекты"],
-              ["dvkvartal", "ДВ Квартал"],
-              ["news", "Новости"],
-              ["map", "Карта проектов"],
-            ].map(([p, n]) => (
-              <a key={p} href={siteHref(p)}>
-                {n}
-              </a>
-            ))}
-          </nav>
-          <nav className="p-footer-regions" aria-label="Регионы в подвале">
-            <h2>Регионы</h2>
-            {regions.map((r) => (
-              <a href={siteHref(regionPath(r))} key={r.id}>
-                {r.name}
-              </a>
-            ))}
-          </nav>
-        </div>
-        <div className="p-footer-bottom">
-          <span>Корпорация развития Дальнего Востока и Арктики · 2026</span>
-          <a href={siteHref("sitemap")}>Карта сайта</a>
-        </div>
-      </div>
-    </footer>
-  );
-}
+function Footer(){ return <UnifiedFooter/>; }
 function RegionCard({ region: r, index = 0 }) {
   return (
     <a
@@ -588,219 +528,7 @@ function NewsCard({ post: n, featured = false, collection }) {
     </NewsLink>
   );
 }
-function Home() {
-  const [regionQuery, setRegionQuery] = useState("");
-  const homeRegions = regions.filter(r => normalize(r.name + " " + r.cities.map(id => cityById[id].name).join(" ")).includes(normalize(regionQuery)));
-  const featured = projects.filter(
-    (p) =>
-      p.images.length &&
-      p.program === "masterplan" &&
-      [
-        "Благоустройство набережной Амурского залива",
-        "Строительство межвузовского кампуса мирового уровня",
-        "Реконструкция Национального музея Республики Бурятия",
-      ].includes(p.title),
-  );
-  const picks =
-    featured.length >= 3
-      ? featured.slice(0, 3)
-      : [
-          projects.find((p) => p.city === "vladivostok" && p.images.length),
-          projects.find((p) => p.city === "ulan-ude" && p.images.length),
-          projects.find(
-            (p) => p.city === "petropavlovsk-kamchatsky" && p.images.length,
-          ),
-        ];
-  return (
-    <>
-      <section className="p-home-hero">
-        <Image
-          src="home-hero.webp"
-          className="p-hero-photo"
-          alt="Русский мост во Владивостоке"
-          priority
-        />
-        <div className="p-hero-shade" />
-        <div className="p-shell p-home-hero-inner">
-          <div className="p-hero-top">
-            <Eyebrow>Стратегические мастер-планы</Eyebrow>
-            <span>
-              От Байкала
-              <br />
-              до Тихого океана
-            </span>
-          </div>
-          <div className="p-home-hero-title">
-            <h1>
-              Новый облик
-              <br />
-              Дальнего Востока<span className="p-title-dot">.</span>
-            </h1>
-            <span className="p-hero-25" aria-hidden="true">
-              25
-            </span>
-          </div>
-          <div className="p-hero-bottom">
-            <p>
-              Города для жизни, работы
-              <br />и будущего.
-            </p>
-            <a className="p-hero-cta" href="#regions">
-              Исследовать регионы
-              <span>
-                <ArrowDown size={27} />
-              </span>
-            </a>
-            <span className="p-hero-coordinate">
-              11 регионов
-              <br />4 млн+ жителей
-            </span>
-          </div>
-        </div>
-      </section>
-      <nav className="p-home-jumps" aria-label="Разделы главной страницы">{[["about","О проекте"],["regions","Регионы"],["projects","Проекты"],["quarter","ДВ Квартал"],["news","Новости"]].map(([id,label]) => <a href={`#${id}`} key={id}>{label}<ArrowDown size={14} /></a>)}</nav>
-      <MasterplanFinder />
-      <section className="p-home-intro p-shell" id="about">
-        <div className="p-intro-side">
-          <Eyebrow number="01">О проекте</Eyebrow>
-          <div className="p-intro-number">
-            25
-            <span>
-              городов.
-              <br />
-              Одно большое будущее.
-            </span>
-          </div>
-        </div>
-        <div className="p-intro-copy">
-          <h2>
-            Перемены начинаются
-            <br />с <em>мастер-плана.</em>
-          </h2>
-          <p>
-            Мастер-планы создаются с учётом мнения жителей. Они определяют
-            принципы развития городов, приоритетные проекты и источники их
-            финансирования.
-          </p>
-          <a className="p-text-link" href={siteHref("about")}>
-            Как устроен проект
-            <Arrow />
-          </a>
-        </div>
-      </section>
-      <section className="p-home-regions" id="regions">
-        <div className="p-shell">
-          <SectionHead
-            number="02"
-            title={
-              <>
-                Разные города.
-                <br />
-                <em>Общие возможности.</em>
-              </>
-            }
-            href={siteHref("regions")}
-            label="Все регионы"
-          >
-            География развития
-          </SectionHead>
-          <label className="p-search-field p-home-region-search"><Search size={20} /><input placeholder="Найти регион или город" aria-label="Найти регион на главной" value={regionQuery} onChange={e => setRegionQuery(e.target.value)} />{regionQuery && <button aria-label="Очистить поиск регионов" onClick={() => setRegionQuery("")}><X size={18} /></button>}</label>
-          <div className="p-region-grid">
-            {homeRegions.map((r, i) => (
-              <RegionCard region={r} index={i} key={r.id} />
-            ))}
-          </div>
-          {!homeRegions.length && <Empty onReset={() => setRegionQuery("")} />}
-        </div>
-      </section>
-      <section className="p-home-projects p-shell" id="projects">
-        <SectionHead
-          number="03"
-          title={
-            <>
-              Будущее обретает
-              <br />
-              <em>очертания.</em>
-            </>
-          }
-          href={siteHref("projects")}
-          label="Все проекты"
-        >
-          От замысла к городу
-        </SectionHead>
-        <div className="p-project-grid">
-          {picks.filter(Boolean).map((p, i) => (
-            <ProjectCard project={p} index={i} key={p.id} />
-          ))}
-        </div>
-        <a className="p-map-band" href={siteHref("map")}>
-          <MapIcon size={34} />
-          <div>
-            <h3>Все перемены — на одной карте</h3>
-            <p>Города, направления развития и объекты мастер-планов</p>
-          </div>
-          <Arrow size={32} />
-        </a>
-      </section>
-      <section className="p-editorial">
-        <div className="p-editorial-image">
-          <Image
-            src="masterplan-editorial-v1.webp"
-            alt="Городская набережная и общественные пространства"
-          />
-        </div>
-        <div className="p-editorial-copy">
-          <Eyebrow>В центре — человек</Eyebrow>
-          <h2>
-            Комфортная среда.
-            <br />
-            <em>Возможности для жизни.</em>
-          </h2>
-          <p>
-            Реализация мастер-планов позволит улучшить условия жизни более чем 4
-            миллионов дальневосточников.
-          </p>
-          <div className="p-editorial-facts">
-            <div>
-              <strong>11</strong>
-              <span>региональных центров</span>
-            </div>
-            <div>
-              <strong>2</strong>
-              <span>столицы БАМа</span>
-            </div>
-          </div>
-          <LinkButton href={siteHref("about")} light>
-            О мастер-планах
-          </LinkButton>
-        </div>
-      </section>
-      <QuarterTeaser />
-      <section className="p-shell p-home-news" id="news">
-        <SectionHead
-          number="05"
-          title={
-            <>
-              Города меняются.
-              <br />
-              <em>Следите за событиями.</em>
-            </>
-          }
-          href={siteHref("news")}
-          label="Все новости"
-        >
-          Новости проекта
-        </SectionHead>
-        <div className="p-news-grid">
-          {news.slice(0, 3).map((n, i) => (
-            <NewsCard post={n} key={n.id} featured={i === 0} />
-          ))}
-        </div>
-      </section>
-      <Partners />
-    </>
-  );
-}
+function Home(){ return <EditorialHome/>; }
 function QuarterTeaser() {
   return (
     <section className="p-quarter-teaser p-shell" id="quarter">
@@ -879,29 +607,7 @@ function PageHero({
     </section>
   );
 }
-function RegionsPage() {
-  const [q, setQ] = useQueryState("q"), [view, setView] = useQueryState("view", "regions");
-  const cityView = view === "cities";
-  const matches = regions.filter(r => normalize(r.name + " " + r.cities.map(id => cityById[id].name).join(" ")).includes(normalize(q)));
-  const territories = cities.filter(c=>parentTerritory(c.id)===c.id);
-  const matchingCities = territories.filter(c => normalize(territoryName(c) + " " + regionById[c.region]?.name).includes(normalize(q)));
-  const count = cityView ? matchingCities.length : matches.length;
-  return <>
-    <PageHero title={<>Один Дальний Восток.<br /><em>11 характеров.</em></>} eyebrow="Регионы-участники" crumbs={[["Регионы"]]} compact />
-    <section className="p-shell p-section">
-      <div className="p-filter-bar">
-        <div className="p-directory-tabs" role="group" aria-label="Показать территории">
-          <button aria-pressed={!cityView} onClick={() => setView("regions")}>Регионы <small>{regions.length}</small></button>
-          <button aria-pressed={cityView} onClick={() => setView("cities")}>Города и агломерации <small>{territories.length}</small></button>
-        </div>
-        <label className="p-search-field"><Search size={20} /><input aria-label="Найти регион или город" placeholder="Регион или город" value={q} onChange={e => setQ(e.target.value)} />{q && <button aria-label="Очистить поиск территорий" onClick={() => setQ("")}><X size={18} /></button>}</label>
-      </div>
-      <div className="p-directory-count" aria-live="polite">Найдено: {count}{q && <button onClick={() => setQ("")}>Сбросить поиск <X size={15} /></button>}</div>
-      {cityView ? <div className="p-city-grid">{matchingCities.map((c,i) => <CityCard city={c} index={i} key={c.id} />)}</div> : <div className="p-region-grid p-regions-catalog">{matches.map((r,i) => <RegionCard key={r.id} region={r} index={i} />)}</div>}
-      {!count && <Empty onReset={() => setQ("")} />}
-    </section>
-  </>;
-}
+function RegionsPage(){ return <EditorialRegions/>; }
 function NextRegion({ region: r }) {
   const next = regions[r.index % regions.length];
   return (
@@ -1718,8 +1424,9 @@ export default function PortalApp() {
     }
     return () => document.body.classList.remove("portal");
   }, []);
+  const isCity = currentPath.startsWith("cities/") || currentPath === "vladivostok";
   return (
-    <NewsProvider>
+    <NewsProvider><div className={`ed-site ${isCity ? "ed-preserve-city" : ""}`}>
       <a className="skip-link" href="#content">
         Перейти к содержанию
       </a>
@@ -1730,6 +1437,7 @@ export default function PortalApp() {
       </main>
       <div className="portal portal-navigation"><Footer /></div>
       {!isTerritory && <BackToTop />}
-    </NewsProvider>
+      {!isCity && <EditorialMotion/>}
+    </div></NewsProvider>
   );
 }

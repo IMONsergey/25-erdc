@@ -23,3 +23,6 @@ import "./layout.css";
 import "./portal/experience.css";
 import "./pages/simplified-city.css";
 import "./portal/catalog-dialog.css";
+
+import './editorial/editorial.css';
+import './editorial/region.css';

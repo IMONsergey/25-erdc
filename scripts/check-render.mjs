@@ -40,7 +40,7 @@ try {
   assert.ok(markup.includes("Новый облик"));
   assert.ok(markup.includes("Дальнего Востока"));
   assert.ok(markup.includes("<svg"));
-  assert.ok(markup.includes("p-region-card"));
+  assert.ok(markup.includes("e-region-explorer"));
   const unwanted = /Концептуальная иллюстрация|сведения исходного портала|расположение ориентировочное|О данных проекта/i;
   assert.ok(!unwanted.test(markup), "Homepage contains production notes");
   for(const requestedPath of ['primorye','buryatia','khabkrai','cities/ulan-ude','cities/petropavlovsk-kamchatsky','primorye/subsidy','projects','projects/733657179','news','dvkvartal','dvkvartal/750970520','about','sitemap']) {
