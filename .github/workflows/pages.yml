@@ -6,13 +6,13 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -21,32 +21,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout current site
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - name: Fetch and preserve Figma assets
+      - name: Checkout version 2
+        uses: actions/checkout@v4
+        with:
+          ref: design/editorial-atlas-v2
+          path: .preview-source
+
+      - name: Preserve existing Figma imagery
         run: |
-          if [[ ! -f assets/.webp-v2 || ! -f assets/project-kungasny-page12.webp || ! -f assets/city-lineart-vladivostok.webp || ! -f assets/city-lineart-artem.webp || ! -f assets/city-lineart-bolshoy-kamen.webp ]]; then
+          if [[ ! -f assets/.webp-v2 || ! -f assets/city-lineart-vladivostok.webp ]]; then
             sudo apt-get update
             sudo apt-get install --yes webp
           fi
           bash scripts/fetch-assets.sh
-          if [[ -n "$(git status --porcelain assets)" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add assets
-            git commit -m "Preserve Figma assets"
-            git push
-          fi
+          cd .preview-source
+          bash scripts/fetch-assets.sh
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-
-      - name: Install dependencies
-        run: npm ci
+          cache-dependency-path: |
+            package-lock.json
+            .preview-source/package-lock.json
 
       - name: Cache original portal imagery
         uses: actions/cache@v4
@@ -55,51 +58,65 @@ jobs:
           key: portal-media-${{ hashFiles('src/content/media.json') }}
           restore-keys: portal-media-
 
-      - name: Preserve original portal imagery
+      - name: Prepare original portal imagery
         run: |
           python -m pip install Pillow
           python scripts/fetch-portal-assets.py
+          cp -a assets/source .preview-source/assets/
+          cd .preview-source
+          python scripts/fetch-portal-assets.py
 
-      - name: Build React site
-        run: npm run build
+      - name: Build current site unchanged
+        run: |
+          npm ci
+          npm run build
+
+      - name: Build version 2
+        working-directory: .preview-source
+        id: preview
+        env:
+          PREVIEW_URL: https://imonsergey.github.io/25-erdc/v2/
+        run: |
+          npm ci
+          npm run build
+          export PREVIEW_COMMIT="$(git rev-parse HEAD)"
+          node scripts/prepare-pages-preview.mjs
+          echo "sha=${PREVIEW_COMMIT}" >> "$GITHUB_OUTPUT"
+
+      - name: Combine the two versions
+        run: |
+          mkdir -p _site/v2
+          cp -a dist/. _site/
+          cp -a .preview-source/dist/. _site/v2/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
-      - name: Upload site
+      - name: Upload both versions
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: _site
 
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify public page
+      - name: Verify both public versions
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+          PREVIEW_COMMIT: ${{ steps.preview.outputs.sha }}
         run: |
           for attempt in {1..12}; do
             ready=true
-            if curl --fail --location --silent --show-error "${PAGE_URL}" --output /tmp/page.html; then
-              grep --quiet "25 городов" /tmp/page.html || ready=false
-              for page in primorye buryatia vladivostok khabkrai kamchatka yakutia chukot zabaikal amurskaya sakhalin eao magadan regions projects news dvkvartal map cities/ulan-ude; do
-                curl --fail --location --silent --show-error "${PAGE_URL}${page}/" --output /dev/null || ready=false
-              done
-              curl --fail --location --silent --show-error "${PAGE_URL}assets/home-hero.webp" --output /dev/null || ready=false
-              curl --fail --location --silent --show-error "${PAGE_URL}assets/fonts/tiktok-sans-cyrillic.woff2" --output /dev/null || ready=false
-              if [[ "$ready" == true ]]; then exit 0; fi
-            fi
+            curl --fail --location --silent --show-error "${PAGE_URL}" --output /tmp/current.html || ready=false
+            curl --fail --location --silent --show-error "${PAGE_URL}v2/version.json" --output /tmp/preview.json || ready=false
+            if ! python -c 'import json, os; assert json.load(open("/tmp/preview.json"))["commit"] == os.environ["PREVIEW_COMMIT"]'; then ready=false; fi
+            for page in v2/ v2/primorye/ v2/vladivostok/ v2/cities/ulan-ude/ v2/projects/ v2/news/; do
+              curl --fail --location --silent --show-error "${PAGE_URL}${page}" --output /dev/null || ready=false
+            done
+            curl --fail --location --silent --show-error "${PAGE_URL}v2/assets/home-hero.webp" --output /dev/null || ready=false
+            if [[ "$ready" == true ]]; then exit 0; fi
             sleep 5
           done
-          echo "The public GitHub Pages URL did not become ready." >&2
+          echo "The two public versions did not become ready." >&2
           exit 1
-
-      - name: Record verified deployment
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit --allow-empty -m "Verify live GitHub Pages deployment"
-          git push
