@@ -2,6 +2,8 @@ import catalog from "../content/catalog.json";
 import news from "../content/news-index.json";
 import mediaIndex from "../content/media.json";
 import { asset } from "../data.js";
+import {territoryPath,projectDestination} from '../content/territory-model.js';
+import {siteRoot} from '../site.js';
 export const { regions, cities, projects, quarter, snapshotDate } = catalog;
 export { news };
 export const regionById = Object.fromEntries(regions.map((r) => [r.id, r]));
@@ -16,8 +18,8 @@ export const media = (url) =>
         ? url
         : asset(url);
 export const regionPath = (r) => (r.id === "primkrai" ? "primorye" : r.id);
-export const cityPath = (c) =>
-  c.id === "vladivostok" ? "vladivostok" : `cities/${c.id}`;
+export const cityPath = c => territoryPath(c.id);
+export const projectHref = p => new URL(projectDestination(p),siteRoot).href;
 export const dateText = (date) =>
   new Date(date + "T12:00:00Z").toLocaleDateString("ru-RU", {
     day: "numeric",

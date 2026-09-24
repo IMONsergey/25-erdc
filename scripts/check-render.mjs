@@ -15,7 +15,8 @@ for (const [path, entry] of Object.entries(historical.files)) {
 for (const [path, hash] of Object.entries(historical.assets)) {
   assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), hash, `Historical asset changed: ${path}`);
 }
-assert.equal(createHash("sha256").update(await readFile("vladivostok/index.html")).digest("hex"), historical.entrySha256);
+assert.equal(createHash("sha256").update(await readFile("docs/vladivostok-entry-20260922.html")).digest("hex"), historical.entrySha256);
+assert.ok((await readFile('vladivostok/index.html','utf8')).includes('/src/vladivostok-live/main.jsx'));
 for (const [path, hash] of Object.entries(approved.sha256)) {
   assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"), hash, `Approved Vladivostok file changed: ${path}`);
 }
@@ -61,6 +62,11 @@ try {
   assert.ok(news.includes('aria-haspopup="dialog"'));
   assert.ok(!news.includes('/news/tpost/'), "News still links to article pages");
   for (const entity of [...catalog.regions, ...catalog.cities]) {
+    if(['artem','bolshoy-kamen'].includes(entity.id)){
+      const redirect=renderToString(createElement(PortalRoute,{requestedPath:`cities/${entity.id}`}));
+      assert.ok(redirect.includes(`vladivostok/?city=${entity.id}`),'Agglomeration city must have a single canonical page');
+      continue;
+    }
     const isRegion = catalog.regions.includes(entity);
     const path = isRegion ? (entity.id === "primkrai" ? "primorye" : entity.id) : (entity.id === "vladivostok" ? "vladivostok" : `cities/${entity.id}`);
     const page = renderToString(entity.id === "vladivostok"
@@ -68,24 +74,21 @@ try {
       : createElement(PortalRoute, { requestedPath: path }));
     // Vladivostok is now an exact historical restore, including its original copy.
     if (entity.id !== "vladivostok") assert.ok(!unwanted.test(page), `${path}: production notes remain`);
-    for (const id of ["hero-title", "regions", "mission", "projects"]) {
+    for (const id of isRegion ? ['hero-title','masterplans','programs'] : ['hero-title','mission','projects']) {
       assert.ok(page.includes(`id="${id}"`), `${path}: missing approved section ${id}`);
     }
     assert.ok(page.includes(entity.name), `${path}: wrong territory`);
     assert.ok(!page.includes('p-page-hero'), `${path}: generic portal hero returned`);
     if (isRegion) {
-      assert.ok(page.includes('regional-atlas-stage'), `${path}: interactive regional atlas missing`);
+      assert.ok(!page.includes('regional-atlas-stage'), `${path}: region duplicates a master-plan atlas`);
       assert.ok(page.includes(`atlas-region-${entity.id}.webp`), `${path}: regional illustration missing`);
-      assert.ok(page.includes('regional-territory-markers'), `${path}: illustration interactions missing`);
+      assert.ok(page.includes('gateway-card'), `${path}: territory gateway missing`);
       assert.ok(!page.includes('OpenStreetMap'), `${path}: tiled map replaced the approved illustration`);
-      assert.ok(page.includes('Город на карте региона'), `${path}: city filtering missing`);
-      assert.ok(page.includes('Объекты на карте'), `${path}: territory-to-map navigation missing`);
-      assert.ok(page.includes('regional-atlas-invitation'), `${path}: approved atlas exploration flow missing`);
-      assert.ok(page.includes('Поиск и фильтры проектов'), `${path}: project search missing`);
+      assert.ok(page.includes('Открыть мастер-план'), `${path}: direct master-plan navigation missing`);
     }
     if (!isRegion && entity.id !== "vladivostok") {
-      assert.ok(page.includes('city-atlas-stage'), `${path}: city atlas missing`);
-      assert.ok(page.includes('Направления на панораме'), `${path}: image interactions missing`);
+      assert.ok(page.includes('promo-atlas'), `${path}: city atlas missing`);
+      assert.ok(page.includes('Объекты мастер-плана на карте'), `${path}: project points missing`);
       assert.ok(page.includes('Найти проект города'), `${path}: search missing`);
       assert.ok(!page.includes('territory-explorer'), `${path}: old flat project list returned`);
     }

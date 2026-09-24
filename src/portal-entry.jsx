@@ -21,3 +21,5 @@ import "./portal/interactions.css";
 import "./layout.css";
 
 import "./portal/experience.css";
+import "./pages/simplified-city.css";
+import "./portal/catalog-dialog.css";

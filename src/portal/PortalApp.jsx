@@ -34,6 +34,8 @@ import { MasterplanFinder, ProjectJourney } from "./Experience.jsx";
 import { filterNews } from "./news-filter.js";
 import TerritoryPage from "../pages/TerritoryPage.jsx";
 import VladivostokPage from "../pages/VladivostokPage.jsx";
+import {parentTerritory,territoryName,projectDestination} from '../content/territory-model.js';
+import CatalogProjectDialog from './CatalogProjectDialog.jsx';
 import {
   regions,
   cities,
@@ -46,6 +48,7 @@ import {
   media,
   regionPath,
   cityPath,
+  projectHref,
   dateText,
   normalize,
   programNames,
@@ -253,11 +256,13 @@ function Header() {
           ...cities.map((c) => ({
             name: c.id === "vladivostok" ? "Владивостокская агломерация" : c.name,
             path: cityPath(c),
+            hash: parentTerritory(c.id)!==c.id ? `?city=${c.id}#regions` : '',
             kind: c.id === "vladivostok" ? "Агломерация" : "Город",
           })),
           ...projects.map((p) => ({
             name: p.title,
-            path: `projects/${p.id}`,
+            path: "",
+            absolute: projectHref(p),
             kind: cityById[p.city]?.name || regionShort[p.region],
           })),
           ...quarter.projects.map(p => ({ name: `${p.name} — ${quarterRegion(p.region)}`, path: "dvkvartal", hash: `#quarter-${p.id}`, kind: "ДВ Квартал" })),
@@ -297,9 +302,9 @@ function Header() {
           <a href={siteHref("dvkvartal")}>ДВ Квартал</a>
           <a href={siteHref("news")}>Новости</a>
         </nav>
-        <a className="p-header-map" href={vladivostok || regionalMap || cityMap ? "#projects" : siteHref("map")}>
+        <a className="p-header-map" href={vladivostok || cityMap ? "#projects" : regionalMap ? "#masterplans" : siteHref("regions")}>
           <MapIcon size={17} />
-          {vladivostok ? "Атлас Владивостока" : regionalMap ? "Карта региона" : cityMap ? "Карта мастер-плана" : "Карта проектов"}
+          {vladivostok || cityMap ? "Проекты на карте" : "Выбрать мастер-план"}
         </a>
         <button
           ref={searchTrigger}
@@ -385,7 +390,7 @@ function Header() {
                 <div className="p-search-results" aria-live="polite">
                   {matches.length ? (
                     matches.map((m, i) => (
-                      m.post ? <NewsLink post={m.post} key={i} onOpen={() => { setSearch(false); setOpen(false); }}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></NewsLink> : <a href={siteHref(m.path, m.hash || "")} key={i}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></a>
+                      m.post ? <NewsLink post={m.post} key={i} onOpen={() => { setSearch(false); setOpen(false); }}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></NewsLink> : <a href={m.absolute||siteHref(m.path, m.hash || "")} key={i}><span>{m.kind}</span><strong>{m.name}</strong><Arrow /></a>
                     ))
                   ) : (
                     <p>
@@ -525,7 +530,7 @@ function CityCard({ city: c, index = 0 }) {
         <span className="p-city-index">{fmt(index + 1)}</span>
       </div>
       <div className="p-city-card-text">
-        <h3>{c.name}</h3>
+        <h3>{territoryName(c)}</h3>
         <span>{c.id === "vladivostok" ? selectedProjects.length : c.projects.length} проектов</span>
       </div>
       <p>{c.mission}</p>
@@ -537,7 +542,7 @@ function ProjectCard({ project: p, index = 0 }) {
   return (
     <a
       className={`p-project-card ${!image ? "p-project-card-text" : ""}`}
-      href={siteHref(`projects/${p.id}`)}
+      href={projectHref(p)}
     >
       {image ? (
         <div className="p-project-image">
@@ -878,7 +883,8 @@ function RegionsPage() {
   const [q, setQ] = useQueryState("q"), [view, setView] = useQueryState("view", "regions");
   const cityView = view === "cities";
   const matches = regions.filter(r => normalize(r.name + " " + r.cities.map(id => cityById[id].name).join(" ")).includes(normalize(q)));
-  const matchingCities = cities.filter(c => normalize(c.name + " " + regionById[c.region]?.name).includes(normalize(q)));
+  const territories = cities.filter(c=>parentTerritory(c.id)===c.id);
+  const matchingCities = territories.filter(c => normalize(territoryName(c) + " " + regionById[c.region]?.name).includes(normalize(q)));
   const count = cityView ? matchingCities.length : matches.length;
   return <>
     <PageHero title={<>Один Дальний Восток.<br /><em>11 характеров.</em></>} eyebrow="Регионы-участники" crumbs={[["Регионы"]]} compact />
@@ -886,7 +892,7 @@ function RegionsPage() {
       <div className="p-filter-bar">
         <div className="p-directory-tabs" role="group" aria-label="Показать территории">
           <button aria-pressed={!cityView} onClick={() => setView("regions")}>Регионы <small>{regions.length}</small></button>
-          <button aria-pressed={cityView} onClick={() => setView("cities")}>Города и агломерации <small>{cities.length}</small></button>
+          <button aria-pressed={cityView} onClick={() => setView("cities")}>Города и агломерации <small>{territories.length}</small></button>
         </div>
         <label className="p-search-field"><Search size={20} /><input aria-label="Найти регион или город" placeholder="Регион или город" value={q} onChange={e => setQ(e.target.value)} />{q && <button aria-label="Очистить поиск территорий" onClick={() => setQ("")}><X size={18} /></button>}</label>
       </div>
@@ -916,7 +922,7 @@ function ProjectRows({ items }) {
   return (
     <div className="p-project-rows">
       {items.map((p, i) => (
-        <a key={p.id} href={siteHref(`projects/${p.id}`)}>
+        <a key={p.id} href={projectHref(p)}>
           <span>{fmt(i + 1)}</span>
           <div>
             <h3>{p.title}</h3>
@@ -1188,6 +1194,7 @@ function ProjectsPage() {
   const cityOptions=cities.filter(c=>!region||c.region===region);
   const chips=[[query,()=>change(setQ,"")],[regionById[region]?.name,()=>{change(setR,"");setCity("");}],[cityById[city]?.name,()=>change(setCity,"")]].filter(([label])=>label);
   return <>
+    <CatalogProjectDialog/>
     <PageHero title={<>Проекты,<br/><em>которые меняют города.</em></>} eyebrow="Каталог развития" crumbs={[["Все проекты"]]} compact/>
     <section className="p-shell p-section p-project-catalog" id="project-results">
       <div className="p-catalog-filters">
@@ -1197,9 +1204,9 @@ function ProjectsPage() {
       </div>
       <div className="p-catalog-programs" aria-label="Программы развития">{[["","Все программы"],...Object.entries(programNames)].map(([id,label])=><button key={id} aria-pressed={program===id} onClick={()=>change(setP,id)}>{label}</button>)}</div>
       {chips.length>0&&<div className="p-catalog-chips" aria-label="Выбранные фильтры">{chips.map(([label,remove])=><button key={label} onClick={remove} aria-label={`Убрать фильтр: ${label}`}>{label}<X size={14}/></button>)}</div>}
-      <div className="p-catalog-summary"><div className="p-results-count" aria-live="polite"><span>Найдено: {filtered.length}</span><button onClick={reset} disabled={!query&&!region&&!city&&!program}>Сбросить<X size={16}/></button></div><div className="p-catalog-actions">{cityById[city]&&<a className="p-text-link" href={siteHref(cityPath(cityById[city]),"#projects")}><MapIcon size={18}/>Карта мастер-плана<Arrow size={18}/></a>}<div className="p-view-toggle" aria-label="Вид каталога"><button aria-label="Показать карточками" aria-pressed={view!=="list"} onClick={()=>setView("cards")}><Grid2X2 size={19}/></button><button aria-label="Показать списком" aria-pressed={view==="list"} onClick={()=>setView("list")}><List size={20}/></button></div></div></div>
+      <div className="p-catalog-summary"><div className="p-results-count" aria-live="polite"><span>Найдено: {filtered.length}</span><button onClick={reset} disabled={!query&&!region&&!city&&!program}>Сбросить<X size={16}/></button></div><div className="p-catalog-actions">{cityById[city]&&<a className="p-text-link" href={siteHref(cityPath(cityById[city]),`?city=${city}#projects`)}><MapIcon size={18}/>Карта мастер-плана<Arrow size={18}/></a>}<div className="p-view-toggle" aria-label="Вид каталога"><button aria-label="Показать карточками" aria-pressed={view!=="list"} onClick={()=>setView("cards")}><Grid2X2 size={19}/></button><button aria-label="Показать списком" aria-pressed={view==="list"} onClick={()=>setView("list")}><List size={20}/></button></div></div></div>
       {filtered.length?<>
-        {view==="list"?<div className="p-project-list-view">{filtered.slice((page-1)*18,page*18).map((p,i)=><a className="p-project-list-row" key={p.id} href={siteHref(`projects/${p.id}`)}><span>{fmt((page-1)*18+i+1)}</span><div><h3>{p.title}</h3><small>{cityById[p.city]?.name||p.place||regionShort[p.region]}</small></div><span>{programNames[p.program]}</span><Arrow size={20}/></a>)}</div>:<div className="p-project-grid">{filtered.slice((page-1)*18,page*18).map((p,i)=><ProjectCard key={p.id} project={p} index={(page-1)*18+i}/>)}</div>}
+        {view==="list"?<div className="p-project-list-view">{filtered.slice((page-1)*18,page*18).map((p,i)=><a className="p-project-list-row" key={p.id} href={projectHref(p)}><span>{fmt((page-1)*18+i+1)}</span><div><h3>{p.title}</h3><small>{cityById[p.city]?.name||p.place||regionShort[p.region]}</small></div><span>{programNames[p.program]}</span><Arrow size={20}/></a>)}</div>:<div className="p-project-grid">{filtered.slice((page-1)*18,page*18).map((p,i)=><ProjectCard key={p.id} project={p} index={(page-1)*18+i}/>)}</div>}
         <Pagination page={page} count={Math.ceil(filtered.length/18)} onChange={n=>{setPage(n);document.getElementById("project-results").scrollIntoView({behavior:"instant"});}}/>
       </>:<Empty onReset={reset}/>}
     </section>
@@ -1580,7 +1587,6 @@ function Sitemap() {
             ["dvkvartal", "ДВ Квартал"],
             ["news", "Новости"],
             ["map", "Интерактивная карта"],
-            ["materials/ulan-ude", "Материалы Улан-Удэ и Северобайкальска"],
           ].map(([p, n]) => (
             <a key={p} href={siteHref(p)}>
               {n}
@@ -1597,13 +1603,13 @@ function Sitemap() {
               </a>
             </h2>
             <nav aria-label={r.name}>
-              {r.cities.map((id) => (
+              {r.cities.filter(id=>parentTerritory(id)===id).map((id) => (
                 <a href={siteHref(cityPath(cityById[id]))} key={id}>
-                  {cityById[id].name}
+                  {territoryName(cityById[id])}
                 </a>
               ))}
               {Object.entries(r.programs).map(([id, p]) => (
-                <a key={id} href={siteHref(`${regionPath(r)}/${id}`)}>
+                <a key={id} href={siteHref(regionPath(r),`#program-${id}`)}>
                   {p.name}
                 </a>
               ))}
@@ -1633,6 +1639,10 @@ function NotFound() {
     </>
   );
 }
+function LegacyDestination({href,label}){
+ useEffect(()=>{location.replace(href);},[href]);
+ return <div className="p-shell p-section"><h1>{label}</h1><a className="p-button" href={href}>Открыть<Arrow/></a></div>;
+}
 export function PortalRoute({requestedPath=currentPath}={}) {
   let path = requestedPath;
   const aliases = {
@@ -1657,7 +1667,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
   if (path === "sitemap") return <Sitemap />;
   if (path === "projects") return <ProjectsPage />;
   if (first === "projects" && projectById[second])
-    return <ProjectPage project={projectById[second]} />;
+    return <LegacyDestination href={projectHref(projectById[second])} label={projectById[second].title}/>;
   if (path === "news") return <NewsPage />;
   if (first === "news" && second === "tpost") {
     const n = news.find((n) => n.id === third);
@@ -1669,16 +1679,15 @@ export function PortalRoute({requestedPath=currentPath}={}) {
     /^project-\d{2}$/.test(third || "")
   )
     return (
-      <Suspense fallback={<Loading />}>
-        <ApprovedProjectPage id={third} />
-      </Suspense>
+      <LegacyDestination href={siteHref('vladivostok',`?project=${third}#projects`)} label="Проект Владивостокской агломерации"/>
     );
   if (path === "vladivostok" || path === "cities/vladivostok") return <VladivostokPage />;
+  if(first==='cities'&&['artem','bolshoy-kamen'].includes(second))return <LegacyDestination href={siteHref('vladivostok',`?city=${second}${location.search.includes('project=')?'&project='+new URLSearchParams(location.search).get('project'):''}#regions`)} label={cityById[second].name}/>;
   if (first === "cities" && cityById[second])
     return <TerritoryPage city={cityById[second]} materials={<CityMaterials city={cityById[second]} />} />;
   if (region) {
     if (second && region.programs[second])
-      return <ProgramPage region={region} program={second} />;
+      return <LegacyDestination href={siteHref(regionPath(region),`#program-${second}`)} label={region.programs[second].name}/>;
     if (!second) return <TerritoryPage region={region} />;
   }
   if (path === "dvkvartal") return <QuarterPage />;
@@ -1686,7 +1695,7 @@ export function PortalRoute({requestedPath=currentPath}={}) {
     const p = quarter.projects.find((p) => p.id === second);
     return p ? <QuarterPage initialProject={p.id} /> : <NotFound />;
   }
-  if (path === "materials/ulan-ude") return <MaterialsPage />;
+  if (path === "materials/ulan-ude") return <LegacyDestination href={siteHref('cities/ulan-ude','#materials')} label="Материалы мастер-плана Улан-Удэ"/>;
   if (path === "map")
     return (
       <Suspense fallback={<Loading />}>

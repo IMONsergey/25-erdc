@@ -8,7 +8,7 @@ export function MasterplanFinder() {
   const id=useId();
   return <section className="p-masterplan-finder p-shell" id="masterplan-finder" aria-labelledby={`${id}-title`}>
     <div className="p-finder-copy"><MapPin size={26}/><div><h2 id={`${id}-title`}>Будущее вашего города</h2><p>Выберите территорию и откройте её мастер-план.</p></div></div>
-    <form onSubmit={e=>{e.preventDefault();if(city)location.assign(siteHref(cityPath(cityById[city]),"#projects"));}}>
+    <form onSubmit={e=>{e.preventDefault();if(city)location.assign(siteHref(cityPath(cityById[city]),`?city=${city}#projects`));}}>
       <label className="p-select-field"><span className="visually-hidden">Город для изучения мастер-плана</span><select aria-label="Город для изучения мастер-плана" value={city} onChange={e=>setCity(e.target.value)}><option value="">Выберите город</option>{regions.map(r=><optgroup key={r.id} label={r.name}>{cities.filter(c=>c.region===r.id).map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</optgroup>)}</select></label>
       <button className="p-button" disabled={!city}>Открыть карту<ArrowUpRight size={20}/></button>
     </form>

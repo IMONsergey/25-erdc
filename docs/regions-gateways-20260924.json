@@ -1,0 +1,23 @@
+{
+  "files": {
+    "src/pages/RegionGateway.jsx": "ce2a3821fb3c96bdf5ea82619e08843dc7cdd62b48a91e4c7c5f36e0b12f81aa",
+    "src/pages/region-gateway.css": "6e5d8ae05d21623bff01f79c06699945e40fee3771f75f2e837c6f6e8dfda480",
+    "src/content/territory-model.js": "c700ed68800dd0c65f6e0be82c0183ad1c39f1575255f2d19fe350388c6bd8ef",
+    "src/layout.css": "a85617bc662c8d106b26b94fd04dee6fa62eab896b58d214442955d72740466c",
+    "src/portal/portal.css": "4070c28f06e1b1041a7605ba0d72140cbc96e051f8cf8af56249a94e1cf6a04b"
+  },
+  "pages": {
+    "regions": "58e0d1fe42f48efe159117c624068231809666902b69d07077cd11ad1deed14a",
+    "primorye": "986c314e5d5dfbab1f4775381ebbc0ed7cab1027de15c0c1a37ecef020540b72",
+    "khabkrai": "edd79ee4bd6678f41a54206d579a52508579e7063b8ddfec58add77ab5318548",
+    "kamchatka": "f335377712745374d1f671753a98fc3f9dc111a2fce96c5160b9c3db4c8797d1",
+    "buryatia": "c3b3e5a9ee2679e932fd264f1db6a42ff9a766e57d513efee36307793d27c854",
+    "yakutia": "03863bad6b90ef2c35046dd37d6bdc5b951e243fab374341f19ca5411921bd23",
+    "chukot": "5fb239a8b59f8512c216a65b55dfaed8aacead76948fe7021c2d718039dd1839",
+    "zabaikal": "aa93bdd9d98c4131879318c5f628b3b9b2e20fcefd2ed3e7eaa5691488c08160",
+    "amurskaya": "8915ca508f278b33126301f08fdeefbe006512d777181653a6a5946d42985232",
+    "sakhalin": "1fa0ae26a0b68630cf04b7171404effef7555559f440da55c6124e5dde7ce223",
+    "eao": "c0fd0e1612b29dc8a7629362f7d572a758950e71f9f6249719565e92fc02fcd6",
+    "magadan": "a9fa09057703cac57ea0aa9223417abbc6cd83ebad7a76b0c8bb9bb9e141d8c7"
+  }
+}

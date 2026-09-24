@@ -1,4 +1,5 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
+import {projectDestination,territoryName} from '../src/content/territory-model.js';
 const c = JSON.parse(await readFile("src/content/catalog.json", "utf8"));
 const news = JSON.parse(await readFile("src/content/news-index.json", "utf8"));
 const template = await readFile("dist/index.html", "utf8");
@@ -18,6 +19,7 @@ const routes = [
     path: "materials/ulan-ude",
     title: "Улан-Удэ и Северобайкальск — материалы мастер-планов",
     type: "materials",
+    redirect: 'cities/ulan-ude/#materials',
   },
 ];
 for (const r of c.regions) {
@@ -26,13 +28,14 @@ for (const r of c.regions) {
     routes.push({
       path: `${regionPath(r)}/${id}`,
       title: `${p.name} — ${r.name}`,
-      type: "program",
+      type: "program-redirect",
+      redirect: `${regionPath(r)}/#program-${id}`,
     });
 }
 for (const city of c.cities)
-  routes.push({ path: cityPath(city), title: city.name, type: "city" });
+  routes.push({ path: cityPath(city), title: territoryName(city), type: ['artem','bolshoy-kamen'].includes(city.id)?'city-redirect':'city', ...(['artem','bolshoy-kamen'].includes(city.id)?{redirect:`vladivostok/?city=${city.id}#regions`}:{}) });
 for (const p of c.projects)
-  routes.push({ path: `projects/${p.id}`, title: p.title, type: "project" });
+  routes.push({ path: `projects/${p.id}`, title: p.title, type: "project-redirect", redirect: projectDestination(p) });
 for (const p of c.quarter.projects)
   routes.push({
     path: `dvkvartal/${p.id}`,
@@ -53,7 +56,8 @@ for (const p of approved)
   routes.push({
     path: `vladivostok/projects/${p.id}`,
     title: p.title,
-    type: "approved-project",
+    type: "approved-project-redirect",
+    redirect: `vladivostok/?project=${p.id}#projects`,
   });
 const aliases = {
   "cities/vladivostok": "vladivostok",
