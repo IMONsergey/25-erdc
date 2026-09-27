@@ -21,3 +21,11 @@ This revision affects the editorial v2 branch only. The original main site and t
 
 ## Verification
 Production build checks region baselines, route rendering, original project media preservation, coverage for all 507 projects and complete generated WebP files. Browser checks cover the catalogue search, generated image loading, mobile catalogue and public deployment.
+
+## Expressive design pass · 27 September 2026
+- Rebuilt the home page around a full-width panoramic scene with three selectable regions and contextual links.
+- Added a sticky chapter navigator, a graphic scale section and a contextual city-life switcher.
+- Reworked project stories, housing and news layouts within the shared twelve-column grid.
+- Introduced blue page headers, regional cards, a region photo composition and a unified graphic footer.
+- All imagery and regional/city facts are retained from the existing catalogue. No extra third-party animation dependency.
+- Checked desktop scene switching, mobile navigation and content switching at 320 px; fixed a clipped image title and scroll-position tracking.

@@ -2,14 +2,14 @@
   "files": {
     "src/pages/RegionGateway.jsx": "f39b29128d5ff24df962ea5d11b5d26702dcc8bf00a02aded08ba3c405e39ce7",
     "src/editorial/region.css": "31a15b18ddc42a53a81dcc35030c9584de97a314f3ce035c05a5c29609bf917c",
-    "src/editorial/EditorialPages.jsx": "ad4fa103919aac7871f3db184f9a1a3c4055bb49d8ed09300b847d30c7828cfe",
+    "src/editorial/EditorialPages.jsx": "e0d78eb79c376b07867b2c985e899a67ea6b0eea984642beffa0e949a0ca294d",
     "src/editorial/editorial.css": "bf25b9a4409635660c28e77d690f1b75bc157b9581d0ef04734636ea9e0f54a3",
     "src/content/territory-model.js": "c700ed68800dd0c65f6e0be82c0183ad1c39f1575255f2d19fe350388c6bd8ef",
     "src/layout.css": "a85617bc662c8d106b26b94fd04dee6fa62eab896b58d214442955d72740466c",
     "src/portal/portal.css": "4070c28f06e1b1041a7605ba0d72140cbc96e051f8cf8af56249a94e1cf6a04b"
   },
   "pages": {
-    "regions": "ca23779520a7045bc92ea9dcba9b9dd32a8b34402c1bd2f4d710a07c4a9c444f",
+    "regions": "f54b5dc569d2b222e792db24ff1454eda4d6cfc6ba3022f2d0d2a53325e33b56",
     "primorye": "0610802374d5e3e60856af0dba4a7fa57dd6f8dcf27dee75d81c8a7f2848ca52",
     "khabkrai": "0195abf042bb5a086ce6bf7ca79ec27067f39aa27aa7cbf4bca3b20abb87925b",
     "kamchatka": "8a159c7c0f250ff1dd02d3f7222789a18af0085ebcea516d95167b5a8bec9895",

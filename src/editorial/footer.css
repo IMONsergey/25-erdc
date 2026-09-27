@@ -12,3 +12,20 @@
 
 .editorial-illustration{position:absolute;z-index:2;left:12px;bottom:12px;max-width:calc(100% - 72px);padding:6px 10px;border-radius:6px;background:rgba(5,40,88,.86);color:#fff!important;font:11px/1.4 "TikTok Sans",Arial,sans-serif;letter-spacing:.02em;pointer-events:none}
 .catalog-project-dialog figure,.project-cover{position:relative}
+
+/* A single graphic finish across the portal and approved city pages. */
+.ed-footer{background:#082c65;overflow:hidden;position:relative}
+.ed-footer-invitation{position:relative;min-height:320px;padding-right:330px}
+.ed-footer-invitation>a{font-weight:450;max-width:1100px;font-size:clamp(48px,7vw,108px)}
+.ed-footer-invitation>a>span:not(.ed-footer-arrow){color:#8fc4ff}
+.ed-footer-arrow{width:72px;height:72px;border-color:#76a5e580}
+.ed-footer-arrow svg{width:44px;height:44px}
+.ed-footer-signal{position:absolute;right:24px;top:0;width:290px;height:290px;border:1px solid #659de45c;border-radius:50%;display:grid;place-items:center;transform:rotate(-12deg);pointer-events:none}
+.ed-footer-signal:before,.ed-footer-signal:after{content:'';position:absolute;inset:22px;border:1px solid #75adf046;border-radius:50%;transform:scaleX(.45) rotate(35deg)}
+.ed-footer-signal:after{transform:scaleX(.45) rotate(-35deg)}
+.ed-footer-signal>span{font-size:180px;line-height:1;letter-spacing:-.075em;color:#b8dcff;font-weight:350;transform:rotate(12deg);margin-left:-12px}
+.ed-footer-grid,.ed-footer-bottom{border-color:#4e76ad60}
+.ed-footer nav a{transition:color .2s,transform .2s}.ed-footer nav a:hover{color:#b4dcff;transform:translateX(3px)}
+@media(max-width:1100px){.ed-footer-invitation{padding-right:220px;min-height:280px}.ed-footer-signal{width:200px;height:200px;top:25px;right:0}.ed-footer-signal>span{font-size:126px}.ed-footer-invitation>a{padding-right:70px}.ed-footer-arrow{width:54px;height:54px}.ed-footer-arrow svg{width:34px;height:34px}}
+@media(max-width:760px){.ed-footer-invitation{padding-right:0;min-height:0}.ed-footer-signal{display:none}.ed-footer-invitation>a{font-size:clamp(43px,9vw,66px);padding-right:64px}.ed-footer-arrow{width:46px;height:46px}.ed-footer-arrow svg{width:28px;height:28px}}
+@media(max-width:360px){.ed-footer-invitation>a{font-size:39px;padding-right:0}.ed-footer-arrow{position:static;margin-top:22px}}
