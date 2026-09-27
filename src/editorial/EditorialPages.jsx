@@ -22,11 +22,11 @@ export function RegionExplorer({items=regions,compact=false}){
  </div>;
 }
 function FeatureProjects(){
- const picks=['vladivostok','ulan-ude','petropavlovsk-kamchatsky'].map(id=>projects.find(p=>p.city===id&&p.images.length)).filter(Boolean);
+ const picks=['vladivostok','ulan-ude','petropavlovsk-kamchatsky'].map(id=>projects.find(p=>p.city===id&&p.hasSourceImages)).filter(Boolean);
  const [selected,setSelected]=useState(0);const p=picks[selected];
  return <section className="e-project-feature" id="projects"><div className="e-shell"><SectionTitle number="02" label="От замысла к городу" title={<>Будущее обретает<br/><em>очертания.</em></>} href={siteHref('projects')} link="Все проекты"/>
   <div className="e-feature-layout"><a className="e-feature-picture" href={projectHref(p)} aria-label={p.title}><Picture key={p.id} src={p.images[0]} alt={p.title}/><span className="e-feature-caption">{cityById[p.city]?.name}<ArrowUpRight size={22}/></span></a>
-  <div className="e-feature-info"><span className="e-label">Мастер-план / {regionShort[p.region]}</span><h3 key={p.id}>{p.title}</h3>{p.stats.length>0&&<dl>{p.stats.slice(0,2).map((s,i)=><div key={i}><dt>{s.label}</dt><dd>{s.value}</dd></div>)}</dl>}<a className="e-link" href={projectHref(p)}>О проекте<ArrowUpRight size={20}/></a><div className="e-feature-pagination" role="group" aria-label="Избранные проекты">{picks.map((item,i)=><button key={item.id} aria-label={`Показать проект: ${item.title}`} aria-pressed={selected===i} onClick={()=>setSelected(i)}><span>{pad(i+1)}</span><span className="e-feature-progress"/></button>)}</div></div></div>
+  <div className="e-feature-info" aria-live="polite"><span className="e-label">Мастер-план / {regionShort[p.region]}</span><h3 key={p.id}>{p.title}</h3>{p.stats.length>0&&<dl>{p.stats.slice(0,2).map((s,i)=><div key={i}><dt>{s.label}</dt><dd>{s.value}</dd></div>)}</dl>}<a className="e-link" href={projectHref(p)}>О проекте<ArrowUpRight size={20}/></a><div className="e-feature-pagination" role="group" aria-label="Избранные проекты">{picks.map((item,i)=><button key={item.id} aria-label={`Показать проект: ${item.title}`} aria-pressed={selected===i} onClick={()=>setSelected(i)}><span>{pad(i+1)}</span><span className="e-feature-city">{cityById[item.city]?.name}</span></button>)}</div></div></div>
   <a className="e-map-link" href={siteHref('map')}><span>Города, направления развития и объекты мастер-планов</span><strong>Все перемены — на одной карте</strong><RoundArrow/></a>
  </div></section>;
 }

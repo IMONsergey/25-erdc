@@ -1,6 +1,7 @@
 import { readFile, access } from "node:fs/promises";
 import assert from "node:assert/strict";
 import path from "node:path";
+import {withProjectVisual} from "../src/content/project-visuals.js";
 const c = JSON.parse(await readFile("src/content/catalog.json", "utf8")),
   news = JSON.parse(await readFile("src/content/news-index.json", "utf8")),
   media = JSON.parse(await readFile("src/content/media.json", "utf8")),
@@ -84,6 +85,20 @@ for (const [url, file] of Object.entries(media))
   await access(`dist/assets/${file}`).catch(() => {
     throw new Error(`Missing media ${file} ${url}`);
   });
+const editorialAssets = new Set();
+for (const project of c.projects) {
+ const display = withProjectVisual(project);
+ assert.ok(display.images.length, `No visual for ${project.id}`);
+ if (project.images.length) assert.deepEqual(display.images, project.images);
+ else editorialAssets.add(display.images[0]);
+}
+for (const file of editorialAssets) {
+ const bytes = await readFile(`dist/assets/${file}`);
+ assert.equal(bytes.toString("ascii", 0, 4), "RIFF", `Invalid image: ${file}`);
+ assert.equal(bytes.toString("ascii", 8, 12), "WEBP");
+ assert.equal(bytes.readUInt32LE(4) + 8, bytes.length, `Truncated image: ${file}`);
+}
+console.log(`Verified ${editorialAssets.size} editorial illustrations; all ${c.projects.length} projects have imagery.`);
 for (const r of routes) {
   const file = r.path.endsWith(".html")
     ? `dist/${r.path}`

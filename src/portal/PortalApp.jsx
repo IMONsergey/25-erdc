@@ -487,6 +487,7 @@ function ProjectCard({ project: p, index = 0 }) {
       {image ? (
         <div className="p-project-image">
           <Image src={image} alt="" />
+          {p.illustration && <span className="editorial-illustration">Иллюстрация</span>}
           <span className="p-card-circle">
             <Arrow />
           </span>
@@ -585,17 +586,12 @@ function PageHero({
   crumbs = [],
   children,
   compact = false,
+  illustration = false,
 }) {
   return (
     <section
-      className={`p-page-hero ${compact ? "p-page-hero-compact" : ""} ${!image ? "p-page-hero-solid" : ""}`}
+      className={`p-page-hero ${compact ? "p-page-hero-compact" : ""} ${!image ? "p-page-hero-solid" : "e-page-hero-split"}`}
     >
-      {image && (
-        <>
-          <Image src={image} className="p-hero-photo" alt="" priority />
-          <div className="p-hero-shade" />
-        </>
-      )}
       <div className="p-shell">
         <Breadcrumbs items={crumbs} />
         <div className="p-page-hero-copy">
@@ -603,6 +599,7 @@ function PageHero({
           <h1>{title}</h1>
           {children}
         </div>
+        {image && <div className="e-page-hero-media"><Image src={image} alt="" priority />{illustration && <span className="editorial-illustration">Иллюстрация</span>}</div>}
       </div>
     </section>
   );
@@ -969,6 +966,7 @@ function ProjectPage({ project: p }) {
     <>
       <PageHero
         image={p.images[0]}
+        illustration={p.illustration}
         title={p.title}
         eyebrow={programNames[p.program]}
         crumbs={[

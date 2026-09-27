@@ -118,7 +118,7 @@ export function Mission({ entity, region, isRegion, items }) {
   const [active, setActive] = useState(0);
   const entries = isRegion
     ? region.cities.map(id => ({name: cityById[id].name, text: cityById[id].mission, image: cityById[id].image, href: siteHref(cityPath(cityById[id]))}))
-    : items.filter(p => p.images.length).slice(0, 4).map(p => ({name:p.title, text:p.texts[0] || p.title, image:p.images[0], href:'#projects'}));
+    : items.filter(p => p.hasSourceImages).slice(0, 4).map(p => ({name:p.title, text:p.texts[0] || p.title, image:p.images[0], href:'#projects'}));
   const entry = entries[active];
   const paragraphs = isRegion ? [] : entity.about.flatMap(t => t.split(/(?<=[.!?])\s+(?=[А-ЯЁ«])/));
   const lead = isRegion ? "Города региона. Единая стратегия развития." : entity.mission;

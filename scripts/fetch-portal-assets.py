@@ -4,9 +4,17 @@ from pathlib import Path
 from PIL import Image,ImageOps
 ROOT=Path(__file__).resolve().parents[1]
 manifest=json.loads((ROOT/'src/content/media.json').read_text());failed=[]
+def valid_cache(path):
+ try:
+  data=path.read_bytes()
+  if data[:4] != b'RIFF' or data[8:12] != b'WEBP' or int.from_bytes(data[4:8],'little')+8 != len(data):return False
+  with Image.open(io.BytesIO(data)) as image:image.load()
+  return True
+ except (OSError,ValueError):return False
+
 def fetch(item):
  url,name=item;p=ROOT/'assets'/name
- if p.exists() and p.stat().st_size>50:return
+ if p.exists() and valid_cache(p):return
  p.parent.mkdir(parents=True,exist_ok=True)
  for attempt in range(3):
   try:
@@ -15,7 +23,10 @@ def fetch(item):
    # Keep full detail in text-heavy source plans, fit photographs for retina cards.
    im.thumbnail((1920,1920),Image.Resampling.LANCZOS)
    if im.mode not in ('RGB','RGBA'):im=im.convert('RGBA' if 'transparency' in im.info else 'RGB')
-   im.save(p,'WEBP',quality=84,method=4);return
+   tmp=p.with_suffix('.tmp.webp')
+   im.save(tmp,'WEBP',quality=84,method=4)
+   if not valid_cache(tmp):raise ValueError('Incomplete optimized image')
+   tmp.replace(p);return
   except Exception as e:
    if attempt==2:return {'url':url,'error':str(e)}
 with concurrent.futures.ThreadPoolExecutor(max_workers=12) as ex:
