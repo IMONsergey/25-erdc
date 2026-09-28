@@ -1,6 +1,5 @@
+import {HorizonHome,HorizonDirectory,HorizonFooter,HorizonMotion} from '../v3/HorizonPages.jsx';
 import UnifiedFooter from '../editorial/UnifiedFooter.jsx';
-import {EditorialHome,EditorialRegions} from '../editorial/EditorialPages.jsx';
-import EditorialMotion from '../editorial/Motion.jsx';
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from "react";
 import {
   ArrowUpRight,
@@ -282,6 +281,7 @@ function Header() {
   return (
     <>
       <header className={`p-header ${scroll ? "p-header-scrolled" : ""}`}>
+        {!vladivostok && !cityMap && <div className="h-header-blur" aria-hidden="true">{Array.from({length:6},(_,i)=><i key={i}/>)}</div>}
         <a
           className="p-brand"
           href={siteHref()}
@@ -529,7 +529,7 @@ function NewsCard({ post: n, featured = false, collection }) {
     </NewsLink>
   );
 }
-function Home(){ return <EditorialHome/>; }
+function Home(){ return <HorizonHome/>; }
 function QuarterTeaser() {
   return (
     <section className="p-quarter-teaser p-shell" id="quarter">
@@ -604,7 +604,7 @@ function PageHero({
     </section>
   );
 }
-function RegionsPage(){ return <EditorialRegions/>; }
+function RegionsPage(){ return <HorizonDirectory/>; }
 function NextRegion({ region: r }) {
   const next = regions[r.index % regions.length];
   return (
@@ -1424,7 +1424,7 @@ export default function PortalApp() {
   }, []);
   const isCity = currentPath.startsWith("cities/") || currentPath === "vladivostok";
   return (
-    <NewsProvider><div className={`ed-site ${isCity ? "ed-preserve-city" : ""}`}>
+    <NewsProvider><div className={`ed-site ${isCity ? "ed-preserve-city" : `v3-site ${!currentPath ? "v3-home" : ""}`}`}>
       <a className="skip-link" href="#content">
         Перейти к содержанию
       </a>
@@ -1433,9 +1433,9 @@ export default function PortalApp() {
       <main id="content" className={isTerritory ? "approved-territory-page" : undefined}>
         <PortalRoute />
       </main>
-      <div className="portal portal-navigation"><Footer /></div>
+      <div className="portal portal-navigation">{isCity ? <Footer /> : <HorizonFooter/>}</div>
       {!isTerritory && <BackToTop />}
-      {!isCity && <EditorialMotion/>}
+      {!isCity && <HorizonMotion/>}
     </div></NewsProvider>
   );
 }

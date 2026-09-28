@@ -27,3 +27,5 @@ import "./portal/catalog-dialog.css";
 import './editorial/editorial.css';
 import './editorial/region.css';
 import './editorial/scenes.css';
+
+import './v3/horizon.css';

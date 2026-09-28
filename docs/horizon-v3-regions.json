@@ -1,0 +1,27 @@
+{
+  "files": {
+    "src/v3/HorizonPages.jsx": "73c4ddea0a3e2b114ea08efba4f107c1ab9d8bd10533cb4692233a508660e638",
+    "src/v3/horizon.css": "7cc0aa53d14f5b042b932455446d1d515be23ba5ad8a5013e30b5ddaff5bd69d",
+    "src/pages/RegionGateway.jsx": "f39b29128d5ff24df962ea5d11b5d26702dcc8bf00a02aded08ba3c405e39ce7",
+    "src/editorial/region.css": "31a15b18ddc42a53a81dcc35030c9584de97a314f3ce035c05a5c29609bf917c",
+    "src/editorial/EditorialPages.jsx": "e0d78eb79c376b07867b2c985e899a67ea6b0eea984642beffa0e949a0ca294d",
+    "src/editorial/editorial.css": "bf25b9a4409635660c28e77d690f1b75bc157b9581d0ef04734636ea9e0f54a3",
+    "src/content/territory-model.js": "c700ed68800dd0c65f6e0be82c0183ad1c39f1575255f2d19fe350388c6bd8ef",
+    "src/layout.css": "a85617bc662c8d106b26b94fd04dee6fa62eab896b58d214442955d72740466c",
+    "src/portal/portal.css": "4070c28f06e1b1041a7605ba0d72140cbc96e051f8cf8af56249a94e1cf6a04b"
+  },
+  "pages": {
+    "regions": "4c0d62b26c9b3668e1b728002c015fe485f11ade568d614dbfe135509f389cba",
+    "primorye": "0610802374d5e3e60856af0dba4a7fa57dd6f8dcf27dee75d81c8a7f2848ca52",
+    "khabkrai": "0195abf042bb5a086ce6bf7ca79ec27067f39aa27aa7cbf4bca3b20abb87925b",
+    "kamchatka": "8a159c7c0f250ff1dd02d3f7222789a18af0085ebcea516d95167b5a8bec9895",
+    "buryatia": "744cce3ab1feb8d197138a7a23bbbf2225777d2cf9ee06aa1bb668f9cdf34cd2",
+    "yakutia": "cccc73cb8632d7a21fdbe73e97b26fc2af44d77975352f696e996247b9c92289",
+    "chukot": "6469049d35161bd9384a5a2407032ec9c08d22063a56a7c8062611caa82e92a8",
+    "zabaikal": "bd0b38d5d7d8d3a1d2b93e275bdf8ffbaf4c466a8f593043bb46d18aa212bcfc",
+    "amurskaya": "072adcd381920af615df6454d2946deefc03422345958e3eda4839effd7f0ff6",
+    "sakhalin": "d91e9109d895a7d51176fd3442b9a092d8d0a3fa13660af0cc6ba3e878d49905",
+    "eao": "98478800f26f1d3f1689b024c11899dbde0d1bdece9ce628dd734be5549568dc",
+    "magadan": "c2449d3d7bd5301eb7934526519e5e114005be91a10d5d9702d4a9554baa9f60"
+  }
+}

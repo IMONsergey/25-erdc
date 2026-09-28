@@ -3,7 +3,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 
 const production = new URL('https://imonsergey.github.io/25-erdc/');
-const preview = new URL(process.env.PREVIEW_URL || new URL('v2/', production));
+const preview = new URL(process.env.PREVIEW_URL || new URL('v3/', production));
 assert.equal(preview.origin, production.origin);
 assert.ok(preview.pathname.startsWith(production.pathname) && preview.pathname !== production.pathname && preview.pathname.endsWith('/'));
 const commit = process.env.PREVIEW_COMMIT;
@@ -22,7 +22,7 @@ async function rewrite(dir) {
   }
 }
 await rewrite('dist');
-await writeFile('dist/version.json', JSON.stringify({version:'editorial-atlas-v2',branch:'design/editorial-atlas-v2',commit,url:preview.href})+'\n');
+await writeFile('dist/version.json', JSON.stringify({version:'horizon-v3',branch:'design/territory-v3',commit,url:preview.href})+'\n');
 assert.ok((await readFile('dist/vladivostok/index.html','utf8')).includes(preview.href+'vladivostok/'));
 assert.ok((await readFile('dist/projects/733657179/index.html','utf8')).includes('url='+preview.href+'projects/'));
 assert.ok((await readFile('dist/404.html','utf8')).includes('name="app-base" content="'+preview.pathname+'"'));
