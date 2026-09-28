@@ -1,56 +1,30 @@
-# V3 · Масштаб жизни
+# V3 — Новый облик / Likova
 
-Полная пересборка отклонённой версии «Новый горизонт». Ветка: `design/territory-v3`.
+Primary reference selected by the user: https://likova.space/.
 
-## Центральная идея
+The previous sliced-photo direction is replaced. The visual system uses uninterrupted photography, white title shelves, offset chapter edges, restrained uppercase typography, and deep blue chapters. The existing brand palette is retained. No Likova branding, photographs, or proprietary assets are copied.
 
-От большого пространства Дальнего Востока к жизни конкретного человека. Сквозной графический приём — единая фотографическая поверхность, разделённая на пять архитектурных плоскостей. Она раскрывается при прокрутке, реагирует на движение указателя, повторяется в региональных обложках и превращается в геометрию внутренних страниц. Существующая синяя палитра сохранена.
+## Shared idea
 
-## Новая структура
+«Новый облик Дальнего Востока»: from a territory and its character to a master-plan and the places it creates. The same composition runs through the homepage, regional directory and gateways, about, project and news catalogs, housing, map, and service pages. City and agglomeration implementations and their assets remain unchanged.
 
-- Главная начинается пространственной сценой «Дальний. Близкий.». Три панорамы переключаются настоящими кнопками; при прокрутке разрезанная поверхность раскрывается. Нет перехвата колеса или обязательного ожидания анимации.
-- Блок масштаба: 11 регионов → 25 городов → 4 млн+ жителей; меняются изображение, объяснение и целевой переход.
-- География — интерактивный веер из 11 регионов. Наведение, фокус и нажатие раскрывают выбранный регион. На телефоне используется нативная горизонтальная прокрутка.
-- «Жить / Учиться / Отдыхать» — большие сменяемые сцены с отдельными переходами к соответствующим проектам.
-- Избранные проекты — горизонтальная лента с привязкой карточек, сенсорной прокруткой и кнопками.
-- Новости — редакционные строки. Новости по-прежнему открываются в доступном диалоге.
-- Региональные страницы пересобраны: пространственная обложка, полоса показателей, переключаемая сцена мастер-планов и программы с сохранёнными глубокими ссылками.
-- Страница «О проекте» построена заново, включая интерактивные этапы «Услышать / Связать / Создать».
-- Общая система охватывает проекты, новости, ДВ Квартал, карту и служебные страницы: крупная типографика, плоскости, асимметричные каталоги, новая навигация и подвал.
+## Motion and interaction
 
-## Блюр
+- Desktop opening: a white title shelf scrolls away while the panorama opens to fill the viewport. Native scrolling, no scroll hijacking.
+- Manifesto: words gain contrast as the reader progresses.
+- Three scale selectors update the image, title, explanation and destination.
+- Eleven regional selectors update a photographic preview, description and link; click, focus and mouse hover are supported.
+- Three urban-life scenes change with desktop scrolling or explicit buttons. Mobile uses the buttons without pinned scroll. All three local images are included.
+- Project rail supports arrows, native horizontal scrolling, touch and keyboard focus.
+- Search, catalog filters, URL state, project and news dialogs, housing comparison and regional program disclosures remain functional.
+- Reduced-motion preference disables animation and long pinned scenes.
 
-Семь зон backdrop-filter с градиентными масками, от 24 px до 0.5 px. Цветной или белой подложки нет. Блюр включается только после начала прокрутки. Цвет навигации определяется фактическим блоком под хедером. Для браузеров без backdrop-filter предусмотрена читаемая подложка соответствующего тона.
+## Header
 
-## Референсы
+A transparent seven-band backdrop blur falls from 20 px to 0.5 px and then to zero. No white/blue tint, saturation filter or opaque gradient is painted over dark sections. Header text changes tone over marked photographic and dark surfaces; unsupported browsers receive a readable solid fallback.
 
-| Референс | Использованный приём |
-| --- | --- |
-| [Likova](https://likova.space/) | Архитектурная композиция, крупный текст, ступенчатые маски, раскрытие панорамы |
-| [DeGirum](https://degirum.videinfra.com/) | Один графический объект связывает состояния; интерфейс объясняет через взаимодействие |
-| [Food Compliance International](https://foodcomplianceinternational.com/) | Повторяемая диагональная геометрия, контраст фотографий и фирменного цвета |
-| [Discovermarket](https://discovermarket.videinfra.com/) | Пространственные слои и последовательное движение от общего к конкретному |
+## Verification
 
-Likova, DeGirum и Discovermarket повторно просмотрены в браузере. Food Compliance заблокировал облачный браузер; для него использован ранее полученный визуальный материал.
+Production build and server-render checks include all 782 routes, 507 projects, 165 complete articles and 1093 local source images. Historical Vladivostok checks cover 17 sources and 78 assets; all 34 region/city layouts are checked independently.
 
-## Сохранённые ограничения
-
-Компоненты, данные и стили городов и агломераций не изменялись. Все новые правила ограничены `.v3-site`; городские страницы получают `.ed-preserve-city`. Исторические V1/V2 эталоны сохранены; обновлён только отдельный V3 baseline регионов.
-
-Поддерживаются клавиатура, фокус, reduced motion, сенсорная прокрутка. Скрытая часть вступительной анимации не доступна фокусу. Поиск, фильтры, модальные новости, сравнение кварталов и ссылки на мастер-планы сохранены.
-
-## Проверка
-
-- `npm run build`: 782 маршрута, 40 канонических страниц, 507 проектов, 165 статей, 1093 локальных медиафайла.
-- Проверки исторического Владивостока (17 исходников, 78 ресурсов), согласованных объектов и 34 региональных/городских макетов пройдены.
-- Браузер: главная и тёмный блок, переключение панорам и масштаба; региональный поиск; веер; выбор территории; фильтр «школ» (33 результата); вид списком; новостной диалог; сравнение кварталов; этапы мастер-плана; меню.
-- Просмотр desktop, телефонов 320 и 390 px. Исправлены наследуемая сетка веера, перенос метрики «4 млн+», контраст показателей кварталов и момент включения блюра.
-- `git diff --check` пройден.
-
-Исходники сохраняются в отдельной ветке; для просмотра обновляется существующая приватная сборка Sites. Публикации V1/V2 и общий workflow GitHub Pages не изменены.
-
-![Главная](home-desktop.jpg)
-
-![Телефон](home-mobile.jpg)
-
-![Блюр на тёмном фоне](header-blur-dark.jpg)
+Browser review covers the desktop composition, 390 px and 320 px mobile layouts, region filtering and selection, scale selection, all three urban-life images, project rail, menu navigation, and the shared internal-page system. Proof images in this directory are captured from the working application, not mockups.
