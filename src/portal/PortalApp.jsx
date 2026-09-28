@@ -1,4 +1,4 @@
-import {HorizonHome,HorizonDirectory,HorizonFooter,HorizonMotion} from '../v3/HorizonPages.jsx';
+import {HorizonHome,HorizonDirectory,HorizonFooter,HorizonMotion,HorizonPageHero,HorizonAbout} from '../v3/HorizonPages.jsx';
 import UnifiedFooter from '../editorial/UnifiedFooter.jsx';
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from "react";
 import {
@@ -202,7 +202,7 @@ function Header() {
     [search, setSearch] = useState(false),
     [q, setQ] = useState(""),
     [scroll, setScroll] = useState(window.scrollY > 20);
-  const [darkSurface, setDarkSurface] = useState(!currentPath);
+  const [darkSurface, setDarkSurface] = useState(false);
   const header = useRef(null);
   useEffect(() => {
     if (vladivostok || cityMap) return;
@@ -210,7 +210,7 @@ function Header() {
     const update = () => {
       frame = 0;
       const sampleY = (header.current?.offsetHeight || 96) / 2;
-      const dark = [...document.querySelectorAll('.v3-site .h-hero, .v3-site .h-life, .v3-site .h-footer')]
+      const dark = [...document.querySelectorAll('.v3-site [data-header-tone=dark]')]
         .some(node => { const r = node.getBoundingClientRect(); return r.top <= sampleY && r.bottom > sampleY; });
       setDarkSurface(dark);
     };
@@ -600,31 +600,7 @@ function Partners() {
     </section>
   );
 }
-function PageHero({
-  image,
-  title,
-  eyebrow,
-  crumbs = [],
-  children,
-  compact = false,
-  illustration = false,
-}) {
-  return (
-    <section
-      className={`p-page-hero ${compact ? "p-page-hero-compact" : ""} ${!image ? "p-page-hero-solid" : "e-page-hero-split"}`}
-    >
-      <div className="p-shell">
-        <Breadcrumbs items={crumbs} />
-        <div className="p-page-hero-copy">
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h1>{title}</h1>
-          {children}
-        </div>
-        {image && <div className="e-page-hero-media"><Image src={image} alt="" priority />{illustration && <span className="editorial-illustration">Иллюстрация</span>}</div>}
-      </div>
-    </section>
-  );
-}
+function PageHero(props){ return <HorizonPageHero {...props}/>; }
 function RegionsPage(){ return <HorizonDirectory/>; }
 function NextRegion({ region: r }) {
   const next = regions[r.index % regions.length];
@@ -919,7 +895,7 @@ function ProjectsPage() {
   const chips=[[query,()=>change(setQ,"")],[regionById[region]?.name,()=>{change(setR,"");setCity("");}],[cityById[city]?.name,()=>change(setCity,"")]].filter(([label])=>label);
   return <>
     <CatalogProjectDialog/>
-    <PageHero title={<>Проекты,<br/><em>которые меняют города.</em></>} eyebrow="Каталог развития" crumbs={[["Все проекты"]]} compact/>
+    <PageHero title={<>Идеи становятся<br/><em>местами.</em></>} eyebrow="Каталог развития" crumbs={[["Все проекты"]]} compact/>
     <section className="p-shell p-section p-project-catalog" id="project-results">
       <div className="p-catalog-filters">
         <label className="p-search-field"><Search size={20}/><input value={query} onChange={e=>change(setQ,e.target.value)} placeholder="Название проекта или город" aria-label="Поиск проектов"/>{query&&<button aria-label="Очистить поиск проектов" onClick={()=>change(setQ,"")}><X size={18}/></button>}</label>
@@ -1092,7 +1068,7 @@ function NewsPage() {
   const change=(setter,value)=>{setter(value);setPage(1);};
   const reset=()=>{setQ("");setSort("newest");setYear("");setTerritory("");setPage(1);};
   return <>
-    <PageHero title={<>Перемены.<br/><em>День за днём.</em></>} eyebrow="Новости проекта" crumbs={[["Новости"]]} compact/>
+    <PageHero title={<>Время<br/><em>перемен.</em></>} eyebrow="Новости проекта" crumbs={[["Новости"]]} compact/>
     <section className="p-shell p-section p-news-catalog-section" id="news-results">
       <div className="p-catalog-filters">
         <label className="p-search-field"><Search size={20}/><input aria-label="Поиск новостей" placeholder="Поиск по новостям" value={q} onChange={e=>change(setQ,e.target.value)}/>{q&&<button aria-label="Очистить поиск новостей" onClick={()=>change(setQ,"")}><X size={18}/></button>}</label>
@@ -1137,7 +1113,7 @@ function QuarterPage({ initialProject }) {
       <p>Комфортное и доступное жильё на территориях опережающего развития Дальнего Востока.</p>
       <a className="p-button p-button-light" href="#quarter-projects">Все семь проектов <ArrowDown size={20} /></a>
     </PageHero>
-    <div className="p-region-stats"><div className="p-shell"><Stats items={quarter.stats} /></div></div>
+    <div className="p-region-stats" data-header-tone="dark"><div className="p-shell"><Stats items={quarter.stats} /></div></div>
     <section className="p-section p-shell" id="quarter-projects">
       <SectionHead number="01" title={<>Семь проектов.<br /><em>Новая среда.</em></>}>Дальневосточный квартал</SectionHead>
       <div className="p-quarter-tools">
@@ -1168,85 +1144,7 @@ function QuarterPage({ initialProject }) {
     </section>
   </>;
 }
-function AboutPage() {
-  const questions = [
-    [
-      "Чем мастер-план отличается от генерального плана?",
-      "Генеральный план отвечает на вопрос, что и где будет построено. Мастер-план объясняет, как и зачем будет развиваться город: в контексте социальных, экономических и пространственных задач. Он описывает управленческие механизмы и источники финансирования.",
-    ],
-    [
-      "Для кого создаются мастер-планы?",
-      "Мастер-план — публичный документ для жителей, бизнеса и власти. Он определяет общие принципы и стратегию пространственного развития города. Генеральный план служит профессиональным инструментом территориального планирования.",
-    ],
-    [
-      "Как учитывается мнение жителей?",
-      "Мастер-планы создаются с учётом мнения жителей. Они помогают определить общие цели развития, актуальные для горожан, бизнеса и власти, и приоритетные проекты, направленные на качественные изменения городской среды.",
-    ],
-  ];
-  return (
-    <>
-      <PageHero
-        image="masterplan-editorial-v1.webp"
-        title={
-          <>
-            Будущее города
-            <br />
-            начинается с людей.
-          </>
-        }
-        eyebrow="О проекте «25 городов»"
-        crumbs={[["О проекте"]]}
-      ><a className="p-button p-button-light" href="#masterplan-finder">Найти свой город<ArrowDown size={20}/></a></PageHero>
-      <section className="p-shell p-section p-about-body">
-        <Eyebrow>Стратегические мастер-планы</Eyebrow>
-        <h2>
-          Повышать качество жизни.
-          <br />
-          <em>Раскрывать возможности.</em>
-        </h2>
-        <p className="p-lead">
-          Мастер-планы развития городов Дальнего Востока разрабатываются с целью
-          повышения качества жизни людей, развития перспективных отраслей
-          экономики, создания новых рабочих мест и дополнительных возможностей
-          для самореализации, раскрытия уникальных природных преимуществ
-          дальневосточных регионов.
-        </p>
-        <Stats
-          items={[
-            { value: "11", label: "региональных центров" },
-            { value: "9", label: "городов с населением свыше 50 тыс. жителей" },
-            { value: "3", label: "города с населением менее 50 тыс. жителей" },
-            { value: "2", label: "столицы БАМа" },
-          ]}
-        />
-        <div className="p-about-impact">
-          <strong>4 млн+</strong>
-          <h3>
-            дальневосточников —<br />в центре преобразований
-          </h3>
-        </div>
-        <ProjectJourney />
-        <SectionHead title="Новые слова или новые смыслы?">
-          Мастер-план и генеральный план
-        </SectionHead>
-        <div className="p-faq">
-          {questions.map(([q, a], i) => (
-            <details key={q} name="about-questions">
-              <summary>
-                <span>{fmt(i + 1)}</span>
-                <h3>{q}</h3>
-                <Plus size={24} />
-              </summary>
-              <p>{a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-      <MasterplanFinder />
-      <Partners />
-    </>
-  );
-}
+function AboutPage(){ return <HorizonAbout/>; }
 function MaterialsPage() {
   const a = useDocument("materials/page144867796"),
     b = useDocument("materials/test-sev-ulan1");
