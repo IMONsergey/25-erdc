@@ -202,6 +202,27 @@ function Header() {
     [search, setSearch] = useState(false),
     [q, setQ] = useState(""),
     [scroll, setScroll] = useState(window.scrollY > 20);
+  const [darkSurface, setDarkSurface] = useState(!currentPath);
+  const header = useRef(null);
+  useEffect(() => {
+    if (vladivostok || cityMap) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const sampleY = (header.current?.offsetHeight || 96) / 2;
+      const dark = [...document.querySelectorAll('.v3-site .h-hero, .v3-site .h-life, .v3-site .h-footer')]
+        .some(node => { const r = node.getBoundingClientRect(); return r.top <= sampleY && r.bottom > sampleY; });
+      setDarkSurface(dark);
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const observer = new ResizeObserver(schedule);
+    const content = document.querySelector('.v3-site');
+    if (content) observer.observe(content);
+    window.addEventListener('scroll', schedule, {passive:true});
+    window.addEventListener('resize', schedule);
+    update();
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); };
+  }, [vladivostok, cityMap]);
   const dialog = useRef(null);
   const trigger = useRef(null);
   const searchTrigger = useRef(null);
@@ -280,8 +301,8 @@ function Header() {
       : [];
   return (
     <>
-      <header className={`p-header ${scroll ? "p-header-scrolled" : ""}`}>
-        {!vladivostok && !cityMap && <div className="h-header-blur" aria-hidden="true">{Array.from({length:6},(_,i)=><i key={i}/>)}</div>}
+      <header ref={header} data-surface={!vladivostok && !cityMap ? (darkSurface ? 'dark' : 'light') : undefined} className={`p-header ${scroll ? "p-header-scrolled" : ""}`}>
+        {!vladivostok && !cityMap && <div className="h-header-blur" aria-hidden="true">{Array.from({length:7},(_,i)=><i key={i}/>)}</div>}
         <a
           className="p-brand"
           href={siteHref()}
